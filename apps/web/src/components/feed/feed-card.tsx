@@ -70,10 +70,8 @@ interface FeedCardProps {
  * excerpt, source, image (hotlinked), topics and reading time. The primary action opens
  * the publisher. Real data + the "Perché lo vedo?" popover land in PR2.
  *
- * NOTE(brand): the image uses the brand 80px corner radius (--radius-image). At small
- * thumbnail sizes this reads as nearly circular corners — flagged for owner review on
- * the styleguide preview (see /styleguide). Likely wants a smaller effective radius for
- * thumbnails.
+ * NOTE(brand): the thumbnail uses --radius-image (16px, owner-approved). The brand's
+ * literal 80px photo radius (--radius-image-lg) is reserved for large/hero imagery only.
  */
 export function FeedCard({
   article,

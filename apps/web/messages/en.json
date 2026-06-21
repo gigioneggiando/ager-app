@@ -106,8 +106,7 @@
       "note": "The reusable feed component: only title, excerpt, source, image and topics. Link-first — no article body. Sample data.",
       "why": "Why am I seeing this?",
       "readingTime": "{minutes} min read",
-      "openExternal": "Open on publisher",
-      "radiusFlag": "To review: the brand specifies an 80px image radius. At thumbnail size the corners read as nearly circular. A smaller effective radius is likely needed for thumbnails — pending confirmation."
+      "openExternal": "Open on publisher"
     }
   }
 }

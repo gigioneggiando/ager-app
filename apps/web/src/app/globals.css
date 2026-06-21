@@ -47,7 +47,8 @@
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) + 4px);
-  --radius-image: var(--radius-image);
+  --radius-image: var(--radius-image); /* feed/thumbnail (16px) */
+  --radius-image-lg: var(--radius-image-lg); /* hero/large imagery only (80px) */
 
   /* Fonts (next/font injects the variables in the root layout). */
   --font-sans: var(--font-inter);

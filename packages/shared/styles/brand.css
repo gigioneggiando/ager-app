@@ -49,5 +49,10 @@
 
   /* ---- Radii --------------------------------------------------------------- */
   --radius: 0.5rem;
-  --radius-image: 80px; /* brand photo corner radius (see styleguide flag at thumbnail size) */
+  /* Thumbnail/feed image radius. The brand's literal 80px reads as near-circular at
+     thumbnail size, so feed thumbnails use 16px (owner-approved). */
+  --radius-image: 16px;
+  /* Reserved for large/hero imagery ONLY (the brand 80px value). FeedCard does not use
+     this — apply it intentionally to big editorial/hero images. */
+  --radius-image-lg: 80px;
 }
