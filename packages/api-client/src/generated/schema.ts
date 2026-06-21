@@ -11,38 +11,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: {
-          sourceId?: number;
-          from?: string;
-          to?: string;
-          errorsOnly?: boolean;
-          page?: number;
-          pageSize?: number;
-        };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["ListIngestionLogs"];
     put?: never;
     post?: never;
     delete?: never;
@@ -58,33 +27,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: {
-          days?: number;
-        };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetIngestionLogStats"];
     put?: never;
     post?: never;
     delete?: never;
@@ -100,33 +43,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          id: number;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetIngestionLogById"];
     put?: never;
     post?: never;
     delete?: never;
@@ -142,35 +59,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: {
-          expiringIn?: number;
-          tdmOptout?: boolean;
-          negotiation?: string;
-        };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["ListSourcesAdmin"];
     put?: never;
     post: {
       parameters: {
@@ -232,33 +121,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          id: number;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetSourceAdmin"];
     put?: never;
     post?: never;
     delete?: never;
@@ -279,8 +142,8 @@ export interface paths {
         };
       };
       responses: {
-        /** @description OK */
-        200: {
+        /** @description No Content */
+        204: {
           headers: {
             [name: string]: unknown;
           };
@@ -288,6 +151,13 @@ export interface paths {
         };
         /** @description Unauthorized */
         401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Not Found */
+        404: {
           headers: {
             [name: string]: unknown;
           };
@@ -372,8 +242,8 @@ export interface paths {
       };
       requestBody?: never;
       responses: {
-        /** @description OK */
-        200: {
+        /** @description No Content */
+        204: {
           headers: {
             [name: string]: unknown;
           };
@@ -381,6 +251,13 @@ export interface paths {
         };
         /** @description Unauthorized */
         401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Not Found */
+        404: {
           headers: {
             [name: string]: unknown;
           };
@@ -414,8 +291,8 @@ export interface paths {
       };
       requestBody?: never;
       responses: {
-        /** @description OK */
-        200: {
+        /** @description No Content */
+        204: {
           headers: {
             [name: string]: unknown;
           };
@@ -423,6 +300,13 @@ export interface paths {
         };
         /** @description Unauthorized */
         401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Not Found */
+        404: {
           headers: {
             [name: string]: unknown;
           };
@@ -463,6 +347,13 @@ export interface paths {
           };
           content?: never;
         };
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
         /** @description Unauthorized */
         401: {
           headers: {
@@ -485,37 +376,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: {
-          pending?: boolean;
-          sourceId?: number;
-          recentDays?: number;
-          page?: number;
-          pageSize?: number;
-        };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["ListTakedownRequests"];
     put?: never;
     post?: never;
     delete?: never;
@@ -531,33 +392,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          id: number;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetTakedownRequestById"];
     put?: never;
     post?: never;
     delete?: never;
@@ -578,8 +413,8 @@ export interface paths {
         };
       };
       responses: {
-        /** @description OK */
-        200: {
+        /** @description No Content */
+        204: {
           headers: {
             [name: string]: unknown;
           };
@@ -587,6 +422,13 @@ export interface paths {
         };
         /** @description Unauthorized */
         401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Not Found */
+        404: {
           headers: {
             [name: string]: unknown;
           };
@@ -671,26 +513,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          id: number;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetArticleById"];
     put: {
       parameters: {
         query?: never;
@@ -711,10 +534,19 @@ export interface paths {
           headers: {
             [name: string]: unknown;
           };
-          content?: never;
+          content: {
+            "application/json": components["schemas"]["Result"];
+          };
         };
         /** @description Unauthorized */
         401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Forbidden */
+        403: {
           headers: {
             [name: string]: unknown;
           };
@@ -736,29 +568,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query: {
-          q: string;
-          page: number;
-          pageSize: number;
-          lang?: string;
-        };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["SearchArticles"];
     put?: never;
     post?: never;
     delete?: never;
@@ -774,24 +584,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetArticleTags"];
     put?: never;
     post?: never;
     delete?: never;
@@ -807,30 +600,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query: {
-          page: number;
-          pageSize: number;
-          lang?: string;
-        };
-        header?: never;
-        path: {
-          tag: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["SearchArticlesByTag"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1104,6 +874,13 @@ export interface paths {
           };
           content?: never;
         };
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
         /** @description Unauthorized */
         401: {
           headers: {
@@ -1141,6 +918,13 @@ export interface paths {
       responses: {
         /** @description OK */
         200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+        /** @description Bad Request */
+        400: {
           headers: {
             [name: string]: unknown;
           };
@@ -1202,89 +986,13 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetMyProfile"];
     put?: never;
     post?: never;
-    delete: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    delete: operations["DeleteMyProfile"];
     options?: never;
     head?: never;
-    patch: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["UpdateMyProfileRequest"];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    patch: operations["UpdateMyProfile"];
     trace?: never;
   };
   "/api/me/change-password": {
@@ -1296,35 +1004,7 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ChangeMyPasswordRequest"];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    post: operations["ChangeMyPassword"];
     delete?: never;
     options?: never;
     head?: never;
@@ -1338,31 +1018,8 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    /** GDPR art. 15 export (JSON download). One export per user per 24h. */
+    get: operations["ExportMyData"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1415,35 +1072,7 @@ export interface paths {
     /** List the caller's reading lists (id, name, itemCount). */
     get: operations["GetMyReadingLists"];
     put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["CreateReadingListRequest"];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    post: operations["CreateReadingList"];
     delete?: never;
     options?: never;
     head?: never;
@@ -1457,69 +1086,9 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: {
-          limit?: number;
-          cursor?: string;
-          expand?: string;
-        };
-        header?: never;
-        path: {
-          readingListId: number;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetReadingListItems"];
     put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          readingListId: number;
-        };
-        cookie?: never;
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["AddReadingListItemRequest"];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    post: operations["AddReadingListItem"];
     delete?: never;
     options?: never;
     head?: never;
@@ -1536,34 +1105,7 @@ export interface paths {
     get?: never;
     put?: never;
     post?: never;
-    delete: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          readingListId: number;
-          articleId: number;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    delete: operations["RemoveReadingListItem"];
     options?: never;
     head?: never;
     patch?: never;
@@ -1579,33 +1121,7 @@ export interface paths {
     get?: never;
     put?: never;
     post?: never;
-    delete: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          readingListId: number;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    delete: operations["DeleteReadingList"];
     options?: never;
     head?: never;
     patch?: never;
@@ -1618,34 +1134,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          ownerUserId: string;
-          slug: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetReadingListBySlug"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1661,34 +1150,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: {
-          limit?: number;
-          cursor?: string;
-        };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-        /** @description Unauthorized */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetMyReadingListsPaged"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1704,27 +1166,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          ownerUserId: string;
-          slug: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetPublicReadingListBySlug"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1740,29 +1182,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: {
-          limit?: number;
-          cursor?: string;
-        };
-        header?: never;
-        path: {
-          readingListId: number;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["GetPublicReadingListItems"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1778,24 +1198,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    get: operations["ListSourcesPublic"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1830,28 +1233,7 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["TakedownRequestInput"];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
+    post: operations["SubmitTakedownRequest"];
     delete?: never;
     options?: never;
     head?: never;
@@ -1866,6 +1248,56 @@ export interface components {
       /** Format: int32 */
       articleId?: number;
       note?: string | null;
+    };
+    ArticleDetailDto: {
+      /** Format: int32 */
+      articleId?: number;
+      title?: string | null;
+      url?: string | null;
+      canonicalUrl?: string | null;
+      excerpt?: string | null;
+      imageUrl?: string | null;
+      author?: string | null;
+      /** Format: int32 */
+      wordCount?: number | null;
+      lang?: string | null;
+      /** Format: date-time */
+      publishedAt?: string;
+      sourceName?: string | null;
+      sourceType?: string | null;
+      topics?: string[] | null;
+      /** Format: int32 */
+      estimatedReadingMinutes?: number;
+      licenseType?: string | null;
+      displayMode?: string | null;
+      paywallDetected?: boolean;
+    };
+    ArticleSearchResultDto: {
+      /** Format: int32 */
+      articleId?: number;
+      title?: string | null;
+      excerpt?: string | null;
+      imageUrl?: string | null;
+      sourceName?: string | null;
+      /** Format: date-time */
+      publishedAt?: string;
+      licenseType?: string | null;
+      displayMode?: string | null;
+      paywallDetected?: boolean;
+    };
+    ArticleSearchResultsPageDto: {
+      items?: components["schemas"]["ArticleSearchResultDto"][] | null;
+      /** Format: int32 */
+      total?: number;
+      /** Format: int32 */
+      page?: number;
+      /** Format: int32 */
+      pageSize?: number;
+    };
+    ArticleTagDto: {
+      slug?: string | null;
+      name?: string | null;
+      keywords?: string[] | null;
     };
     ArticleUpdateRequest: {
       title?: string | null;
@@ -1954,6 +1386,127 @@ export interface components {
       /** Format: double */
       clusterProminence?: number;
     };
+    GdprExportResponse: {
+      /** Format: date-time */
+      generatedAtUtc?: string;
+      profile?: components["schemas"]["GdprUserProfile"];
+      externalIdentities?:
+        | components["schemas"]["GdprExternalIdentity"][]
+        | null;
+      interactions?: components["schemas"]["GdprInteraction"][] | null;
+      readingLists?: components["schemas"]["GdprReadingList"][] | null;
+      readingListItems?: components["schemas"]["GdprReadingListItem"][] | null;
+      userInterests?: components["schemas"]["GdprUserInterest"][] | null;
+    };
+    GdprExternalIdentity: {
+      provider?: string | null;
+      email?: string | null;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    GdprInteraction: {
+      /** Format: int32 */
+      articleId?: number;
+      type?: string | null;
+      reason?: string | null;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    GdprReadingList: {
+      /** Format: int32 */
+      readingListId?: number;
+      name?: string | null;
+      slug?: string | null;
+      description?: string | null;
+      visibility?: string | null;
+      allowCollaboration?: boolean;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+    };
+    GdprReadingListItem: {
+      /** Format: int32 */
+      readingListId?: number;
+      /** Format: int32 */
+      articleId?: number;
+      note?: string | null;
+      /** Format: date-time */
+      addedAt?: string;
+    };
+    GdprUserInterest: {
+      /** Format: int32 */
+      interestId?: number;
+      /** Format: double */
+      weight?: number;
+      source?: string | null;
+      /** Format: double */
+      confidence?: number;
+      /** Format: date-time */
+      lastUpdatedAt?: string;
+    };
+    GdprUserProfile: {
+      /** Format: uuid */
+      publicId?: string;
+      username?: string | null;
+      email?: string | null;
+      role?: string | null;
+      status?: string | null;
+      avatarUrl?: string | null;
+      locale?: string | null;
+      timezone?: string | null;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+      /** Format: date-time */
+      lastLoginAt?: string | null;
+      /** Format: date-time */
+      deletedAt?: string | null;
+      /** Format: date-time */
+      hardDeleteDue?: string | null;
+    };
+    IngestionLogAdminResponse: {
+      /** Format: int64 */
+      logId?: number;
+      /** Format: int32 */
+      sourceId?: number;
+      sourceName?: string | null;
+      /** Format: date-time */
+      fetchedAt?: string;
+      robotsTxtHash?: string | null;
+      tdmrepJsonPresent?: boolean;
+      tdmrepJsonHash?: string | null;
+      aiTxtPresent?: boolean;
+      aiTxtHash?: string | null;
+      /** Format: int32 */
+      articlesIngested?: number;
+      /** Format: int32 */
+      articlesSkipped?: number;
+      errors?: string | null;
+    };
+    IngestionLogStatsPoint: {
+      /** Format: date */
+      day?: string;
+      /** Format: int32 */
+      sourceId?: number;
+      sourceName?: string | null;
+      /** Format: int32 */
+      articlesIngested?: number;
+      /** Format: int32 */
+      articlesSkipped?: number;
+      /** Format: int32 */
+      runsWithErrors?: number;
+    };
+    IngestionLogStatsResponse: {
+      /** Format: int32 */
+      windowDays?: number;
+      /** Format: date */
+      from?: string;
+      /** Format: date */
+      to?: string;
+      points?: components["schemas"]["IngestionLogStatsPoint"][] | null;
+    };
     /**
      * Format: int32
      * @enum {integer}
@@ -2003,6 +1556,23 @@ export interface components {
       instance?: string | null;
     } & {
       [key: string]: unknown;
+    };
+    ReadingListDto: {
+      /** Format: int32 */
+      id?: number;
+      /** Format: uuid */
+      ownerUserId?: string;
+      name?: string | null;
+      slug?: string | null;
+      description?: string | null;
+      visibility?: components["schemas"]["Visibility"];
+      allowCollaboration?: boolean;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+      /** Format: int32 */
+      itemsCount?: number;
     };
     ReadingStatsDto: {
       window?: string | null;
@@ -2079,6 +1649,34 @@ export interface components {
       country?: string | null;
       lang?: string | null;
     };
+    SourceAdminResponse: {
+      /** Format: int32 */
+      sourceId?: number;
+      type?: string | null;
+      name?: string | null;
+      url?: string | null;
+      rssUrl?: string | null;
+      country?: string | null;
+      lang?: string | null;
+      enabled?: boolean;
+      tosUrl?: string | null;
+      /** Format: date-time */
+      tosLastCheckedAt?: string | null;
+      tosHashLast?: string | null;
+      licensingStatus?: string | null;
+      /** Format: date */
+      licenseExpiresAt?: string | null;
+      tdmOptoutPresent?: boolean;
+      tdmOptoutMechanism?: string | null;
+      imageHotlinkAllowed?: boolean;
+      publisherContactEmail?: string | null;
+      negotiationStatus?: string | null;
+      notes?: string | null;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+    };
     SourceAdminUpdate: {
       licensingStatus?: string | null;
       /** Format: date */
@@ -2104,6 +1702,37 @@ export interface components {
       /** Format: date */
       licenseExpiresAt?: string | null;
       tdmOptoutPresent?: boolean;
+    };
+    SourceResponse: {
+      /** Format: int32 */
+      sourceId?: number;
+      name?: string | null;
+      country?: string | null;
+      lang?: string | null;
+      url?: string | null;
+    };
+    TakedownRequestAdminResponse: {
+      /** Format: int64 */
+      requestId?: number;
+      /** Format: int32 */
+      articleId?: number | null;
+      articleTitle?: string | null;
+      articleUrl?: string | null;
+      articleTakedownStatus?: string | null;
+      /** Format: int32 */
+      sourceId?: number | null;
+      sourceName?: string | null;
+      sourceLicensingStatus?: string | null;
+      requesterEmail?: string | null;
+      requesterRole?: string | null;
+      reason?: string | null;
+      /** Format: date-time */
+      receivedAt?: string;
+      /** Format: date-time */
+      respondedAt?: string | null;
+      actionTaken?: string | null;
+      responseNotes?: string | null;
+      isPending?: boolean;
     };
     TakedownRequestAdminUpdate: {
       actionTaken?: string | null;
@@ -2131,6 +1760,25 @@ export interface components {
       /** Format: double */
       weight?: number;
     };
+    UserProfileDto: {
+      /** Format: uuid */
+      id?: string;
+      username?: string | null;
+      email?: string | null;
+      avatarUrl?: string | null;
+      locale?: string | null;
+      timezone?: string | null;
+      role?: string | null;
+      status?: string | null;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+      /** Format: date-time */
+      lastLoginAt?: string | null;
+      /** Format: date-time */
+      deletedAt?: string | null;
+    };
     /**
      * Format: int32
      * @enum {integer}
@@ -2145,6 +1793,355 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+  ListIngestionLogs: {
+    parameters: {
+      query?: {
+        sourceId?: number;
+        from?: string;
+        to?: string;
+        errorsOnly?: boolean;
+        page?: number;
+        pageSize?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["IngestionLogAdminResponse"][];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetIngestionLogStats: {
+    parameters: {
+      query?: {
+        days?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["IngestionLogStatsResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetIngestionLogById: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["IngestionLogAdminResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ListSourcesAdmin: {
+    parameters: {
+      query?: {
+        expiringIn?: number;
+        tdmOptout?: boolean;
+        negotiation?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SourceAdminResponse"][];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetSourceAdmin: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SourceAdminResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ListTakedownRequests: {
+    parameters: {
+      query?: {
+        pending?: boolean;
+        sourceId?: number;
+        recentDays?: number;
+        page?: number;
+        pageSize?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TakedownRequestAdminResponse"][];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetTakedownRequestById: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["TakedownRequestAdminResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetArticleById: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArticleDetailDto"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  SearchArticles: {
+    parameters: {
+      query: {
+        q: string;
+        page: number;
+        pageSize: number;
+        lang?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArticleSearchResultsPageDto"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetArticleTags: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArticleTagDto"][];
+        };
+      };
+    };
+  };
+  SearchArticlesByTag: {
+    parameters: {
+      query: {
+        page: number;
+        pageSize: number;
+        lang?: string;
+      };
+      header?: never;
+      path: {
+        tag: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ArticleSearchResultsPageDto"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   GetCsrf: {
     parameters: {
       query?: never;
@@ -2816,6 +2813,187 @@ export interface operations {
       };
     };
   };
+  GetMyProfile: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UserProfileDto"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  DeleteMyProfile: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UpdateMyProfile: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateMyProfileRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UserProfileDto"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ChangeMyPassword: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ChangeMyPasswordRequest"];
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ExportMyData: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["GdprExportResponse"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Too Many Requests */
+      429: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   SetMyInterests: {
     parameters: {
       query?: never;
@@ -2918,6 +3096,360 @@ export interface operations {
       };
     };
   };
+  CreateReadingList: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateReadingListRequest"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetReadingListItems: {
+    parameters: {
+      query?: {
+        limit?: number;
+        cursor?: string;
+        expand?: string;
+      };
+      header?: never;
+      path: {
+        readingListId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AddReadingListItem: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        readingListId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddReadingListItemRequest"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  RemoveReadingListItem: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        readingListId: number;
+        articleId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  DeleteReadingList: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        readingListId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetReadingListBySlug: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        ownerUserId: string;
+        slug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReadingListDto"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetMyReadingListsPaged: {
+    parameters: {
+      query?: {
+        limit?: number;
+        cursor?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetPublicReadingListBySlug: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        ownerUserId: string;
+        slug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReadingListDto"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetPublicReadingListItems: {
+    parameters: {
+      query?: {
+        limit?: number;
+        cursor?: string;
+      };
+      header?: never;
+      path: {
+        readingListId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ListSourcesPublic: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SourceResponse"][];
+        };
+      };
+    };
+  };
   GetSourcePublic: {
     parameters: {
       query?: never;
@@ -2940,6 +3472,35 @@ export interface operations {
       };
       /** @description Not Found */
       404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  SubmitTakedownRequest: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TakedownRequestInput"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Bad Request */
+      400: {
         headers: {
           [name: string]: unknown;
         };

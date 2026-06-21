@@ -6,7 +6,9 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 
 import { routing } from "@/i18n/routing";
+import { getSession } from "@/lib/server/session";
 import { Providers } from "@/app/providers";
+import { AuthProvider } from "@/components/auth/auth-provider";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import "../globals.css";
@@ -58,6 +60,7 @@ export default async function LocaleLayout({
     notFound();
   }
   setRequestLocale(locale);
+  const session = await getSession();
 
   return (
     <html
@@ -66,11 +69,13 @@ export default async function LocaleLayout({
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
         <NextIntlClientProvider>
-          <Providers>
-            <Header />
-            <main className="flex flex-1 flex-col">{children}</main>
-            <Footer />
-          </Providers>
+          <AuthProvider initialSession={session}>
+            <Providers>
+              <Header />
+              <main className="flex flex-1 flex-col">{children}</main>
+              <Footer />
+            </Providers>
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>

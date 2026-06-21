@@ -18,6 +18,9 @@ export type FeedPage = components["schemas"]["FeedPage"];
 export type FeedItem = components["schemas"]["FeedItemDto"];
 export type FeedScoreBreakdown = components["schemas"]["FeedScoreBreakdownDto"];
 export type SourceDetail = components["schemas"]["SourceDetailDto"];
+export type AuthResult = components["schemas"]["AuthResultDto"];
+export type LoginRequest = components["schemas"]["LoginRequest"];
+export type UserProfile = components["schemas"]["UserProfileDto"];
 
 /**
  * Article-detail response. The contract does not declare a schema for
