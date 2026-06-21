@@ -1,7 +1,10 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowUpRight } from "lucide-react";
 
+import { Link } from "@/i18n/navigation";
+import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export default async function LandingPage({
   params,
@@ -13,29 +16,33 @@ export default async function LandingPage({
   const t = await getTranslations("Landing");
 
   return (
-    <main className="flex flex-1 items-center justify-center bg-background px-6 py-16 text-foreground">
-      <section className="mx-auto flex w-full max-w-2xl flex-col items-center gap-6 text-center">
-        <span className="rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">
+    <Container size="default" className="flex flex-1 flex-col justify-center py-20">
+      <div className="flex max-w-2xl flex-col gap-6">
+        <Badge variant="context" className="w-fit">
           {t("badge")}
-        </span>
+        </Badge>
 
-        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+        <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
           {t("title")}
         </h1>
 
-        <p className="text-xl font-medium text-foreground/90">{t("tagline")}</p>
-
-        <p className="max-w-prose text-base leading-relaxed text-muted-foreground">
+        <p className="text-lg leading-relaxed text-foreground/90">
           {t("description")}
         </p>
 
-        <Button size="lg" disabled>
-          {t("cta")}
-          <ArrowUpRight aria-hidden="true" />
-        </Button>
+        <p className="text-sm italic text-muted-foreground">{t("claim")}</p>
+
+        <div className="mt-2 flex flex-wrap gap-3">
+          <Button asChild>
+            <Link href="/styleguide">
+              {t("cta")}
+              <ArrowUpRight aria-hidden="true" />
+            </Link>
+          </Button>
+        </div>
 
         <p className="text-xs text-muted-foreground">{t("scaffoldNote")}</p>
-      </section>
-    </main>
+      </div>
+    </Container>
   );
 }

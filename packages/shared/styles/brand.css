@@ -1,0 +1,53 @@
+/*
+ * AGER brand palette — SINGLE SOURCE OF TRUTH (one-place swap).
+ * Consumed by apps/web/src/app/globals.css via `@import "@ager/shared/brand.css"`.
+ * Mirrored in TS at packages/shared/src/tokens.ts (for mobile / non-CSS consumers).
+ *
+ * LIGHT-FIRST: the brand defines no dark palette. Do NOT add an unofficial dark theme
+ * here without owner sign-off. No high saturation, no colored shadows.
+ */
+:root {
+  /* ---- Raw brand palette ---------------------------------------------------- */
+  --ager-blue: #0f2a44; /* primary — authority, editorial depth. Never long body text. */
+  --editorial-white: #f9faf7; /* warm white — primary background, cards, feed */
+  --neutral-beige: #efe9df; /* secondary background — "spiegato bene" / approfondimento */
+  --ink-gray: #1c1c1c; /* primary text — never pure black */
+  --muted-gray: #6b7280; /* metadata, timestamps, source, placeholders */
+  --ethical-green: #1e6f5c; /* accent — ethics/context, badges, secondary CTA (<=10%) */
+
+  /* ---- Functional / state colors ------------------------------------------- */
+  --state-link: #1a5fb4; /* inline links, CTA hover, text emphasis */
+  --state-success: #2e8b57; /* confirmed / verified / positive outcomes */
+  --state-warning: #d97706; /* sensitive / evolving / fact-check in progress */
+  --state-error: #b42318; /* alerts, errors, retracted content */
+
+  /* ---- Semantic (shadcn) tokens — LIGHT ONLY ------------------------------- */
+  --background: var(--editorial-white);
+  --foreground: var(--ink-gray);
+  --card: var(--editorial-white);
+  --card-foreground: var(--ink-gray);
+  --popover: var(--editorial-white);
+  --popover-foreground: var(--ink-gray);
+  --primary: var(--ager-blue);
+  --primary-foreground: var(--editorial-white);
+  --secondary: var(--neutral-beige);
+  --secondary-foreground: var(--ager-blue);
+  --muted: var(--neutral-beige);
+  --muted-foreground: var(--muted-gray);
+  --accent: var(--ethical-green);
+  --accent-foreground: var(--editorial-white);
+  --destructive: var(--state-error);
+  --destructive-foreground: var(--editorial-white);
+  --link: var(--state-link);
+  --success: var(--state-success);
+  --warning: var(--state-warning);
+
+  /* Warm, low-contrast border/input derived from the beige family. */
+  --border: #e4ddd0;
+  --input: #e4ddd0;
+  --ring: var(--ager-blue);
+
+  /* ---- Radii --------------------------------------------------------------- */
+  --radius: 0.5rem;
+  --radius-image: 80px; /* brand photo corner radius (see styleguide flag at thumbnail size) */
+}

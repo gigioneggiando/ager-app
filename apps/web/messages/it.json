@@ -1,10 +1,113 @@
 {
   "Landing": {
     "badge": "Anteprima · Sprint 5",
-    "title": "AGER",
-    "tagline": "Notizie civiche italiane, prima il link.",
-    "description": "Un lettore di notizie che ti porta direttamente all'editore. Niente copie dell'articolo: solo titolo, anteprima e fonte. Il feed personalizzato arriva nei prossimi aggiornamenti.",
-    "cta": "Scopri di più",
-    "scaffoldNote": "Impalcatura del progetto — nessuna funzionalità ancora."
+    "title": "Notizie civiche, prima il link",
+    "description": "Ager raccoglie e ordina l'informazione che conta, e ti porta direttamente all'editore. Niente copie dell'articolo: titolo, contesto e fonte, sempre verificabili. Il feed personalizzato arriva nei prossimi aggiornamenti.",
+    "claim": "Ager riduce il rumore e aumenta la comprensione.",
+    "cta": "Apri lo styleguide",
+    "scaffoldNote": "Design system del progetto — dati reali non ancora collegati."
+  },
+  "Nav": {
+    "primary": "Navigazione principale",
+    "feed": "Feed",
+    "sources": "Fonti",
+    "insights": "Approfondimenti",
+    "styleguide": "Styleguide",
+    "soon": "presto",
+    "openMenu": "Apri il menu",
+    "closeMenu": "Chiudi il menu"
+  },
+  "Footer": {
+    "mission": "Riportiamo la qualità al centro dell'informazione: fonti visibili, contesto dichiarato, rispetto del tuo tempo e della tua intelligenza.",
+    "nav": "Navigazione del footer",
+    "styleguide": "Styleguide",
+    "sourcesSoon": "Fonti (presto)",
+    "aboutSoon": "Chi siamo (presto)",
+    "rights": "Tutti i diritti riservati.",
+    "claim": "Riduce il rumore, aumenta la comprensione."
+  },
+  "Styleguide": {
+    "badge": "Brand · v1",
+    "title": "Design system di Ager",
+    "intro": "L'identità visiva di Ager applicata ai componenti dell'interfaccia. Una base coerente, sobria ed editoriale, da rivedere prima di collegare i dati reali.",
+    "sections": {
+      "palette": "Palette",
+      "typography": "Tipografia",
+      "logo": "Logo",
+      "buttons": "Pulsanti",
+      "badges": "Badge",
+      "surfaces": "Superfici e stati",
+      "feed": "FeedCard"
+    },
+    "palette": {
+      "note": "Colori ufficiali del brand. Niente alte saturazioni, niente ombre colorate. Distribuzione consigliata: ~60% neutri, ~25% blu, ≤10% verde, ~5% funzionali.",
+      "functional": "Colori funzionali",
+      "agerBlue": "Header, titoli, CTA primarie. Mai per testi lunghi.",
+      "editorialWhite": "Sfondo principale, card, feed.",
+      "neutralBeige": "Sfondi secondari, sezioni di approfondimento.",
+      "inkGray": "Corpo del testo. Mai nero puro.",
+      "mutedGray": "Metadata, timestamp, fonti, placeholder.",
+      "ethicalGreen": "Accento: affidabilità, contesto, CTA secondarie.",
+      "link": "Link inline, hover, evidenziazioni.",
+      "success": "Contenuti confermati, stato verificato.",
+      "warning": "Contenuti sensibili, notizie in evoluzione.",
+      "error": "Segnalazioni, errori, contenuti smentiti."
+    },
+    "type": {
+      "note": "Merriweather per titoli e wordmark, Inter per UI e testo. Gerarchia a livelli: sintesi → contesto → approfondimento.",
+      "synthesis": "Sintesi",
+      "depth": "Approfondimento",
+      "sampleHeading": "Capire prima, scorrere dopo",
+      "h1": "Titolo di sezione",
+      "h2": "Sottotitolo",
+      "h3": "Contesto",
+      "sampleBody": "Il testo di lettura usa Inter a 16px con interlinea ampia, pensato per spiegazioni brevi ma dense. La semplificazione serve a comprendere meglio, non a banalizzare: definiamo i termini chiave e distinguiamo i fatti dalle interpretazioni.",
+      "small": "Testo secondario",
+      "metadata": "metadata e fonti",
+      "caption": "Didascalia"
+    },
+    "logo": {
+      "note": "Spazio di rispetto pari al 14% del simbolo. Dimensioni minime digitali: logo completo 120px, icona 32px.",
+      "full": "Logo completo",
+      "symbol": "Simbolo",
+      "onBlue": "Su sfondo blu",
+      "forbidden": "Vietato: ombre o effetti, colori fuori palette, rotazione, deformazione, wordmark con font diverso da Merriweather."
+    },
+    "buttons": {
+      "note": "Primaria in blu, secondaria in verde etico. Le CTA secondarie restano un accento.",
+      "primary": "Azione primaria",
+      "secondary": "Azione secondaria",
+      "outline": "Contorno",
+      "ghost": "Discreto",
+      "link": "Link",
+      "destructive": "Elimina"
+    },
+    "badges": {
+      "note": "Etichette a bassa saturazione. Il verde segnala fiducia e contesto, l'arancione l'evoluzione, il rosso l'errore.",
+      "verified": "Verificato",
+      "context": "Contesto",
+      "sources": "Fonti",
+      "warning": "In evoluzione",
+      "error": "Smentito",
+      "topic": "Economia"
+    },
+    "surfaces": {
+      "note": "Card, scheletri di caricamento e stati vuoti o di errore, in tono misurato.",
+      "cardTitle": "Titolo della card",
+      "cardDescription": "Una breve descrizione di supporto in grigio attenuato.",
+      "emptyTitle": "Nessun contenuto",
+      "emptyDescription": "Non c'è ancora nulla da mostrare qui. Torna più tardi.",
+      "emptyAction": "Aggiorna",
+      "errorTitle": "Qualcosa non ha funzionato",
+      "errorDescription": "Non siamo riusciti a caricare i contenuti. Riprova tra poco.",
+      "errorAction": "Riprova"
+    },
+    "feed": {
+      "note": "Il componente riutilizzabile del feed: solo titolo, anteprima, fonte, immagine e argomenti. Link-first — nessun corpo dell'articolo. Dati di esempio.",
+      "why": "Perché lo vedo?",
+      "readingTime": "{minutes} min di lettura",
+      "openExternal": "Apri sull'editore",
+      "radiusFlag": "Da rivedere: il brand prevede un raggio immagine di 80px. A dimensione thumbnail gli angoli risultano quasi circolari. Probabile necessità di un raggio effettivo più contenuto per le miniature — in attesa di conferma."
+    }
   }
 }

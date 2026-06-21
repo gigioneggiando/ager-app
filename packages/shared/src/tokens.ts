@@ -1,17 +1,75 @@
 /**
- * Design tokens — single source of truth for cross-platform theming (web now, mobile later).
+ * Design tokens — TS mirror of the AGER brand for non-CSS consumers (mobile later,
+ * docs, tests). The canonical CSS source of truth is packages/shared/styles/brand.css,
+ * imported by apps/web globals. Keep the two in sync; swap the palette in ONE place.
  *
- * NEUTRAL placeholder only. The owner swaps the palette here (and the matching CSS
- * variables in apps/web/src/app/globals.css) in ONE place later. Do NOT hardcode brand
- * colors anywhere else. Values are HSL channels so they map 1:1 onto the shadcn/ui
- * CSS-variable convention (`hsl(var(--token))`).
+ * LIGHT-FIRST: the brand defines no dark palette. There is intentionally no dark color
+ * set here — do not add one without owner sign-off.
  */
+
+/** Raw brand palette (hex). */
+export const brand = {
+  agerBlue: "#0F2A44",
+  editorialWhite: "#F9FAF7",
+  neutralBeige: "#EFE9DF",
+  inkGray: "#1C1C1C",
+  mutedGray: "#6B7280",
+  ethicalGreen: "#1E6F5C",
+} as const;
+
+/** Functional / state colors. */
+export const state = {
+  link: "#1A5FB4",
+  success: "#2E8B57",
+  warning: "#D97706",
+  error: "#B42318",
+} as const;
+
+/**
+ * Recommended usage budget from the brand book (coherence cross-app):
+ * ~60% neutrals (white + beige), ~25% blue, ~10% green accent, ~5% functional.
+ */
+export const usageBudget = {
+  neutrals: 0.6,
+  agerBlue: 0.25,
+  ethicalGreen: 0.1,
+  functional: 0.05,
+} as const;
+
+/** Semantic color tokens (light theme only — mirrors brand.css). */
+export const colors = {
+  light: {
+    background: brand.editorialWhite,
+    foreground: brand.inkGray,
+    card: brand.editorialWhite,
+    cardForeground: brand.inkGray,
+    popover: brand.editorialWhite,
+    popoverForeground: brand.inkGray,
+    primary: brand.agerBlue,
+    primaryForeground: brand.editorialWhite,
+    secondary: brand.neutralBeige,
+    secondaryForeground: brand.agerBlue,
+    muted: brand.neutralBeige,
+    mutedForeground: brand.mutedGray,
+    accent: brand.ethicalGreen,
+    accentForeground: brand.editorialWhite,
+    destructive: state.error,
+    destructiveForeground: brand.editorialWhite,
+    link: state.link,
+    success: state.success,
+    warning: state.warning,
+    border: "#E4DDD0",
+    input: "#E4DDD0",
+    ring: brand.agerBlue,
+  },
+} as const;
 
 export const radius = {
   sm: "0.25rem",
   md: "0.5rem",
-  lg: "0.625rem",
-  xl: "0.75rem",
+  lg: "0.75rem",
+  /** Brand photo corner radius. */
+  image: "80px",
 } as const;
 
 export const spacing = {
@@ -21,81 +79,67 @@ export const spacing = {
   lg: "1.5rem",
   xl: "2rem",
   "2xl": "3rem",
+  "3xl": "4rem",
 } as const;
 
 export const typography = {
+  /** Serif — headings + wordmark. */
+  fontSerif:
+    'var(--font-merriweather), Merriweather, ui-serif, Georgia, Cambria, "Times New Roman", serif',
+  /** Sans — UI + body. */
   fontSans:
-    'var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-  fontMono:
-    'var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace',
-  size: {
-    xs: "0.75rem",
-    sm: "0.875rem",
-    base: "1rem",
-    lg: "1.125rem",
-    xl: "1.25rem",
-    "2xl": "1.5rem",
-    "3xl": "1.875rem",
-  },
+    'var(--font-inter), Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
   weight: {
-    normal: 400,
+    light: 300,
+    regular: 400,
     medium: 500,
     semibold: 600,
     bold: 700,
+    black: 900,
   },
   leading: {
     tight: 1.2,
-    normal: 1.5,
-    relaxed: 1.625,
+    snug: 1.35,
+    normal: 1.6,
+    relaxed: 1.75,
+  },
+  /**
+   * Layered editorial hierarchy: sintesi (the gist) → contesto (context) →
+   * approfondimento (depth). Maps to the visual type scale.
+   */
+  scale: {
+    display: "3rem", // 48 — hero / wordmark display
+    h1: "2.25rem", // 36 — sintesi
+    h2: "1.75rem", // 28
+    h3: "1.375rem", // 22 — contesto
+    h4: "1.125rem", // 18
+    body: "1rem", // 16 — approfondimento / body
+    small: "0.875rem", // 14 — metadata
+    caption: "0.75rem", // 12 — caption / timestamp
   },
 } as const;
 
-/**
- * Semantic color tokens as HSL channel triplets ("H S% L%").
- * NEUTRAL (shadcn "neutral" base). Light + dark. Brand-agnostic on purpose.
- */
-export const colors = {
-  light: {
-    background: "0 0% 100%",
-    foreground: "0 0% 3.9%",
-    card: "0 0% 100%",
-    cardForeground: "0 0% 3.9%",
-    primary: "0 0% 9%",
-    primaryForeground: "0 0% 98%",
-    secondary: "0 0% 96.1%",
-    secondaryForeground: "0 0% 9%",
-    muted: "0 0% 96.1%",
-    mutedForeground: "0 0% 45.1%",
-    accent: "0 0% 96.1%",
-    accentForeground: "0 0% 9%",
-    destructive: "0 84.2% 60.2%",
-    destructiveForeground: "0 0% 98%",
-    border: "0 0% 89.8%",
-    input: "0 0% 89.8%",
-    ring: "0 0% 3.9%",
-  },
-  dark: {
-    background: "0 0% 3.9%",
-    foreground: "0 0% 98%",
-    card: "0 0% 3.9%",
-    cardForeground: "0 0% 98%",
-    primary: "0 0% 98%",
-    primaryForeground: "0 0% 9%",
-    secondary: "0 0% 14.9%",
-    secondaryForeground: "0 0% 98%",
-    muted: "0 0% 14.9%",
-    mutedForeground: "0 0% 63.9%",
-    accent: "0 0% 14.9%",
-    accentForeground: "0 0% 98%",
-    destructive: "0 62.8% 30.6%",
-    destructiveForeground: "0 0% 98%",
-    border: "0 0% 14.9%",
-    input: "0 0% 14.9%",
-    ring: "0 0% 83.1%",
+/** Logo constraints from the brand book. */
+export const logo = {
+  /** Clear space = 14% of the symbol's size on every side. */
+  clearSpaceRatio: 0.14,
+  /** Minimum digital sizes (px). */
+  minSize: {
+    primary: 120,
+    icon: 32,
   },
 } as const;
 
-export const tokens = { radius, spacing, typography, colors } as const;
+export const tokens = {
+  brand,
+  state,
+  colors,
+  radius,
+  spacing,
+  typography,
+  logo,
+  usageBudget,
+} as const;
 
 export type ColorScheme = keyof typeof colors;
 export type ColorToken = keyof typeof colors.light;
