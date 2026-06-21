@@ -1,0 +1,10 @@
+{
+  "Landing": {
+    "badge": "Preview · Sprint 5",
+    "title": "AGER",
+    "tagline": "Italian civic news, link-first.",
+    "description": "A news reader that takes you straight to the publisher. No article copies — just the headline, an excerpt, and the source. The personalized feed arrives in upcoming releases.",
+    "cta": "Learn more",
+    "scaffoldNote": "Project scaffold — no features yet."
+  }
+}

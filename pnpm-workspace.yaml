@@ -1,0 +1,13 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# Per-dependency lifecycle-build approvals (pnpm). true = allow its install/build
+# scripts to run; false = skip (the dep ships prebuilt binaries and needs nothing).
+# sharp powers next/image; esbuild/@swc back the test+build toolchain.
+allowBuilds:
+  "@parcel/watcher": false
+  "@swc/core": true
+  esbuild: true
+  sharp: true
+  unrs-resolver: false
