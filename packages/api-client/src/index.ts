@@ -17,3 +17,11 @@ import type { components } from "./generated/schema";
 export type FeedPage = components["schemas"]["FeedPage"];
 export type FeedItem = components["schemas"]["FeedItemDto"];
 export type FeedScoreBreakdown = components["schemas"]["FeedScoreBreakdownDto"];
+export type SourceDetail = components["schemas"]["SourceDetailDto"];
+
+/**
+ * Article-detail response. The contract does not declare a schema for
+ * GET /api/articles/{id} (200 "OK"), so we reuse FeedItemDto — the canonical article
+ * projection this API returns elsewhere (the feed). Render defensively (all optional).
+ */
+export type Article = components["schemas"]["FeedItemDto"];

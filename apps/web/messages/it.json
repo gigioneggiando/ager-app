@@ -67,6 +67,44 @@
       "loadMore": "Carica altro"
     }
   },
+  "Article": {
+    "untitled": "Senza titolo",
+    "by": "di {author}",
+    "readingTime": "{minutes} min di lettura",
+    "license": "Licenza: {license}",
+    "paywall": "Paywall",
+    "readOnPublisher": "Leggi sull'editore",
+    "linkFirstNote": "Ager rimanda sempre alla fonte originale. Non ospitiamo il testo dell'articolo."
+  },
+  "Sources": {
+    "heading": "Fonti",
+    "subheading": "Gli editori e le testate da cui Ager raccoglie le notizie, con tipo e gruppo editoriale.",
+    "unknownName": "Fonte senza nome",
+    "group": "Gruppo {id}",
+    "emptyTitle": "Nessuna fonte",
+    "emptyDescription": "Al momento non ci sono fonti da mostrare. Torna più tardi."
+  },
+  "SourceDetail": {
+    "fallbackTitle": "Fonte",
+    "backToList": "Tutte le fonti",
+    "group": "Gruppo {id}",
+    "country": "Paese",
+    "language": "Lingua",
+    "license": "Stato della licenza",
+    "licenseExpires": "Licenza in scadenza",
+    "tdm": "Opt-out TDM",
+    "tdmOptout": "Opt-out TDM",
+    "yes": "Sì",
+    "no": "No",
+    "visitHomepage": "Vai al sito",
+    "viewTerms": "Termini di servizio",
+    "rss": "Feed RSS"
+  },
+  "NotFound": {
+    "title": "Pagina non trovata",
+    "description": "Il contenuto che cerchi non esiste o è stato spostato.",
+    "backHome": "Torna al feed"
+  },
   "Styleguide": {
     "badge": "Brand · v1",
     "title": "Design system di Ager",

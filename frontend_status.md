@@ -9,7 +9,7 @@ off `main`, open PR vs `main`, owner ratifies/merges. See
 | **PR0** | Scaffold: monorepo + Next.js web app + OpenAPI client + CI | `feat/prompt0` | ✅ Merged (#1) |
 | **PR1** | Design system + app shell — official Ager brand (tokens, fonts, logo/favicon, shell, components, FeedCard, styleguide) | `feat/prompt1` | ✅ Done — PR open vs `main` |
 | **PR2** | Feed — public/cold-start (`GET /api/feed` anonymous, infinite scroll, transparency) | `feat/prompt2` | ✅ Done — PR open vs `main` |
-| PR3 | Article + sources (detail, redirect-to-publisher, search, OG) | — | ⬜ Not started |
+| **PR3** | Article detail + dynamic OG images + sources (via proxies) | `feat/prompt3` | ✅ Done — PR open vs `main` |
 | PR4 | Auth (magic-link + OTP, JWT/CSRF via route-handler proxy, session) | — | ⬜ Not started |
 | PR5 | Onboarding + me (interests, interactions, reading lists, stats) | — | ⬜ Not started |
 | PR6 | Polish + deploy (PWA, OG, Lighthouse, a11y, Vercel, tag `frontend-web-v1`) | — | ⬜ Not started |
@@ -119,6 +119,40 @@ selector, no interactions, no personalization** (those are PR4/PR5).
 - **CORS**: ✅ resolved by routing the feed through the same-origin proxy handler — the
   browser never calls the backend directly, so no CORS config is needed. Set
   `API_BASE_URL=https://api.agerculture.com` in Vercel (Production + Preview).
+
+## PR3 — Article detail + OG + sources ✅
+
+All backend calls go through same-origin proxies / server-side fetches (no CORS).
+
+- **Proxy routes**: `src/app/api/articles/[id]`, `src/app/api/sources`,
+  `src/app/api/sources/[id]` — shared `backendGet` + `proxyJson` helper
+  (`src/lib/server/backend.ts`): forwards params, `Cache-Control` +
+  `next: { revalidate: 60 }`, passes through 404, collapses other errors to 502.
+- **Article page** `/[locale]/article/[id]`: server-rendered from the backend (shared
+  `getArticle`), link-first (metadata only, no body) — title, source + type + date +
+  author + reading time, excerpt, image (16px / placeholder), topics, license/paywall
+  badges. Prominent "Leggi sull'editore" CTA opens `url` in a new tab
+  (TODO(PR5): OPENED_EXTERNAL). `notFound()` → localized 404. `generateMetadata` sets
+  title/description/OG/Twitter using `canonicalUrl`.
+- **Dynamic OG** (`opengraph-image.tsx`, article + site-wide): branded card via
+  `next/og` (Ager Blue, Editorial White, **Merriweather** title + Ager logo). Verified
+  rendering a real backend title end-to-end. Runs on the **edge runtime** (required so
+  `fetch(new URL(..., import.meta.url))` font loading works — the Node runtime can't
+  fetch file: URLs). Merriweather woff fonts committed under `src/assets/fonts/`.
+- **Sources**: `/[locale]/sources` (list, SSG+ISR) and `/[locale]/sources/[id]`
+  (profile, `SourceDetailDto`: type, group, homepage, RSS, country/lang, license/ToS,
+  TDM opt-out) with localized 404.
+- it/en + brand tokens throughout; accessible. Tests: 38 passing (proxy param
+  threading + 404/502, article render/null-fields/404, sources list/detail/404, OG
+  export shape). Lint + typecheck + build green.
+
+### Contract notes (PR3)
+
+- `GET /api/articles/{id}` and `GET /api/sources` (list) declare **no 200 schema** in
+  swagger. We reuse the generated `FeedItemDto` for the article (`Article` alias) and
+  `SourceDetailDto[]` for the list, rendering defensively. If the backend later returns
+  a different article-detail shape, add a real schema and regenerate.
+- Source detail path is `/api/sources/{sourceId}` (not `{id}`).
 
 ### Notes / follow-ups
 
