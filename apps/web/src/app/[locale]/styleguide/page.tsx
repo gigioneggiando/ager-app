@@ -335,15 +335,6 @@ export default async function StyleguidePage({
 
       {/* FEEDCARD */}
       <Section title={t("sections.feed")} description={t("feed.note")}>
-        {/* Flag for owner review — brand 80px image radius at thumbnail size. */}
-        <div className="flex items-start gap-2 rounded-lg border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-foreground/90">
-          <AlertTriangle
-            className="mt-0.5 size-4 shrink-0 text-warning"
-            aria-hidden="true"
-          />
-          <p>{t("feed.radiusFlag")}</p>
-        </div>
-
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {MOCK_ARTICLES.map((article) => (
             <FeedCard

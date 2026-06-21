@@ -72,14 +72,13 @@ Implements the official **Ager brand** (from `docs/brand/`).
   the Vercel preview.
 - Tests: 13 passing (Button, Badge, Logo, FeedCard). Lint + typecheck + build green.
 
-### ⚠ Owner decision needed (PR1)
+### Owner decisions (PR1)
 
-- **FeedCard image radius**: brand spec is **80px** (`--radius-image`). At thumbnail
-  size the corners read as nearly circular. Implemented per brand and **flagged** with a
-  callout on the styleguide page — likely wants a smaller effective radius for
-  thumbnails. Confirm desired value.
-- **Dark mode**: not provided by the brand. Confirm whether to design an official dark
-  palette later, or stay light-only.
+- **FeedCard image radius**: ✅ resolved — capped at **16px** (`--radius-image`). The
+  brand's literal 80px is preserved as `--radius-image-lg`, reserved for large/hero
+  imagery only (FeedCard does not use it). Styleguide warning callout removed.
+- **Dark mode**: ⬜ pending — not provided by the brand. Confirm whether to design an
+  official dark palette later, or stay light-only (current: light-only).
 
 ### Notes / follow-ups
 

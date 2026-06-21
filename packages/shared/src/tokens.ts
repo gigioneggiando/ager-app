@@ -68,8 +68,10 @@ export const radius = {
   sm: "0.25rem",
   md: "0.5rem",
   lg: "0.75rem",
-  /** Brand photo corner radius. */
-  image: "80px",
+  /** Feed/thumbnail image radius (owner-approved; brand 80px is near-circular here). */
+  image: "16px",
+  /** Reserved for large/hero imagery only — the brand's literal photo radius. */
+  imageLg: "80px",
 } as const;
 
 export const spacing = {

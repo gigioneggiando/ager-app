@@ -106,8 +106,7 @@
       "note": "Il componente riutilizzabile del feed: solo titolo, anteprima, fonte, immagine e argomenti. Link-first — nessun corpo dell'articolo. Dati di esempio.",
       "why": "Perché lo vedo?",
       "readingTime": "{minutes} min di lettura",
-      "openExternal": "Apri sull'editore",
-      "radiusFlag": "Da rivedere: il brand prevede un raggio immagine di 80px. A dimensione thumbnail gli angoli risultano quasi circolari. Probabile necessità di un raggio effettivo più contenuto per le miniature — in attesa di conferma."
+      "openExternal": "Apri sull'editore"
     }
   }
 }
