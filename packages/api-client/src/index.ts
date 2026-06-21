@@ -9,3 +9,11 @@ export {
 // Generated OpenAPI types — single source of truth for API shapes. Regenerate with
 // `pnpm gen:api` whenever openapi/swagger.json changes. Never hand-edit schema.ts.
 export type { paths, components, operations } from "./generated/schema";
+
+import type { components } from "./generated/schema";
+
+// Convenience aliases to generated schema types (NOT hand-written DTOs — they resolve
+// to the generated shapes and update automatically on `pnpm gen:api`).
+export type FeedPage = components["schemas"]["FeedPage"];
+export type FeedItem = components["schemas"]["FeedItemDto"];
+export type FeedScoreBreakdown = components["schemas"]["FeedScoreBreakdownDto"];

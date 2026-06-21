@@ -1,12 +1,4 @@
 {
-  "Landing": {
-    "badge": "Preview · Sprint 5",
-    "title": "Civic news, link-first",
-    "description": "Ager gathers and orders the information that matters, and takes you straight to the publisher. No article copies: headline, context and source, always verifiable. The personalized feed arrives in upcoming releases.",
-    "claim": "Ager reduces the noise and increases understanding.",
-    "cta": "Open the styleguide",
-    "scaffoldNote": "Project design system — real data not wired yet."
-  },
   "Nav": {
     "primary": "Primary navigation",
     "feed": "Feed",
@@ -25,6 +17,55 @@
     "aboutSoon": "About (soon)",
     "rights": "All rights reserved.",
     "claim": "Reduces the noise, increases understanding."
+  },
+  "Feed": {
+    "heading": "Your feed",
+    "subheading": "An ordered selection of what matters, with the source always visible. Tap a headline to read on the publisher.",
+    "card": {
+      "untitled": "Untitled",
+      "openExternal": "open on publisher",
+      "readingTime": "{minutes} min read"
+    },
+    "why": {
+      "trigger": "Why am I seeing this?",
+      "intro": "This item is ranked using several signals. Here's how much each one weighs.",
+      "score": "Overall score",
+      "feedMode": "Feed mode",
+      "version": "Recommender version",
+      "dimensions": {
+        "recency": {
+          "label": "Recency",
+          "help": "How recent the story is."
+        },
+        "topicMatch": {
+          "label": "Topic match",
+          "help": "How well the topic fits your interests."
+        },
+        "sourceDiversity": {
+          "label": "Source diversity",
+          "help": "Favors a range of sources, avoiding concentration."
+        },
+        "topicVariety": {
+          "label": "Topic variety",
+          "help": "Keeps the feed varied, not a single subject."
+        },
+        "clusterProminence": {
+          "label": "Story prominence",
+          "help": "How much the story stands out across sources."
+        }
+      }
+    },
+    "list": {
+      "loading": "Loading the feed",
+      "errorTitle": "We couldn't load the feed",
+      "errorDescription": "Something went wrong. Please try again shortly.",
+      "retry": "Retry",
+      "emptyTitle": "Nothing here yet",
+      "emptyDescription": "There's nothing to show right now. Check back later.",
+      "caughtUpTitle": "You're all caught up",
+      "caughtUpDescription": "You've seen everything we've selected for now. Check back later for more.",
+      "loadMore": "Load more"
+    }
   },
   "Styleguide": {
     "badge": "Brand · v1",
@@ -103,10 +144,7 @@
       "errorAction": "Retry"
     },
     "feed": {
-      "note": "The reusable feed component: only title, excerpt, source, image and topics. Link-first — no article body. Sample data.",
-      "why": "Why am I seeing this?",
-      "readingTime": "{minutes} min read",
-      "openExternal": "Open on publisher"
+      "note": "The reusable feed component: only title, excerpt, source, image and topics. Link-first — no article body. The third card shows the image placeholder. Sample data."
     }
   }
 }

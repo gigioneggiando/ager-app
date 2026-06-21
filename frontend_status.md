@@ -8,7 +8,7 @@ off `main`, open PR vs `main`, owner ratifies/merges. See
 | ------ | ----- | ------ | ------ |
 | **PR0** | Scaffold: monorepo + Next.js web app + OpenAPI client + CI | `feat/prompt0` | ✅ Merged (#1) |
 | **PR1** | Design system + app shell — official Ager brand (tokens, fonts, logo/favicon, shell, components, FeedCard, styleguide) | `feat/prompt1` | ✅ Done — PR open vs `main` |
-| PR2 | Feed (`GET /api/feed`, infinite scroll, feed modes, transparency) | — | ⬜ Not started |
+| **PR2** | Feed — public/cold-start (`GET /api/feed` anonymous, infinite scroll, transparency) | `feat/prompt2` | ✅ Done — PR open vs `main` |
 | PR3 | Article + sources (detail, redirect-to-publisher, search, OG) | — | ⬜ Not started |
 | PR4 | Auth (magic-link + OTP, JWT/CSRF via route-handler proxy, session) | — | ⬜ Not started |
 | PR5 | Onboarding + me (interests, interactions, reading lists, stats) | — | ⬜ Not started |
@@ -80,8 +80,48 @@ Implements the official **Ager brand** (from `docs/brand/`).
 - **Dark mode**: ⬜ pending — not provided by the brand. Confirm whether to design an
   official dark palette later, or stay light-only (current: light-only).
 
+## PR2 — Feed (public / cold-start) ✅
+
+The real feed, read anonymously (backend returns cold-start). **No auth, no mode
+selector, no interactions, no personalization** (those are PR4/PR5).
+
+- **Data layer**: generated openapi-fetch client calls `GET /api/feed { cursor?, limit? }`
+  (no auth header). TanStack Query `useInfiniteQuery` with `pageParam = nextCursor`;
+  `getNextPageParam` stops on null. Items deduped by `articleId`. `Providers`
+  (QueryClientProvider) added to the locale layout.
+- **Feed page** (home `/[locale]`): FeedCard grid from real `FeedItemDto` data;
+  infinite scroll via IntersectionObserver sentinel + "Carica altro" fallback button.
+  FeedCard rewritten to consume the generated `FeedItem` type (title, sourceName +
+  sourceType, relative `publishedAt`, excerpt, hotlinked image, topic chips,
+  estimatedReadingMinutes, score). Card opens `url` in a new tab
+  (`target=_blank rel="noopener noreferrer"`); all `displayMode`s resolve to that for
+  now (TODO(PR5): OPENED_EXTERNAL interaction). Link-first — no article body.
+- **"Perché lo vedo?"**: expander showing the scoreBreakdown (recency, topicMatch,
+  sourceDiversity, topicVariety, clusterProminence) as labeled % bars + feedMode +
+  recommenderVersion, explained in plain IT/EN.
+- **States** (calm, not engagement-maximizing): skeleton grid (loading), friendly
+  retry (error), sober empty state, and a "Sei in pari" caught-up state at end of feed
+  (no endless spinner).
+- **Images**: `next/image` `unoptimized` for arbitrary publisher hosts (remotePatterns
+  already wildcard), with a brand placeholder (Ager symbol on beige) when `imageUrl`
+  is null. 16px radius retained.
+- **i18n + a11y**: all strings it (default) + en, brand tone; single keyboard focus
+  target per card; meter roles on the score bars.
+- Tests: 20 passing (feed renders from a mocked client, infinite scroll appends a
+  second page with the threaded cursor, "Perché lo vedo" breakdown, empty/error/
+  caught-up states, null-image fallback). Lint + typecheck + build green.
+
+### ⚠ Owner note (PR2)
+
+- **CORS**: the browser calls `https://api.agerculture.com/api/feed` directly (per the
+  plan's public-read pattern). The backend must allow the web origin
+  (Vercel preview/prod + `localhost:3000`) or the feed shows the error state. Validate
+  the CORS allowlist — flagged in the plan for PR4, but it gates the live feed now.
+
 ### Notes / follow-ups
 
+- Note: the contract marks all `FeedItemDto` fields optional (no `required`), so the
+  card renders defensively (guards + fallbacks).
 - Next 16 deprecated the `middleware` file convention → using `src/proxy.ts`.
 - `next/image` `remotePatterns` currently allows any https host (link-first hotlinking);
   tighten to a source allowlist when sources land (PR2/PR3).

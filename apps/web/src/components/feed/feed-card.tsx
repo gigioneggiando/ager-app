@@ -1,86 +1,54 @@
+"use client";
+
 import Image from "next/image";
-import { ArrowUpRight, Clock, HelpCircle } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { ArrowUpRight, Clock } from "lucide-react";
+import type { FeedItem } from "@ager/api-client";
 
 import { cn } from "@/lib/utils";
+import { formatAbsoluteDate, formatRelativeTime } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-
-export interface FeedCardSource {
-  name: string;
-  /** Optional source favicon/logo (hotlinked). */
-  iconUrl?: string;
-}
-
-/** Transparency placeholder — populated with real score/breakdown in PR2. */
-export interface FeedCardWhy {
-  score?: number;
-}
-
-export interface FeedCardArticle {
-  id: string;
-  title: string;
-  source: FeedCardSource;
-  /** ISO timestamp. */
-  publishedAt: string;
-  excerpt: string;
-  /** Hotlinked publisher image. */
-  imageUrl?: string;
-  topics: string[];
-  readingTimeMinutes: number;
-  /** Publisher URL — link-first primary action. */
-  href: string;
-  why?: FeedCardWhy;
-}
-
-export interface FeedCardLabels {
-  /** "Perché lo vedo?" */
-  why: string;
-  /** Reading time, e.g. (5) => "5 min di lettura". */
-  readingTime: (minutes: number) => string;
-  /** Accessible label for the external-link action, e.g. "Apri sull'editore". */
-  openExternal: string;
-}
-
-const DEFAULT_LABELS: FeedCardLabels = {
-  why: "Perché lo vedo?",
-  readingTime: (m) => `${m} min di lettura`,
-  openExternal: "Apri sull'editore",
-};
-
-function formatTimestamp(iso: string, locale: string): string {
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return "";
-  return new Intl.DateTimeFormat(locale, {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(date);
-}
+import { AgerSymbol } from "@/components/brand/ager-symbol";
+import { WhyShown } from "@/components/feed/why-shown";
 
 interface FeedCardProps {
-  article: FeedCardArticle;
-  locale?: string;
-  labels?: Partial<FeedCardLabels>;
+  item: FeedItem;
+  feedMode?: string | null;
+  recommenderVersion?: string | null;
   className?: string;
 }
 
 /**
- * The reusable feed card. LINK-FIRST: it never renders an article body — only title,
- * excerpt, source, image (hotlinked), topics and reading time. The primary action opens
- * the publisher. Real data + the "Perché lo vedo?" popover land in PR2.
+ * The reusable feed card, populated from the generated FeedItemDto. LINK-FIRST: it never
+ * renders an article body — only title, excerpt, source, hotlinked image, topics and
+ * reading time. The primary action opens the publisher (`url`) in a new tab.
  *
- * NOTE(brand): the thumbnail uses --radius-image (16px, owner-approved). The brand's
- * literal 80px photo radius (--radius-image-lg) is reserved for large/hero imagery only.
+ * `displayMode` (redirect | webview | reader_optin) all resolve to "open url in a new
+ * tab" on web for now.
+ * TODO(PR5): fire an OPENED_EXTERNAL interaction on open (needs auth).
  */
 export function FeedCard({
-  article,
-  locale = "it",
-  labels: labelOverrides,
+  item,
+  feedMode,
+  recommenderVersion,
   className,
 }: FeedCardProps) {
-  const labels = { ...DEFAULT_LABELS, ...labelOverrides };
-  const timestamp = formatTimestamp(article.publishedAt, locale);
+  const t = useTranslations("Feed");
+  const locale = useLocale();
+
+  // Every FeedItemDto field is optional in the contract — stay defensive.
+  const title = item.title?.trim() || t("card.untitled");
+  const href = item.url || item.canonicalUrl || "#";
+  const topics = item.topics ?? [];
+  const minutes = item.estimatedReadingMinutes;
+  const relative = item.publishedAt
+    ? formatRelativeTime(item.publishedAt, locale)
+    : "";
+  const absolute = item.publishedAt
+    ? formatAbsoluteDate(item.publishedAt, locale)
+    : "";
 
   return (
     <Card
@@ -89,29 +57,36 @@ export function FeedCard({
         className,
       )}
     >
-      {article.imageUrl ? (
-        <a
-          href={article.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={labels.openExternal}
-          className="relative m-3 mb-0 block aspect-[16/9] overflow-hidden rounded-image bg-muted"
-        >
+      {/* Image (hotlinked) or brand placeholder. Decorative — the headline link below
+          carries the accessible name, so the image link is hidden from AT + tab order. */}
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-hidden="true"
+        tabIndex={-1}
+        className="relative m-3 mb-0 block aspect-[16/9] overflow-hidden rounded-image bg-muted"
+      >
+        {item.imageUrl ? (
           <Image
-            src={article.imageUrl}
-            alt=""
+            src={item.imageUrl}
+            alt={title}
             fill
             unoptimized
-            sizes="(max-width: 640px) 100vw, 480px"
+            sizes="(max-width: 640px) 100vw, 400px"
             className="object-cover"
           />
-        </a>
-      ) : null}
+        ) : (
+          <span className="flex h-full w-full items-center justify-center bg-neutral-beige">
+            <AgerSymbol className="size-10 text-primary/15" />
+          </span>
+        )}
+      </a>
 
       <div className="flex flex-1 flex-col gap-3 p-5">
-        {article.topics.length > 0 ? (
+        {topics.length > 0 ? (
           <div className="flex flex-wrap gap-1.5">
-            {article.topics.map((topic) => (
+            {topics.map((topic) => (
               <Badge key={topic} variant="neutral">
                 {topic}
               </Badge>
@@ -121,49 +96,60 @@ export function FeedCard({
 
         <h3 className="font-serif text-lg font-bold leading-snug tracking-tight">
           <a
-            href={article.href}
+            href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-primary transition-colors hover:text-link focus-visible:underline focus-visible:outline-none"
+            className="text-primary transition-colors hover:text-link focus-visible:rounded focus-visible:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
-            {article.title}
+            {title}
             <ArrowUpRight
               className="ml-1 inline size-4 align-text-top text-muted-foreground transition-colors group-hover:text-link"
               aria-hidden="true"
             />
+            <span className="sr-only"> — {t("card.openExternal")}</span>
           </a>
         </h3>
 
-        <p className="line-clamp-3 text-sm leading-relaxed text-foreground/90">
-          {article.excerpt}
-        </p>
+        {item.excerpt ? (
+          <p className="line-clamp-3 text-sm leading-relaxed text-foreground/90">
+            {item.excerpt}
+          </p>
+        ) : null}
 
         <div className="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
-          <span className="font-medium text-foreground/80">
-            {article.source.name}
-          </span>
-          {timestamp ? (
+          {item.sourceName ? (
+            <span className="font-medium text-foreground/80">
+              {item.sourceName}
+            </span>
+          ) : null}
+          {item.sourceType ? (
+            <span className="lowercase">· {item.sourceType}</span>
+          ) : null}
+          {relative ? (
             <>
               <span aria-hidden="true">·</span>
-              <time dateTime={article.publishedAt}>{timestamp}</time>
+              <time dateTime={item.publishedAt} title={absolute}>
+                {relative}
+              </time>
             </>
           ) : null}
-          <span aria-hidden="true">·</span>
-          <span className="inline-flex items-center gap-1">
-            <Clock className="size-3" aria-hidden="true" />
-            {labels.readingTime(article.readingTimeMinutes)}
-          </span>
+          {typeof minutes === "number" ? (
+            <>
+              <span aria-hidden="true">·</span>
+              <span className="inline-flex items-center gap-1">
+                <Clock className="size-3" aria-hidden="true" />
+                {t("card.readingTime", { minutes })}
+              </span>
+            </>
+          ) : null}
         </div>
 
-        {/* "Perché lo vedo?" — transparency affordance placeholder (wired in PR2). */}
-        <button
-          type="button"
-          className="inline-flex w-fit items-center gap-1 rounded text-xs font-medium text-link transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          aria-disabled="true"
-        >
-          <HelpCircle className="size-3.5" aria-hidden="true" />
-          {labels.why}
-        </button>
+        <WhyShown
+          score={item.score}
+          breakdown={item.scoreBreakdown}
+          feedMode={feedMode}
+          recommenderVersion={recommenderVersion}
+        />
       </div>
     </Card>
   );
