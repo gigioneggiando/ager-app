@@ -67,6 +67,44 @@
       "loadMore": "Load more"
     }
   },
+  "Article": {
+    "untitled": "Untitled",
+    "by": "by {author}",
+    "readingTime": "{minutes} min read",
+    "license": "License: {license}",
+    "paywall": "Paywall",
+    "readOnPublisher": "Read on publisher",
+    "linkFirstNote": "Ager always links to the original source. We don't host the article text."
+  },
+  "Sources": {
+    "heading": "Sources",
+    "subheading": "The publishers and outlets Ager gathers news from, with type and publisher group.",
+    "unknownName": "Unnamed source",
+    "group": "Group {id}",
+    "emptyTitle": "No sources",
+    "emptyDescription": "There are no sources to show right now. Check back later."
+  },
+  "SourceDetail": {
+    "fallbackTitle": "Source",
+    "backToList": "All sources",
+    "group": "Group {id}",
+    "country": "Country",
+    "language": "Language",
+    "license": "Licensing status",
+    "licenseExpires": "License expires",
+    "tdm": "TDM opt-out",
+    "tdmOptout": "TDM opt-out",
+    "yes": "Yes",
+    "no": "No",
+    "visitHomepage": "Visit website",
+    "viewTerms": "Terms of service",
+    "rss": "RSS feed"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The content you're looking for doesn't exist or has moved.",
+    "backHome": "Back to the feed"
+  },
   "Styleguide": {
     "badge": "Brand · v1",
     "title": "Ager design system",
