@@ -1,0 +1,15 @@
+# Normalize all text files to LF in the repo (Windows dev ↔ Linux CI determinism).
+* text=auto eol=lf
+
+# Binary assets — never normalize.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# Generated — keep out of language stats / collapsed in diffs.
+packages/api-client/src/generated/** linguist-generated=true
+pnpm-lock.yaml linguist-generated=true

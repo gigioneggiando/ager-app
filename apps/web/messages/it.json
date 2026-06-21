@@ -1,0 +1,10 @@
+{
+  "Landing": {
+    "badge": "Anteprima · Sprint 5",
+    "title": "AGER",
+    "tagline": "Notizie civiche italiane, prima il link.",
+    "description": "Un lettore di notizie che ti porta direttamente all'editore. Niente copie dell'articolo: solo titolo, anteprima e fonte. Il feed personalizzato arriva nei prossimi aggiornamenti.",
+    "cta": "Scopri di più",
+    "scaffoldNote": "Impalcatura del progetto — nessuna funzionalità ancora."
+  }
+}

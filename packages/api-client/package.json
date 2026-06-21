@@ -1,0 +1,23 @@
+{
+  "name": "@ager/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/generated/schema.ts"
+  },
+  "scripts": {
+    "gen:api": "openapi-typescript openapi/swagger.json -o src/generated/schema.ts && prettier --write src/generated/schema.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.13.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "openapi-typescript": "^7.5.2",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3"
+  }
+}
