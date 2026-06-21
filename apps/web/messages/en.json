@@ -18,6 +18,38 @@
     "rights": "All rights reserved.",
     "claim": "Reduces the noise, increases understanding."
   },
+  "Login": {
+    "title": "Sign in",
+    "subtitle": "Enter your email and we'll send you a sign-in code.",
+    "codeSubtitle": "We sent a code to {email}.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@example.com",
+    "requestCode": "Send the code",
+    "codeLabel": "Sign-in code",
+    "codePlaceholder": "123456",
+    "verify": "Sign in",
+    "changeEmail": "Use a different email",
+    "privacyNote": "By signing in you agree to our data processing as described in our policy.",
+    "errors": {
+      "rateLimit": "Too many attempts. Try again in a few minutes.",
+      "requestFailed": "We couldn't send the code. Please try again.",
+      "invalidCode": "Wrong or expired code. Check it and try again.",
+      "verifyFailed": "Sign-in failed. Please try again.",
+      "network": "Network error. Check your connection and try again."
+    }
+  },
+  "Account": {
+    "signIn": "Sign in",
+    "account": "Account",
+    "myAccount": "My account",
+    "signOut": "Sign out",
+    "title": "My account",
+    "profile": "Profile",
+    "username": "Username",
+    "email": "Email",
+    "role": "Role",
+    "loadError": "Couldn't load your profile."
+  },
   "Feed": {
     "heading": "Your feed",
     "subheading": "An ordered selection of what matters, with the source always visible. Tap a headline to read on the publisher.",

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { Logo } from "@/components/brand/logo";
 import { Container } from "@/components/layout/container";
 import { LocaleSwitch } from "@/components/layout/locale-switch";
+import { UserMenu } from "@/components/layout/user-menu";
 
 type NavItem = { key: string; href: string; soon?: boolean };
 
@@ -63,6 +64,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <UserMenu />
           <LocaleSwitch />
           <button
             type="button"

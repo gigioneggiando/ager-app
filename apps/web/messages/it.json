@@ -18,6 +18,38 @@
     "rights": "Tutti i diritti riservati.",
     "claim": "Riduce il rumore, aumenta la comprensione."
   },
+  "Login": {
+    "title": "Accedi",
+    "subtitle": "Inserisci la tua email: ti invieremo un codice di accesso.",
+    "codeSubtitle": "Abbiamo inviato un codice a {email}.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "nome@esempio.it",
+    "requestCode": "Invia il codice",
+    "codeLabel": "Codice di accesso",
+    "codePlaceholder": "123456",
+    "verify": "Accedi",
+    "changeEmail": "Usa un'altra email",
+    "privacyNote": "Accedendo accetti il trattamento dei dati secondo la nostra informativa.",
+    "errors": {
+      "rateLimit": "Troppi tentativi. Riprova tra qualche minuto.",
+      "requestFailed": "Non siamo riusciti a inviare il codice. Riprova.",
+      "invalidCode": "Codice errato o scaduto. Controlla e riprova.",
+      "verifyFailed": "Accesso non riuscito. Riprova.",
+      "network": "Errore di rete. Controlla la connessione e riprova."
+    }
+  },
+  "Account": {
+    "signIn": "Accedi",
+    "account": "Account",
+    "myAccount": "Il mio account",
+    "signOut": "Esci",
+    "title": "Il mio account",
+    "profile": "Profilo",
+    "username": "Nome utente",
+    "email": "Email",
+    "role": "Ruolo",
+    "loadError": "Impossibile caricare il profilo."
+  },
   "Feed": {
     "heading": "Il tuo feed",
     "subheading": "Una selezione ordinata di ciò che conta, con la fonte sempre visibile. Tocca un titolo per leggere sull'editore.",

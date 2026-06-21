@@ -10,7 +10,7 @@ off `main`, open PR vs `main`, owner ratifies/merges. See
 | **PR1** | Design system + app shell — official Ager brand (tokens, fonts, logo/favicon, shell, components, FeedCard, styleguide) | `feat/prompt1` | ✅ Done — PR open vs `main` |
 | **PR2** | Feed — public/cold-start (`GET /api/feed` anonymous, infinite scroll, transparency) | `feat/prompt2` | ✅ Done — PR open vs `main` |
 | **PR3** | Article detail + dynamic OG images + sources (via proxies) | `feat/prompt3` | ✅ Done — PR open vs `main` |
-| PR4 | Auth (magic-link + OTP, JWT/CSRF via route-handler proxy, session) | — | ⬜ Not started |
+| **PR4** | Auth — OTP login, HttpOnly session + refresh + CSRF via route-handler proxy, personalized feed | `feat/prompt4` | ✅ Done — PR open vs `main` |
 | PR5 | Onboarding + me (interests, interactions, reading lists, stats) | — | ⬜ Not started |
 | PR6 | Polish + deploy (PWA, OG, Lighthouse, a11y, Vercel, tag `frontend-web-v1`) | — | ⬜ Not started |
 | 5b | Mobile (Expo, later) | — | ⬜ Not started |
@@ -153,6 +153,48 @@ All backend calls go through same-origin proxies / server-side fetches (no CORS)
   `SourceDetailDto[]` for the list, rendering defensively. If the backend later returns
   a different article-detail shape, add a real schema and regenerate.
 - Source detail path is `/api/sources/{sourceId}` (not `{id}`).
+
+## PR4 — Authentication ✅
+
+OTP login + session/refresh/logout via a server-side route-handler proxy with HttpOnly
+cookies + CSRF; personalized feed for logged-in users. **No tokens in browser JS.**
+
+- **Backend mechanics (read, not assumed)**: login = `POST /api/auth/login/request-code
+  {email}` then `POST /api/auth/login {email, otpCode}` → `AuthResultDto`
+  {access+refresh+expiries+role}; `POST /api/auth/refresh {refreshToken}`; `POST
+  /api/auth/logout {refreshToken}` (Bearer). CSRF: header `X-CSRF-TOKEN`, cookie
+  `XSRF-TOKEN`, enforced **only when the request carries the cookie** (`EnforceAlways=off`)
+  — Bearer/server-to-server clients are exempt by design. JWT access 30m, refresh 14d.
+- **Route handlers** (`src/app/api/auth/*`): `request-code`, `verify` (sets `ager_at` +
+  `ager_rt` HttpOnly cookies server-side, returns only `{userId, role}`), `refresh`
+  (silent), `logout` (revoke + clear), `csrf` (seed token), `session`. Plus an authed
+  `/api/me` proxy.
+- **Authed proxy** (`authedBackendFetch`, extends `backendGet`/`proxyJson`): reads the
+  access cookie → Bearer; **refreshes once on 401** and retries; performs the backend
+  double-submit **CSRF handshake** on state-changing calls. The refresh token never
+  reaches client JS.
+- **Session**: `getSession()` (server, decodes the access JWT for display) + client
+  `AuthProvider`/`useSession`. Header shows account menu + logout vs "Accedi".
+  `/me` is a protected route (redirects to `/login?next=…`).
+- **Login UI** `/[locale]/login`: email → code → verify, brand tone, it/en, accessible,
+  error states (wrong/expired code → 401, rate-limit → 429).
+- **Personalized feed**: the feed proxy attaches the user's Bearer when a session exists
+  (→ backend personalizes; cache `private, no-store`); anonymous stays cold-start
+  (cacheable).
+- **Verified E2E against the real backend** (`api.agerculture.com`): `/api/auth/csrf` →
+  200; `request-code` → 204; `verify` with a wrong code → **401** (not 403) — proving the
+  CSRF handshake passes and the call reaches credential validation.
+- Tests: 45 passing (login sets cookies; refresh-on-401 retry; CSRF header on writes;
+  protected-route redirect; feed sends Bearer when authed, none when anon). Lint +
+  typecheck + build green.
+
+### Notes / follow-ups (PR4)
+
+- CSRF is implemented (handshake on writes) but, per the backend's actual config, would
+  also work without it for the Bearer BFF — kept it for correctness + future-proofing.
+- The auth-aware root layout reads cookies, so pages render dynamically (was SSG for
+  `/sources`, `/styleguide`). Acceptable; revisit if static perf matters.
+- `next/og` article/site OG remain on the edge runtime (PR3).
 
 ### Notes / follow-ups
 
