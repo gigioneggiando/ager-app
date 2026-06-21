@@ -16,13 +16,14 @@ describe("GET /api/feed (server-side proxy)", () => {
       feedMode: "cold_start",
       recommenderVersion: "v1",
     };
-    const fetchMock = vi.fn(
-      async (_input: string | URL | Request, _init?: RequestInit) =>
+    const fetchMock = vi
+      .fn<(input: string | URL | Request, init?: RequestInit) => Promise<Response>>()
+      .mockResolvedValue(
         new Response(JSON.stringify(page), {
           status: 200,
           headers: { "content-type": "application/json" },
         }),
-    );
+      );
     global.fetch = fetchMock as unknown as typeof fetch;
 
     const res = await GET(
