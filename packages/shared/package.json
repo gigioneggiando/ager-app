@@ -6,7 +6,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./tokens": "./src/tokens.ts",
-    "./schemas": "./src/schemas.ts"
+    "./schemas": "./src/schemas.ts",
+    "./brand.css": "./styles/brand.css"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

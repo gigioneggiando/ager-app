@@ -19,7 +19,14 @@ describe("Button", () => {
     );
     const button = screen.getByRole("button", { name: "Outline" });
     expect(button).toHaveClass("border");
-    expect(button).toHaveClass("h-10");
+    expect(button).toHaveClass("h-11");
+  });
+
+  it("maps the secondary variant to the green accent", () => {
+    render(<Button variant="secondary">Secondary</Button>);
+    expect(screen.getByRole("button", { name: "Secondary" })).toHaveClass(
+      "bg-accent",
+    );
   });
 
   it("renders as a child element when asChild is set", () => {

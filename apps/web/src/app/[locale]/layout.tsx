@@ -1,32 +1,39 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Merriweather } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 
 import { routing } from "@/i18n/routing";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
 import "../globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Sans — UI + body.
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Serif — headings + wordmark.
+const merriweather = Merriweather({
+  variable: "--font-merriweather",
   subsets: ["latin"],
+  weight: ["300", "400", "700", "900"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "AGER",
-    template: "%s · AGER",
+    default: "Ager",
+    template: "%s · Ager",
   },
-  description: "Link-first Italian civic news aggregator.",
+  description:
+    "Ager — riduce il rumore, aumenta la comprensione. Notizie civiche italiane, prima il link.",
 };
 
-// Pre-render each locale at build time.
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -42,16 +49,19 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-  // Enable static rendering for this locale.
   setRequestLocale(locale);
 
   return (
     <html
       lang={locale}
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${merriweather.variable} h-full`}
     >
-      <body className="flex min-h-full flex-col">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+      <body className="flex min-h-full flex-col bg-background text-foreground">
+        <NextIntlClientProvider>
+          <Header />
+          <main className="flex flex-1 flex-col">{children}</main>
+          <Footer />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

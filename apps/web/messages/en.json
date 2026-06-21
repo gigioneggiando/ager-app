@@ -1,10 +1,113 @@
 {
   "Landing": {
     "badge": "Preview · Sprint 5",
-    "title": "AGER",
-    "tagline": "Italian civic news, link-first.",
-    "description": "A news reader that takes you straight to the publisher. No article copies — just the headline, an excerpt, and the source. The personalized feed arrives in upcoming releases.",
-    "cta": "Learn more",
-    "scaffoldNote": "Project scaffold — no features yet."
+    "title": "Civic news, link-first",
+    "description": "Ager gathers and orders the information that matters, and takes you straight to the publisher. No article copies: headline, context and source, always verifiable. The personalized feed arrives in upcoming releases.",
+    "claim": "Ager reduces the noise and increases understanding.",
+    "cta": "Open the styleguide",
+    "scaffoldNote": "Project design system — real data not wired yet."
+  },
+  "Nav": {
+    "primary": "Primary navigation",
+    "feed": "Feed",
+    "sources": "Sources",
+    "insights": "Insights",
+    "styleguide": "Styleguide",
+    "soon": "soon",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "Footer": {
+    "mission": "We put quality back at the center of the news: visible sources, declared context, respect for your time and your intelligence.",
+    "nav": "Footer navigation",
+    "styleguide": "Styleguide",
+    "sourcesSoon": "Sources (soon)",
+    "aboutSoon": "About (soon)",
+    "rights": "All rights reserved.",
+    "claim": "Reduces the noise, increases understanding."
+  },
+  "Styleguide": {
+    "badge": "Brand · v1",
+    "title": "Ager design system",
+    "intro": "Ager's visual identity applied to the interface components. A coherent, sober, editorial baseline to review before wiring real data.",
+    "sections": {
+      "palette": "Palette",
+      "typography": "Typography",
+      "logo": "Logo",
+      "buttons": "Buttons",
+      "badges": "Badges",
+      "surfaces": "Surfaces & states",
+      "feed": "FeedCard"
+    },
+    "palette": {
+      "note": "Official brand colors. No high saturation, no colored shadows. Recommended distribution: ~60% neutrals, ~25% blue, ≤10% green, ~5% functional.",
+      "functional": "Functional colors",
+      "agerBlue": "Header, headings, primary CTAs. Never long body text.",
+      "editorialWhite": "Primary background, cards, feed.",
+      "neutralBeige": "Secondary backgrounds, deep-dive sections.",
+      "inkGray": "Body text. Never pure black.",
+      "mutedGray": "Metadata, timestamps, sources, placeholders.",
+      "ethicalGreen": "Accent: trust, context, secondary CTAs.",
+      "link": "Inline links, hover, emphasis.",
+      "success": "Confirmed content, verified status.",
+      "warning": "Sensitive content, evolving stories.",
+      "error": "Alerts, errors, retracted content."
+    },
+    "type": {
+      "note": "Merriweather for headings and the wordmark, Inter for UI and body. Layered hierarchy: synthesis → context → depth.",
+      "synthesis": "Synthesis",
+      "depth": "Depth",
+      "sampleHeading": "Understand first, scroll later",
+      "h1": "Section heading",
+      "h2": "Subheading",
+      "h3": "Context",
+      "sampleBody": "Body copy uses Inter at 16px with generous line height, built for short but dense explanations. Simplification serves understanding, not dumbing-down: we define key terms and separate facts from interpretation.",
+      "small": "Secondary text",
+      "metadata": "metadata and sources",
+      "caption": "Caption"
+    },
+    "logo": {
+      "note": "Clear space equal to 14% of the symbol. Minimum digital sizes: full logo 120px, icon 32px.",
+      "full": "Full logo",
+      "symbol": "Symbol",
+      "onBlue": "On blue background",
+      "forbidden": "Forbidden: shadows or effects, colors outside the palette, rotation, deformation, a wordmark in any font other than Merriweather."
+    },
+    "buttons": {
+      "note": "Primary in blue, secondary in ethical green. Secondary CTAs remain an accent.",
+      "primary": "Primary action",
+      "secondary": "Secondary action",
+      "outline": "Outline",
+      "ghost": "Ghost",
+      "link": "Link",
+      "destructive": "Delete"
+    },
+    "badges": {
+      "note": "Low-saturation labels. Green signals trust and context, orange evolution, red error.",
+      "verified": "Verified",
+      "context": "Context",
+      "sources": "Sources",
+      "warning": "Evolving",
+      "error": "Retracted",
+      "topic": "Economy"
+    },
+    "surfaces": {
+      "note": "Cards, loading skeletons, and empty or error states, in a measured tone.",
+      "cardTitle": "Card title",
+      "cardDescription": "A short supporting description in muted gray.",
+      "emptyTitle": "Nothing here yet",
+      "emptyDescription": "There's nothing to show here yet. Check back later.",
+      "emptyAction": "Refresh",
+      "errorTitle": "Something went wrong",
+      "errorDescription": "We couldn't load the content. Please try again shortly.",
+      "errorAction": "Retry"
+    },
+    "feed": {
+      "note": "The reusable feed component: only title, excerpt, source, image and topics. Link-first — no article body. Sample data.",
+      "why": "Why am I seeing this?",
+      "readingTime": "{minutes} min read",
+      "openExternal": "Open on publisher",
+      "radiusFlag": "To review: the brand specifies an 80px image radius. At thumbnail size the corners read as nearly circular. A smaller effective radius is likely needed for thumbnails — pending confirmation."
+    }
   }
 }
