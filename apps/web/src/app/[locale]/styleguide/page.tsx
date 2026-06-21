@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AlertTriangle, BadgeCheck, Inbox } from "lucide-react";
 import { brand, state } from "@ager/shared";
+import type { FeedItem } from "@ager/api-client";
 
 import { Container } from "@/components/layout/container";
 import { Logo } from "@/components/brand/logo";
@@ -18,11 +19,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/states/empty-state";
 import { ErrorState } from "@/components/states/error-state";
-import {
-  FeedCard,
-  FeedCardSkeleton,
-  type FeedCardArticle,
-} from "@/components/feed/feed-card";
+import { FeedCard, FeedCardSkeleton } from "@/components/feed/feed-card";
 
 export const metadata: Metadata = {
   title: "Styleguide",
@@ -82,45 +79,79 @@ function SwatchCard({ swatch }: { swatch: Swatch }) {
   );
 }
 
-const MOCK_ARTICLES: FeedCardArticle[] = [
+const MOCK_ITEMS: FeedItem[] = [
   {
-    id: "1",
-    title:
-      "La nuova legge sull'acqua: cosa cambia per i comuni e perché conta",
-    source: { name: "Il Sole 24 Ore" },
-    publishedAt: "2026-06-19T08:30:00Z",
+    articleId: 1,
+    title: "La nuova legge sull'acqua: cosa cambia per i comuni e perché conta",
+    url: "https://example.com/articolo-acqua",
     excerpt:
       "Il provvedimento ridisegna la governance delle risorse idriche locali. Abbiamo letto il testo e isolato i tre punti che incidono davvero sulla gestione comunale.",
     imageUrl: "https://picsum.photos/seed/ager-acqua/640/360",
+    publishedAt: "2026-06-19T08:30:00Z",
+    sourceName: "Il Sole 24 Ore",
+    sourceType: "quotidiano",
     topics: ["Ambiente", "Politica"],
-    readingTimeMinutes: 6,
-    href: "https://example.com/articolo-acqua",
-    why: { score: 0.82 },
+    estimatedReadingMinutes: 6,
+    displayMode: "redirect",
+    paywallDetected: false,
+    score: 0.82,
+    scoreBreakdown: {
+      recency: 0.9,
+      topicMatch: 0.6,
+      sourceDiversity: 0.7,
+      topicVariety: 0.5,
+      clusterProminence: 0.85,
+    },
+    rank: 1,
   },
   {
-    id: "2",
+    articleId: 2,
     title: "Inflazione in calo: i dati ISTAT letti senza allarmismi",
-    source: { name: "ANSA" },
-    publishedAt: "2026-06-18T15:10:00Z",
+    url: "https://example.com/articolo-inflazione",
     excerpt:
       "Il dato mensile scende, ma la lettura richiede contesto. Cosa misura l'indice, cosa no, e perché il carrello della spesa racconta una storia diversa.",
     imageUrl: "https://picsum.photos/seed/ager-istat/640/360",
+    publishedAt: "2026-06-18T15:10:00Z",
+    sourceName: "ANSA",
+    sourceType: "agenzia",
     topics: ["Economia"],
-    readingTimeMinutes: 4,
-    href: "https://example.com/articolo-inflazione",
-    why: { score: 0.74 },
+    estimatedReadingMinutes: 4,
+    displayMode: "redirect",
+    paywallDetected: false,
+    score: 0.74,
+    scoreBreakdown: {
+      recency: 0.7,
+      topicMatch: 0.8,
+      sourceDiversity: 0.6,
+      topicVariety: 0.4,
+      clusterProminence: 0.5,
+    },
+    rank: 2,
   },
   {
-    id: "3",
+    // Null image → exercises the brand placeholder fallback.
+    articleId: 3,
     title: "Scuola e intelligenza artificiale: le linee guida del ministero",
-    source: { name: "Corriere della Sera" },
-    publishedAt: "2026-06-17T07:00:00Z",
+    url: "https://example.com/articolo-scuola-ia",
     excerpt:
       "Arrivano le indicazioni per l'uso dell'IA in classe. Distinguiamo ciò che è vincolante da ciò che resta una raccomandazione, con esempi concreti.",
+    imageUrl: null,
+    publishedAt: "2026-06-17T07:00:00Z",
+    sourceName: "Corriere della Sera",
+    sourceType: "quotidiano",
     topics: ["Scuola", "Tecnologia", "Società"],
-    readingTimeMinutes: 8,
-    href: "https://example.com/articolo-scuola-ia",
-    why: { score: 0.91 },
+    estimatedReadingMinutes: 8,
+    displayMode: "redirect",
+    paywallDetected: false,
+    score: 0.91,
+    scoreBreakdown: {
+      recency: 0.4,
+      topicMatch: 0.95,
+      sourceDiversity: 0.8,
+      topicVariety: 0.9,
+      clusterProminence: 0.7,
+    },
+    rank: 3,
   },
 ];
 
@@ -167,12 +198,6 @@ export default async function StyleguidePage({
     { name: "Warning", hex: state.warning, role: t("palette.warning") },
     { name: "Error", hex: state.error, role: t("palette.error") },
   ];
-
-  const feedLabels = {
-    why: t("feed.why"),
-    readingTime: (m: number) => t("feed.readingTime", { minutes: m }),
-    openExternal: t("feed.openExternal"),
-  };
 
   return (
     <Container size="wide" className="py-10">
@@ -336,12 +361,12 @@ export default async function StyleguidePage({
       {/* FEEDCARD */}
       <Section title={t("sections.feed")} description={t("feed.note")}>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {MOCK_ARTICLES.map((article) => (
+          {MOCK_ITEMS.map((item) => (
             <FeedCard
-              key={article.id}
-              article={article}
-              locale={locale}
-              labels={feedLabels}
+              key={item.articleId}
+              item={item}
+              feedMode="cold_start"
+              recommenderVersion="v1.0.0"
             />
           ))}
           <FeedCardSkeleton />

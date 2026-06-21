@@ -1,12 +1,4 @@
 {
-  "Landing": {
-    "badge": "Anteprima · Sprint 5",
-    "title": "Notizie civiche, prima il link",
-    "description": "Ager raccoglie e ordina l'informazione che conta, e ti porta direttamente all'editore. Niente copie dell'articolo: titolo, contesto e fonte, sempre verificabili. Il feed personalizzato arriva nei prossimi aggiornamenti.",
-    "claim": "Ager riduce il rumore e aumenta la comprensione.",
-    "cta": "Apri lo styleguide",
-    "scaffoldNote": "Design system del progetto — dati reali non ancora collegati."
-  },
   "Nav": {
     "primary": "Navigazione principale",
     "feed": "Feed",
@@ -25,6 +17,55 @@
     "aboutSoon": "Chi siamo (presto)",
     "rights": "Tutti i diritti riservati.",
     "claim": "Riduce il rumore, aumenta la comprensione."
+  },
+  "Feed": {
+    "heading": "Il tuo feed",
+    "subheading": "Una selezione ordinata di ciò che conta, con la fonte sempre visibile. Tocca un titolo per leggere sull'editore.",
+    "card": {
+      "untitled": "Senza titolo",
+      "openExternal": "apri sull'editore",
+      "readingTime": "{minutes} min di lettura"
+    },
+    "why": {
+      "trigger": "Perché lo vedo?",
+      "intro": "Questo contenuto è ordinato in base a più segnali. Ecco il peso di ciascuno.",
+      "score": "Punteggio complessivo",
+      "feedMode": "Modalità feed",
+      "version": "Versione del recommender",
+      "dimensions": {
+        "recency": {
+          "label": "Attualità",
+          "help": "Quanto è recente la notizia."
+        },
+        "topicMatch": {
+          "label": "Affinità tematica",
+          "help": "Quanto il tema è in linea con i tuoi interessi."
+        },
+        "sourceDiversity": {
+          "label": "Diversità delle fonti",
+          "help": "Favorisce fonti diverse, evitando la concentrazione."
+        },
+        "topicVariety": {
+          "label": "Varietà dei temi",
+          "help": "Mantiene il feed vario, senza un solo argomento."
+        },
+        "clusterProminence": {
+          "label": "Rilevanza della notizia",
+          "help": "Quanto la notizia emerge tra fonti diverse."
+        }
+      }
+    },
+    "list": {
+      "loading": "Caricamento del feed",
+      "errorTitle": "Non siamo riusciti a caricare il feed",
+      "errorDescription": "Qualcosa è andato storto. Riprova tra poco.",
+      "retry": "Riprova",
+      "emptyTitle": "Nessun contenuto",
+      "emptyDescription": "Per ora non c'è nulla da mostrare. Torna più tardi.",
+      "caughtUpTitle": "Sei in pari",
+      "caughtUpDescription": "Hai visto tutto ciò che abbiamo selezionato per ora. Torna più tardi per nuovi contenuti.",
+      "loadMore": "Carica altro"
+    }
   },
   "Styleguide": {
     "badge": "Brand · v1",
@@ -103,10 +144,7 @@
       "errorAction": "Riprova"
     },
     "feed": {
-      "note": "Il componente riutilizzabile del feed: solo titolo, anteprima, fonte, immagine e argomenti. Link-first — nessun corpo dell'articolo. Dati di esempio.",
-      "why": "Perché lo vedo?",
-      "readingTime": "{minutes} min di lettura",
-      "openExternal": "Apri sull'editore"
+      "note": "Il componente riutilizzabile del feed: solo titolo, anteprima, fonte, immagine e argomenti. Link-first — nessun corpo dell'articolo. La terza card mostra il segnaposto immagine. Dati di esempio."
     }
   }
 }

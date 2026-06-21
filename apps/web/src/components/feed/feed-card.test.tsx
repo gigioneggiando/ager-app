@@ -1,43 +1,50 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import type { FeedItem } from "@ager/api-client";
 
-import {
-  FeedCard,
-  FeedCardSkeleton,
-  type FeedCardArticle,
-} from "./feed-card";
+import { renderWithProviders } from "@/test/test-utils";
+import { FeedCard, FeedCardSkeleton } from "./feed-card";
 
-const article: FeedCardArticle = {
-  id: "1",
+const baseItem: FeedItem = {
+  articleId: 1,
   title: "La nuova legge sull'acqua",
-  source: { name: "ANSA" },
-  publishedAt: "2026-06-19T08:30:00Z",
+  url: "https://example.com/articolo",
   excerpt: "Cosa cambia per i comuni e perché conta.",
   imageUrl: "https://picsum.photos/seed/test/640/360",
+  publishedAt: "2026-06-19T08:30:00Z",
+  sourceName: "ANSA",
+  sourceType: "agenzia",
   topics: ["Ambiente", "Politica"],
-  readingTimeMinutes: 6,
-  href: "https://example.com/articolo",
-  why: { score: 0.8 },
-};
-
-const labels = {
-  why: "Perché lo vedo?",
-  readingTime: (m: number) => `${m} min di lettura`,
-  openExternal: "Apri sull'editore",
+  estimatedReadingMinutes: 6,
+  displayMode: "redirect",
+  paywallDetected: false,
+  score: 0.8,
+  scoreBreakdown: {
+    recency: 0.9,
+    topicMatch: 0.6,
+    sourceDiversity: 0.7,
+    topicVariety: 0.5,
+    clusterProminence: 0.8,
+  },
+  rank: 1,
 };
 
 describe("FeedCard", () => {
-  it("renders the headline as a link that opens the publisher in a new tab", () => {
-    render(<FeedCard article={article} labels={labels} />);
+  it("opens the publisher url in a new tab from the headline", () => {
+    renderWithProviders(<FeedCard item={baseItem} />);
     const titleLink = screen.getByRole("link", { name: /nuova legge/i });
     expect(titleLink).toHaveAttribute("href", "https://example.com/articolo");
     expect(titleLink).toHaveAttribute("target", "_blank");
-    expect(titleLink).toHaveAttribute("rel", expect.stringContaining("noopener"));
+    expect(titleLink).toHaveAttribute(
+      "rel",
+      expect.stringContaining("noopener"),
+    );
   });
 
-  it("shows source, topics, excerpt, reading time and the why affordance", () => {
-    render(<FeedCard article={article} labels={labels} />);
+  it("renders source, type, topics, excerpt, reading time and the why affordance", () => {
+    renderWithProviders(<FeedCard item={baseItem} />);
     expect(screen.getByText("ANSA")).toBeInTheDocument();
+    expect(screen.getByText(/agenzia/)).toBeInTheDocument();
     expect(screen.getByText("Ambiente")).toBeInTheDocument();
     expect(screen.getByText("Politica")).toBeInTheDocument();
     expect(
@@ -45,21 +52,35 @@ describe("FeedCard", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("6 min di lettura")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Perché lo vedo?" }),
+      screen.getByRole("button", { name: /Perché lo vedo/i }),
     ).toBeInTheDocument();
   });
 
-  it("is link-first: renders no article body beyond the excerpt", () => {
-    render(<FeedCard article={article} labels={labels} />);
-    // Only the excerpt paragraph should carry article prose.
-    const paragraphs = document.querySelectorAll("p");
-    expect(paragraphs).toHaveLength(1);
+  it("is link-first: no article body beyond the excerpt (collapsed)", () => {
+    renderWithProviders(<FeedCard item={baseItem} />);
+    expect(document.querySelectorAll("p")).toHaveLength(1);
+  });
+
+  it("falls back to the brand placeholder when imageUrl is null", () => {
+    renderWithProviders(
+      <FeedCard item={{ ...baseItem, imageUrl: null }} />,
+    );
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    // The placeholder renders the inline Ager symbol (decorative svg).
+    expect(document.querySelector("svg")).toBeInTheDocument();
+  });
+
+  it("renders the title fallback when title is missing", () => {
+    renderWithProviders(
+      <FeedCard item={{ ...baseItem, title: null }} />,
+    );
+    expect(screen.getByText("Senza titolo")).toBeInTheDocument();
   });
 
   it("skeleton renders pulse placeholders", () => {
-    const { container } = render(<FeedCardSkeleton />);
-    expect(container.querySelectorAll(".animate-pulse").length).toBeGreaterThan(
-      0,
-    );
+    const { container } = renderWithProviders(<FeedCardSkeleton />);
+    expect(
+      container.querySelectorAll(".animate-pulse").length,
+    ).toBeGreaterThan(0);
   });
 });
