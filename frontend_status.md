@@ -85,10 +85,13 @@ Implements the official **Ager brand** (from `docs/brand/`).
 The real feed, read anonymously (backend returns cold-start). **No auth, no mode
 selector, no interactions, no personalization** (those are PR4/PR5).
 
-- **Data layer**: generated openapi-fetch client calls `GET /api/feed { cursor?, limit? }`
-  (no auth header). TanStack Query `useInfiniteQuery` with `pageParam = nextCursor`;
-  `getNextPageParam` stops on null. Items deduped by `articleId`. `Providers`
-  (QueryClientProvider) added to the locale layout.
+- **Data layer**: the browser calls a **same-origin Next route handler**
+  (`src/app/api/feed/route.ts`) that proxies `GET ${API_BASE_URL}/api/feed` server-side
+  (forwards cursor + limit, `Cache-Control` + `next: { revalidate: 60 }`) — no CORS, the
+  backend URL stays server-only. This is the proxy pattern auth/CSRF reuse in PR4.
+  TanStack Query `useInfiniteQuery` with `pageParam = nextCursor`; `getNextPageParam`
+  stops on null. Items deduped by `articleId`. Response stays typed as the generated
+  `FeedPage`. `Providers` (QueryClientProvider) added to the locale layout.
 - **Feed page** (home `/[locale]`): FeedCard grid from real `FeedItemDto` data;
   infinite scroll via IntersectionObserver sentinel + "Carica altro" fallback button.
   FeedCard rewritten to consume the generated `FeedItem` type (title, sourceName +
@@ -111,12 +114,11 @@ selector, no interactions, no personalization** (those are PR4/PR5).
   second page with the threaded cursor, "Perché lo vedo" breakdown, empty/error/
   caught-up states, null-image fallback). Lint + typecheck + build green.
 
-### ⚠ Owner note (PR2)
+### Owner note (PR2)
 
-- **CORS**: the browser calls `https://api.agerculture.com/api/feed` directly (per the
-  plan's public-read pattern). The backend must allow the web origin
-  (Vercel preview/prod + `localhost:3000`) or the feed shows the error state. Validate
-  the CORS allowlist — flagged in the plan for PR4, but it gates the live feed now.
+- **CORS**: ✅ resolved by routing the feed through the same-origin proxy handler — the
+  browser never calls the backend directly, so no CORS config is needed. Set
+  `API_BASE_URL=https://api.agerculture.com` in Vercel (Production + Preview).
 
 ### Notes / follow-ups
 

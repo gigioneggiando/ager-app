@@ -53,8 +53,11 @@ pnpm build
 pnpm test
 ```
 
-The web app reads `NEXT_PUBLIC_API_BASE_URL` (default `https://api.agerculture.com`).
-Copy `apps/web/.env.example` to `apps/web/.env.local` to point at a local backend.
+Backend calls go through **same-origin Next route handlers** that proxy the backend
+server-side (no CORS; the backend URL stays off the client). Set `API_BASE_URL`
+(server-only; default `https://api.agerculture.com`). Copy `apps/web/.env.example` to
+`apps/web/.env.local` to point at a local backend. `NEXT_PUBLIC_API_BASE_URL` is optional
+and only needed if some value must reach the browser.
 
 ### Updating the API contract
 
@@ -80,7 +83,10 @@ project in Vercel:
 - **Install Command**: `pnpm install` (Vercel auto-detects pnpm from the lockfile)
 - **Output Directory**: `.next` (default)
 - **Node version**: 22
-- **Environment variables**: set `NEXT_PUBLIC_API_BASE_URL`
+- **Environment variables**: set `API_BASE_URL` (server-only) to
+  `https://api.agerculture.com` for **both Production and Preview**. Route handlers proxy
+  the backend with it. `NEXT_PUBLIC_API_BASE_URL` is optional (only if a value must reach
+  the browser).
 
 ## Conventions
 
@@ -89,7 +95,8 @@ project in Vercel:
 - **Theming is token-driven** — neutral shadcn defaults for now. Swap the palette in
   `packages/shared/src/tokens.ts` + `apps/web/src/app/globals.css`. Do **not** hardcode
   brand colors.
-- **Auth** (later): cookie/CSRF dance via Next route handlers; public reads call the API
-  directly via `NEXT_PUBLIC_API_BASE_URL`.
+- **Backend calls go through same-origin Next route handlers** (server-side proxy, e.g.
+  `/api/feed`) using `API_BASE_URL` — no CORS, backend URL stays server-only. Auth/CSRF
+  (later) reuse this proxy pattern.
 - **One PR per prompt**; branch `feat/<topic>` off `main`, open PR vs `main`, owner
   merges.
