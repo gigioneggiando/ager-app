@@ -11,7 +11,7 @@ off `main`, open PR vs `main`, owner ratifies/merges. See
 | **PR2** | Feed — public/cold-start (`GET /api/feed` anonymous, infinite scroll, transparency) | `feat/prompt2` | ✅ Done — PR open vs `main` |
 | **PR3** | Article detail + dynamic OG images + sources (via proxies) | `feat/prompt3` | ✅ Done — PR open vs `main` |
 | **PR4** | Auth — OTP login, HttpOnly session + refresh + CSRF via route-handler proxy, personalized feed | `feat/prompt4` | ✅ Done — PR open vs `main` |
-| PR5 | Onboarding + me (interests, interactions, reading lists, stats) | — | ⬜ Not started |
+| **PR5** | Logged-in layer — onboarding interests + interactions + reading lists | `feat/prompt5` | ✅ Done — PR open vs `main` |
 | PR6 | Polish + deploy (PWA, OG, Lighthouse, a11y, Vercel, tag `frontend-web-v1`) | — | ⬜ Not started |
 | 5b | Mobile (Expo, later) | — | ⬜ Not started |
 
@@ -195,6 +195,37 @@ cookies + CSRF; personalized feed for logged-in users. **No tokens in browser JS
 - The auth-aware root layout reads cookies, so pages render dynamically (was SSG for
   `/sources`, `/styleguide`). Acceptable; revisit if static perf matters.
 - `next/og` article/site OG remain on the edge runtime (PR3).
+
+## PR5 — Logged-in user layer ✅
+
+Onboarding interests + interactions + reading lists, all via the PR4 authed proxy + CSRF.
+
+- **Onboarding**: `GET /api/interests` (taxonomy, macro/subtopic), multi-select **5–10**,
+  skippable. `POST /api/me/interests` saves (Explicit). Trigger: the verify route returns
+  `needsOnboarding` (per-user `ager_onboarded` cookie); first login → `/onboarding?next=…`.
+  Editable later at `/me/interests`.
+- **Interactions** (`POST /api/interactions`, authed + CSRF, bound **by NAME**):
+  OPENED_EXTERNAL (open publisher — fulfils the PR2 TODO), SAVE (couples to lists),
+  DISCARD (optimistic remove from the feed cache), SHARE. Anonymous → prompt login
+  (never calls the API unauthenticated). VIEW/READ_COMPLETED skipped for V1 (link-first).
+- **Reading lists**: `GET/POST /api/me/reading-lists`, add/remove items.
+  `/me/reading-lists` page (lists + items + create + optimistic remove). Card "Salva"
+  adds to a default list ("Salvati"/"Saved", created if missing) and fires SAVE.
+- **/me hub**: profile (PR4) + entry points to Interests and Reading lists.
+- Optimistic UI (discard/remove), TanStack Query invalidation after mutations, it/en,
+  accessible, fully auth-gated.
+- Tests: 50 passing (interest save ≥5; DISCARD posts the right type; reading-list
+  create/add/remove optimistic; anon actions prompt login; verify→needsOnboarding).
+  Lint + typecheck + build green.
+
+### Contract notes (PR5)
+
+- `InteractionType` shows as an int enum in swagger but the DTO binds **by name**
+  (`JsonStringEnumConverter`) — we send the string names.
+- There is **no GET for interests**, so onboarding is gated by a per-user cookie
+  (`ager_onboarded`), not server truth. Acceptable (onboarding is skippable + editable).
+- Reading-list item DTOs (`ArticleInListDto`) aren't in the contract (anonymous-wrapped),
+  so they're typed locally in `features/reading-lists/types.ts`.
 
 ### Notes / follow-ups
 

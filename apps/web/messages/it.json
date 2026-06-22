@@ -48,7 +48,43 @@
     "username": "Nome utente",
     "email": "Email",
     "role": "Ruolo",
-    "loadError": "Impossibile caricare il profilo."
+    "loadError": "Impossibile caricare il profilo.",
+    "manage": "Gestisci",
+    "interests": "Interessi",
+    "interestsHint": "Personalizza il tuo feed",
+    "readingLists": "Liste di lettura",
+    "readingListsHint": "Gli articoli che hai salvato"
+  },
+  "Actions": {
+    "save": "Salva",
+    "saved": "Salvato",
+    "discard": "Nascondi",
+    "share": "Condividi",
+    "savedListName": "Salvati"
+  },
+  "Onboarding": {
+    "title": "Scegli i tuoi interessi",
+    "subtitle": "Seleziona da 5 a 10 argomenti: useremo i tuoi interessi per ordinare il feed. Puoi modificarli in qualsiasi momento.",
+    "save": "Salva e continua",
+    "skip": "Salta per ora",
+    "selectedCount": "{count} selezionati (min {min}, max {max})",
+    "loadError": "Impossibile caricare gli argomenti.",
+    "saveError": "Salvataggio non riuscito. Riprova.",
+    "saved": "Interessi salvati.",
+    "editTitle": "I tuoi interessi",
+    "editSubtitle": "Aggiorna gli argomenti che orientano il tuo feed."
+  },
+  "ReadingLists": {
+    "title": "Liste di lettura",
+    "subtitle": "Organizza gli articoli che salvi.",
+    "newListLabel": "Nuova lista",
+    "newListPlaceholder": "Es. Da leggere",
+    "create": "Crea",
+    "emptyTitle": "Nessuna lista",
+    "emptyDescription": "Crea la tua prima lista per organizzare gli articoli salvati.",
+    "emptyList": "Questa lista è vuota.",
+    "remove": "Rimuovi",
+    "loadError": "Impossibile caricare le liste."
   },
   "Feed": {
     "heading": "Il tuo feed",

@@ -48,7 +48,43 @@
     "username": "Username",
     "email": "Email",
     "role": "Role",
-    "loadError": "Couldn't load your profile."
+    "loadError": "Couldn't load your profile.",
+    "manage": "Manage",
+    "interests": "Interests",
+    "interestsHint": "Personalize your feed",
+    "readingLists": "Reading lists",
+    "readingListsHint": "Articles you've saved"
+  },
+  "Actions": {
+    "save": "Save",
+    "saved": "Saved",
+    "discard": "Hide",
+    "share": "Share",
+    "savedListName": "Saved"
+  },
+  "Onboarding": {
+    "title": "Choose your interests",
+    "subtitle": "Pick 5 to 10 topics — we'll use your interests to order your feed. You can change them anytime.",
+    "save": "Save and continue",
+    "skip": "Skip for now",
+    "selectedCount": "{count} selected (min {min}, max {max})",
+    "loadError": "Couldn't load topics.",
+    "saveError": "Save failed. Please try again.",
+    "saved": "Interests saved.",
+    "editTitle": "Your interests",
+    "editSubtitle": "Update the topics that shape your feed."
+  },
+  "ReadingLists": {
+    "title": "Reading lists",
+    "subtitle": "Organize the articles you save.",
+    "newListLabel": "New list",
+    "newListPlaceholder": "e.g. To read",
+    "create": "Create",
+    "emptyTitle": "No lists yet",
+    "emptyDescription": "Create your first list to organize saved articles.",
+    "emptyList": "This list is empty.",
+    "remove": "Remove",
+    "loadError": "Couldn't load your lists."
   },
   "Feed": {
     "heading": "Your feed",

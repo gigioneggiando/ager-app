@@ -12,6 +12,12 @@ vi.mock("@/features/feed/api", () => ({
   fetchFeedPage: vi.fn(),
 }));
 
+// FeedCardActions (rendered per card) uses the App Router navigation hooks.
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), refresh: vi.fn() }),
+  usePathname: () => "/it",
+}));
+
 const mockFetch = vi.mocked(fetchFeedPage);
 
 function makeItem(id: number, title: string): FeedItem {

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { ArrowUpRight, Clock } from "lucide-react";
@@ -18,6 +19,10 @@ interface FeedCardProps {
   feedMode?: string | null;
   recommenderVersion?: string | null;
   className?: string;
+  /** Side-effect fired when the user opens the publisher (e.g. OPENED_EXTERNAL). */
+  onOpen?: () => void;
+  /** Optional actions row (Save / Discard / Share), rendered in the footer. */
+  actions?: ReactNode;
 }
 
 /**
@@ -26,14 +31,16 @@ interface FeedCardProps {
  * reading time. The primary action opens the publisher (`url`) in a new tab.
  *
  * `displayMode` (redirect | webview | reader_optin) all resolve to "open url in a new
- * tab" on web for now.
- * TODO(PR5): fire an OPENED_EXTERNAL interaction on open (needs auth).
+ * tab" on web for now. `onOpen` fires the OPENED_EXTERNAL interaction (wired by the feed),
+ * and `actions` injects the Save / Discard / Share row.
  */
 export function FeedCard({
   item,
   feedMode,
   recommenderVersion,
   className,
+  onOpen,
+  actions,
 }: FeedCardProps) {
   const t = useTranslations("Feed");
   const locale = useLocale();
@@ -65,6 +72,7 @@ export function FeedCard({
         rel="noopener noreferrer"
         aria-hidden="true"
         tabIndex={-1}
+        onClick={onOpen}
         className="relative m-3 mb-0 block aspect-[16/9] overflow-hidden rounded-image bg-muted"
       >
         {item.imageUrl ? (
@@ -99,6 +107,7 @@ export function FeedCard({
             href={href}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={onOpen}
             className="text-primary transition-colors hover:text-link focus-visible:rounded focus-visible:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             {title}
@@ -150,6 +159,12 @@ export function FeedCard({
           feedMode={feedMode}
           recommenderVersion={recommenderVersion}
         />
+
+        {actions ? (
+          <div className="flex items-center gap-1 border-t border-border pt-3">
+            {actions}
+          </div>
+        ) : null}
       </div>
     </Card>
   );
