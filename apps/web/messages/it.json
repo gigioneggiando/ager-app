@@ -290,6 +290,11 @@
     "description": "Il contenuto che cerchi non esiste o è stato spostato.",
     "backHome": "Torna al feed"
   },
+  "Error": {
+    "title": "Qualcosa è andato storto",
+    "description": "Si è verificato un errore imprevisto. Riprova tra poco.",
+    "retry": "Riprova"
+  },
   "Styleguide": {
     "badge": "Brand · v1",
     "title": "Design system di Ager",

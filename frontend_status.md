@@ -2,7 +2,10 @@
 
 Tracker for the AGER web frontend (Sprint 5). One PR per prompt; branch `feat/<topic>`
 off `main`, open PR vs `main`, owner ratifies/merges. See
-[`FRONTEND_DESIGN.md`](./FRONTEND_DESIGN.md) for the locked decisions.
+[`FRONTEND_DESIGN.md`](./FRONTEND_DESIGN.md) for the locked decisions and
+[`SMOKE_TEST.md`](./SMOKE_TEST.md) for the v1 acceptance checklist.
+
+**Status: web v1 feature-complete** (PR7 close-out open). Mobile (Expo) is Sprint 5b.
 
 | Prompt | Scope | Branch | Status |
 | ------ | ----- | ------ | ------ |
@@ -14,8 +17,8 @@ off `main`, open PR vs `main`, owner ratifies/merges. See
 | **PR5** | Logged-in layer — onboarding interests + interactions + reading lists | `feat/prompt5` | ✅ Done — PR open vs `main` |
 | **Interests** | Interests editor — server truth + no hard cap | `feat/prompt-interests` | ✅ Merged (#9) |
 | **Lists** | Reading-list rich port — multiple lists + add-to-list dialog + default surface + 3s undo | `feat/prompt-lists` | ✅ Merged (#10) |
-| **PR6** | Feed mode selector + me/stats dashboard + search (text + tag) | `feat/prompt6` | ✅ Done — PR open vs `main` |
-| PR7 | Close-out — PWA, OG finalize, Lighthouse/perf, a11y pass, deploy, tag `frontend-web-v1` | — | ⬜ Not started |
+| **PR6** | Feed mode selector + me/stats dashboard + search (text + tag) | `feat/prompt6` | ✅ Merged (#11) |
+| **PR7** | Close-out — PWA + OG/metadata finalize + perf/a11y + security headers + error boundary + acceptance doc | `feat/prompt7` | ✅ Done — PR open vs `main` |
 | 5b | Mobile (Expo, later) | — | ⬜ Not started |
 
 ## PR0 — Scaffold ✅
@@ -319,6 +322,42 @@ Three logged-in/discovery surfaces, all via the typed client through same-origin
   `aria-pressed` toggles, `aria-live` result count). Tests: **65 passing** (+ feed mode
   select/persist/anon-note, stats window switch + indices, search text/tag/paginate).
   Lint + typecheck + build green.
+
+## PR7 — Close-out (web v1) ✅ (`feat/prompt7`)
+
+Production readiness. The web app is **feature-complete for v1**.
+
+- **PWA** — web app manifest (`src/app/manifest.ts` → `/manifest.webmanifest`):
+  name/short_name, brand theme (`#0F2A44`) / background (`#F9FAF7`), `display: standalone`,
+  192 + 512 + maskable icons (added a 192 to `gen-brand-icons.mjs`; reuses the PR1 tiles).
+  Service worker (`public/sw.js`) registered in production via `ServiceWorkerRegister`:
+  installable, caches the static shell (`/_next/static`, `/brand`) cache-first, **never**
+  caches `/api/*` or HTML (no stale auth/personalized content).
+- **OG / metadata** — site-wide defaults in the root layout (canonical, OpenGraph
+  `website` + Twitter `summary_large_image`, `applicationName`, `appleWebApp`) on top of
+  the existing site-wide + per-article `next/og` images; `viewport.themeColor` = ager-blue.
+  Per-route metadata already in place (article canonical/OG, sources/search titles,
+  `/me/*` noindex).
+- **Resilience / a11y** — route error boundary (`[locale]/error.tsx`) + last-resort
+  `global-error.tsx` (renders its own `<html>`, inline brand styling); the localized 404
+  stays. Brand-token contrast, meter/`role="search"`/`aria-pressed`/`aria-live` already
+  applied across feed/stats/search.
+- **Security headers** (`next.config.ts` `headers()`) — CSP (`frame-ancestors 'none'`,
+  `connect-src 'self'` since all backend calls are same-origin proxies, `img-src https:`
+  for hotlinking; `'unsafe-eval'`/`ws:` dev-only), HSTS preload, `X-Frame-Options DENY`,
+  `nosniff`, Referrer-Policy, Permissions-Policy. Closes the deferred CSP/HSTS item.
+- **Acceptance doc** — `SMOKE_TEST.md` enumerates the shipped surface (feed + 6 modes,
+  article/sources/OG, auth, onboarding/interests, interactions, rich reading lists, stats,
+  search, PWA, metadata, perf/a11y/security) with checks + a manual/Lighthouse pass list.
+- Tests: **66 passing** (+ manifest shape). Lint + typecheck + build green;
+  `/manifest.webmanifest` emitted.
+
+### Post-merge (owner)
+- Confirm the Vercel **Production** build from `main` is green (root dir `apps/web`).
+- Tag the release: `git tag frontend-web-v1 && git push origin frontend-web-v1`.
+- Custom domain + `NEXT_PUBLIC_SITE_URL` (used by `metadataBase`/OG) — owner step.
+- Known future hardening: script-src nonces (currently `'unsafe-inline'` for Next's inline
+  bootstrap, no nonce middleware); offline fallback page; `next/image` host allowlist.
 
 ### Notes / follow-ups
 

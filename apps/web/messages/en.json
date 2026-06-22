@@ -290,6 +290,11 @@
     "description": "The content you're looking for doesn't exist or has moved.",
     "backHome": "Back to the feed"
   },
+  "Error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again shortly.",
+    "retry": "Try again"
+  },
   "Styleguide": {
     "badge": "Brand · v1",
     "title": "Ager design system",
