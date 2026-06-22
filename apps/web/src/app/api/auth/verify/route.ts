@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { AuthResult } from "@ager/api-client";
 
@@ -34,5 +35,15 @@ export async function POST(request: Request) {
 
   const auth = (await res.json()) as AuthResult;
   await setSessionCookies(auth);
-  return NextResponse.json({ userId: auth.userId, role: auth.role });
+
+  // Onboard once per user: trigger the interests flow unless this user already completed it
+  // (tracked by the ager_onboarded cookie set on save/skip).
+  const onboarded = (await cookies()).get("ager_onboarded")?.value;
+  const needsOnboarding = onboarded !== auth.userId;
+
+  return NextResponse.json({
+    userId: auth.userId,
+    role: auth.role,
+    needsOnboarding,
+  });
 }

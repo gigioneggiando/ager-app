@@ -21,6 +21,9 @@ export type SourceDetail = components["schemas"]["SourceDetailDto"];
 export type AuthResult = components["schemas"]["AuthResultDto"];
 export type LoginRequest = components["schemas"]["LoginRequest"];
 export type UserProfile = components["schemas"]["UserProfileDto"];
+export type Interest = components["schemas"]["InterestDto"];
+export type UserInterest = components["schemas"]["UserInterestDto"];
+export type ReadingList = components["schemas"]["ReadingListDto"];
 
 /**
  * Article-detail response. The contract does not declare a schema for

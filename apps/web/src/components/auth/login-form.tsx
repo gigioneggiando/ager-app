@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 import { useSession } from "@/components/auth/auth-provider";
@@ -20,6 +20,7 @@ function safeNext(next: string | null): string {
 export function LoginForm() {
   const t = useTranslations("Login");
   const router = useRouter();
+  const locale = useLocale();
   const searchParams = useSearchParams();
   const { refresh } = useSession();
 
@@ -65,8 +66,17 @@ export function LoginForm() {
         body: JSON.stringify({ email, code }),
       });
       if (res.ok) {
+        const data = (await res.json().catch(() => null)) as {
+          needsOnboarding?: boolean;
+        } | null;
         await refresh();
-        router.replace(next);
+        if (data?.needsOnboarding) {
+          router.replace(
+            `/${locale}/onboarding?next=${encodeURIComponent(next)}`,
+          );
+        } else {
+          router.replace(next);
+        }
         router.refresh();
         return;
       }

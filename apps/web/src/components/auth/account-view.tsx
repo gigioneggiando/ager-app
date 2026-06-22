@@ -3,9 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { LogOut } from "lucide-react";
+import { Bookmark, ChevronRight, LogOut, Sparkles } from "lucide-react";
 import type { UserProfile } from "@ager/api-client";
 
+import { Link } from "@/i18n/navigation";
 import { useSession } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -83,6 +84,46 @@ export function AccountView() {
           )}
         </CardContent>
       </Card>
+
+      <nav className="grid gap-3 sm:grid-cols-2" aria-label={t("manage")}>
+        <Link
+          href="/me/interests"
+          className="flex items-center justify-between gap-3 rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <span className="flex items-center gap-3">
+            <Sparkles className="size-5 text-accent" aria-hidden="true" />
+            <span className="flex flex-col">
+              <span className="font-medium">{t("interests")}</span>
+              <span className="text-xs text-muted-foreground">
+                {t("interestsHint")}
+              </span>
+            </span>
+          </span>
+          <ChevronRight
+            className="size-4 text-muted-foreground"
+            aria-hidden="true"
+          />
+        </Link>
+
+        <Link
+          href="/me/reading-lists"
+          className="flex items-center justify-between gap-3 rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <span className="flex items-center gap-3">
+            <Bookmark className="size-5 text-accent" aria-hidden="true" />
+            <span className="flex flex-col">
+              <span className="font-medium">{t("readingLists")}</span>
+              <span className="text-xs text-muted-foreground">
+                {t("readingListsHint")}
+              </span>
+            </span>
+          </span>
+          <ChevronRight
+            className="size-4 text-muted-foreground"
+            aria-hidden="true"
+          />
+        </Link>
+      </nav>
     </div>
   );
 }

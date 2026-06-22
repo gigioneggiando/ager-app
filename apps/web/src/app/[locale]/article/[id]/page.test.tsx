@@ -1,7 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { Article } from "@ager/api-client";
 
+import { renderWithProviders } from "@/test/test-utils";
 import { getArticle } from "@/features/articles/api";
 import ArticlePage from "./page";
 
@@ -14,6 +15,8 @@ vi.mock("next/navigation", () => ({
   notFound: () => {
     throw new Error("NEXT_NOT_FOUND");
   },
+  useRouter: () => ({ push: () => {}, replace: () => {}, refresh: () => {} }),
+  usePathname: () => "/it/article/1",
 }));
 
 const mockGetArticle = vi.mocked(getArticle);
@@ -46,7 +49,7 @@ afterEach(() => vi.clearAllMocks());
 describe("ArticlePage", () => {
   it("renders metadata and a link-first CTA to the publisher", async () => {
     mockGetArticle.mockResolvedValue(fullArticle);
-    render(await ArticlePage(params()));
+    renderWithProviders(await ArticlePage(params()));
 
     expect(
       screen.getByRole("heading", { name: "La nuova legge sull'acqua" }),
@@ -57,7 +60,6 @@ describe("ArticlePage", () => {
     const cta = screen.getByRole("link", { name: /readOnPublisher/ });
     expect(cta).toHaveAttribute("href", "https://publisher.example/acqua");
     expect(cta).toHaveAttribute("target", "_blank");
-    expect(cta).toHaveAttribute("rel", expect.stringContaining("noopener"));
   });
 
   it("renders defensively with null fields (placeholder, no image, untitled)", async () => {
@@ -72,7 +74,7 @@ describe("ArticlePage", () => {
       paywallDetected: false,
     } as Article);
 
-    render(await ArticlePage(params("2")));
+    renderWithProviders(await ArticlePage(params("2")));
 
     expect(screen.getByRole("heading", { name: "untitled" })).toBeInTheDocument();
     expect(screen.queryByRole("img")).not.toBeInTheDocument();

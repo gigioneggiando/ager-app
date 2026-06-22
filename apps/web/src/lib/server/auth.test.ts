@@ -68,8 +68,13 @@ describe("verify route (login)", () => {
     );
 
     expect(res.status).toBe(200);
-    const body = (await res.json()) as { userId: string; role: string };
-    expect(body).toEqual({ userId: authResult.userId, role: "user" });
+    const body = (await res.json()) as {
+      userId: string;
+      role: string;
+      needsOnboarding: boolean;
+    };
+    expect(body).toMatchObject({ userId: authResult.userId, role: "user" });
+    expect(body.needsOnboarding).toBe(true); // no ager_onboarded cookie for this user
     // Tokens land in cookies, never in the response body.
     expect(JSON.stringify(body)).not.toContain("new-access");
     expect(cookieJar.get("ager_at")).toBe("new-access");

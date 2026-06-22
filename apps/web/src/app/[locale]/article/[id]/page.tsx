@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { ArrowUpRight, Clock, Lock } from "lucide-react";
+import { Clock, Lock } from "lucide-react";
 
 import { getArticle } from "@/features/articles/api";
 import { formatAbsoluteDate } from "@/lib/format";
 import { Container } from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { AgerSymbol } from "@/components/brand/ager-symbol";
+import { ArticleActions } from "@/components/article/article-actions";
 
 type Params = Promise<{ locale: string; id: string }>;
 
@@ -153,18 +153,15 @@ export default async function ArticlePage({ params }: { params: Params }) {
           </p>
         ) : null}
 
-        {/* Link-first CTA. displayMode (redirect|webview|reader_optin) all open the
-            publisher url on web for now.
-            TODO(PR5): fire an OPENED_EXTERNAL interaction on click (needs auth). */}
-        <div className="flex flex-col gap-2 border-t border-border pt-6">
-          <Button asChild size="lg" className="w-fit">
-            <a href={href} target="_blank" rel="noopener noreferrer">
-              {t("readOnPublisher")}
-              <ArrowUpRight aria-hidden="true" />
-            </a>
-          </Button>
-          <p className="text-xs text-muted-foreground">{t("linkFirstNote")}</p>
-        </div>
+        {/* Link-first actions. displayMode (redirect|webview|reader_optin) all open the
+            publisher url on web for now; opening fires OPENED_EXTERNAL when signed in. */}
+        <ArticleActions
+          articleId={article.articleId ?? Number(id)}
+          url={href}
+          title={title}
+          openLabel={t("readOnPublisher")}
+          linkFirstNote={t("linkFirstNote")}
+        />
       </article>
     </Container>
   );

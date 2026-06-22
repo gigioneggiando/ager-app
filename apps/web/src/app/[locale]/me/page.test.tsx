@@ -12,6 +12,12 @@ vi.mock("next/navigation", () => ({
   redirect: (url: string) => {
     throw new Error(`REDIRECT:${url}`);
   },
+  useRouter: () => ({ push: () => {}, replace: () => {}, refresh: () => {} }),
+}));
+// AccountView pulls in the i18n navigation (Link); stub it to avoid loading next-intl's
+// client navigation in the test environment.
+vi.mock("@/i18n/navigation", () => ({
+  Link: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 const mockGetSession = vi.mocked(getSession);

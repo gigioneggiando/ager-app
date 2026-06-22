@@ -8,7 +8,7 @@ import { fetchFeedPage } from "./api";
 /** Cold-start public feed (anonymous). Cursor-paginated infinite query. */
 export function useFeed() {
   return useInfiniteQuery({
-    queryKey: ["feed", "cold-start"],
+    queryKey: ["feed"],
     queryFn: ({ pageParam }) =>
       fetchFeedPage({ cursor: pageParam ?? undefined }),
     initialPageParam: undefined as string | undefined,
