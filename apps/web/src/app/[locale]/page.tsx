@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Container } from "@/components/layout/container";
-import { FeedList } from "@/components/feed/feed-list";
+import { FeedView } from "@/components/feed/feed-view";
 
 export default async function FeedPage({
   params,
@@ -20,7 +20,7 @@ export default async function FeedPage({
           {t("subheading")}
         </p>
       </header>
-      <FeedList />
+      <FeedView />
     </Container>
   );
 }

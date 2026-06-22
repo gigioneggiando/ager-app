@@ -28,6 +28,10 @@ export type ReadingList = components["schemas"]["ReadingListDto"];
 export type ReadingListsPage = components["schemas"]["ReadingListsPageDto"];
 export type ReadingListItemsPage = components["schemas"]["ReadingListItemsPageDto"];
 export type ArticleInList = components["schemas"]["ArticleInListDto"];
+export type ReadingStats = components["schemas"]["ReadingStatsDto"];
+export type ArticleSearchResult = components["schemas"]["ArticleSearchResultDto"];
+export type ArticleSearchResultsPage = components["schemas"]["ArticleSearchResultsPageDto"];
+export type ArticleTag = components["schemas"]["ArticleTagDto"];
 
 /**
  * Article-detail response. The contract does not declare a schema for

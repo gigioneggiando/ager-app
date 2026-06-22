@@ -15,6 +15,7 @@ type NavItem = { key: string; href: string; soon?: boolean };
 
 const NAV_ITEMS: NavItem[] = [
   { key: "feed", href: "/" },
+  { key: "search", href: "/cerca" },
   { key: "sources", href: "/sources" },
   { key: "insights", href: "/", soon: true },
   { key: "styleguide", href: "/styleguide" },

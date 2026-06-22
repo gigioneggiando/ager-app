@@ -2,6 +2,7 @@
   "Nav": {
     "primary": "Navigazione principale",
     "feed": "Feed",
+    "search": "Cerca",
     "sources": "Fonti",
     "insights": "Approfondimenti",
     "styleguide": "Styleguide",
@@ -54,7 +55,9 @@
     "interestsHint": "Personalizza il tuo feed",
     "readingLists": "Liste di lettura",
     "readingListsHint": "Gli articoli che hai salvato",
-    "saved": "Salvati"
+    "saved": "Salvati",
+    "stats": "Statistiche di lettura",
+    "statsHint": "La varietà delle tue letture"
   },
   "Actions": {
     "save": "Salva",
@@ -122,9 +125,87 @@
     "cancel": "Annulla",
     "save": "Salva"
   },
+  "Stats": {
+    "title": "Statistiche di lettura",
+    "subtitle": "Indici di varietà delle tue letture: quanto diversifichi fonti e temi.",
+    "windowLabel": "Periodo",
+    "windows": {
+      "7d": "7 giorni",
+      "14d": "14 giorni",
+      "30d": "30 giorni"
+    },
+    "distinctSources": "Diversità delle fonti",
+    "distinctSourcesHint": "Quota di fonti distinte sul totale delle interazioni: più è alta, più vari sono gli editori che leggi.",
+    "topTopicShare": "Concentrazione sul tema principale",
+    "topTopicShareHint": "Quanto pesa il tuo tema più frequente: valori bassi indicano letture più varie.",
+    "totalInteractions": "Interazioni totali",
+    "totalInteractionsHint": "Azioni registrate nel periodo selezionato.",
+    "byType": "Interazioni per tipo",
+    "topics": "Temi più letti",
+    "noData": "Nessun dato per questo periodo.",
+    "loadError": "Impossibile caricare le statistiche.",
+    "emptyTitle": "Ancora nessun dato",
+    "emptyDescription": "Leggi e interagisci con qualche articolo: qui vedrai la varietà delle tue letture.",
+    "types": {
+      "VIEW": "Visualizzazioni",
+      "OPENED_EXTERNAL": "Aperture sull'editore",
+      "READ_COMPLETED": "Letture completate",
+      "SAVE": "Salvataggi",
+      "DISCARD": "Nascosti",
+      "SHARE": "Condivisioni"
+    }
+  },
+  "Search": {
+    "title": "Cerca",
+    "subtitle": "Cerca tra gli articoli per parole chiave o sfoglia per tema. I risultati rimandano all'editore.",
+    "inputLabel": "Cerca articoli",
+    "placeholder": "Parole chiave, nome, argomento…",
+    "submit": "Cerca",
+    "browseByTag": "Sfoglia per tema",
+    "idleTitle": "Inizia una ricerca",
+    "idleDescription": "Digita una parola chiave o scegli un tema per vedere i risultati.",
+    "emptyTitle": "Nessun risultato",
+    "emptyDescription": "Nessun articolo per \"{term}\". Prova con altre parole o un tema.",
+    "resultsCount": "{count, plural, =0 {nessun risultato} one {# risultato} other {# risultati}}",
+    "loadError": "Impossibile eseguire la ricerca.",
+    "untitled": "Senza titolo",
+    "paywall": "Paywall",
+    "pagination": "Paginazione dei risultati",
+    "previous": "Precedente",
+    "next": "Successiva",
+    "pageOf": "Pagina {page} di {total}"
+  },
   "Feed": {
     "heading": "Il tuo feed",
     "subheading": "Una selezione ordinata di ciò che conta, con la fonte sempre visibile. Tocca un titolo per leggere sull'editore.",
+    "modeLabel": "Ordina per",
+    "modeAnonNote": "Le modalità personalizzano il feed una volta effettuato l'accesso. Da non registrato vedi una selezione iniziale neutra.",
+    "modes": {
+      "balanced": {
+        "label": "Equilibrato",
+        "help": "Un mix calibrato di attualità, affinità e varietà."
+      },
+      "most_recent": {
+        "label": "Più recenti",
+        "help": "Dà priorità alle notizie pubblicate da poco."
+      },
+      "more_pluralism": {
+        "label": "Più pluralismo",
+        "help": "Amplia la gamma di fonti e punti di vista."
+      },
+      "most_personalized": {
+        "label": "Più personalizzato",
+        "help": "Si appoggia di più ai tuoi interessi e alle tue azioni."
+      },
+      "less_personalized": {
+        "label": "Meno personalizzato",
+        "help": "Riduce il peso del tuo profilo per una visione più ampia."
+      },
+      "chronological": {
+        "label": "Cronologico",
+        "help": "In ordine di tempo, senza riordino algoritmico."
+      }
+    },
     "card": {
       "untitled": "Senza titolo",
       "openExternal": "apri sull'editore",

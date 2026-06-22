@@ -13,8 +13,9 @@ off `main`, open PR vs `main`, owner ratifies/merges. See
 | **PR4** | Auth — OTP login, HttpOnly session + refresh + CSRF via route-handler proxy, personalized feed | `feat/prompt4` | ✅ Done — PR open vs `main` |
 | **PR5** | Logged-in layer — onboarding interests + interactions + reading lists | `feat/prompt5` | ✅ Done — PR open vs `main` |
 | **Interests** | Interests editor — server truth + no hard cap | `feat/prompt-interests` | ✅ Merged (#9) |
-| **Lists** | Reading-list rich port — multiple lists + add-to-list dialog + default surface + 3s undo | `feat/prompt-lists` | ✅ Done — PR open vs `main` |
-| PR6 | Polish + deploy (PWA, OG, Lighthouse, a11y, Vercel, tag `frontend-web-v1`) | — | ⬜ Not started |
+| **Lists** | Reading-list rich port — multiple lists + add-to-list dialog + default surface + 3s undo | `feat/prompt-lists` | ✅ Merged (#10) |
+| **PR6** | Feed mode selector + me/stats dashboard + search (text + tag) | `feat/prompt6` | ✅ Done — PR open vs `main` |
+| PR7 | Close-out — PWA, OG finalize, Lighthouse/perf, a11y pass, deploy, tag `frontend-web-v1` | — | ⬜ Not started |
 | 5b | Mobile (Expo, later) | — | ⬜ Not started |
 
 ## PR0 — Scaffold ✅
@@ -287,10 +288,45 @@ string-enum interactions). All writes go through the PR4 authed proxy + CSRF.
   + build green. Local `features/reading-lists/types.ts` deleted in favor of the generated
   `ArticleInListDto`.
 
+## PR6 — Feed modes + stats + search ✅ (`feat/prompt6`)
+
+Three logged-in/discovery surfaces, all via the typed client through same-origin proxies.
+
+- **Feed mode selector** — a control over the six recommender modes (`balanced` default,
+  `most_recent`, `more_pluralism`, `most_personalized`, `less_personalized`,
+  `chronological`). The mode flows through the feed proxy (`?mode=`) and is part of the
+  feed query key, so switching re-ranks. Persisted in `localStorage` (`ager:feedMode`) via
+  a new `usePersistentState` hook (`useSyncExternalStore` — no set-state-in-effect, no
+  hydration mismatch). Anonymous visitors still get cold-start with a note that modes
+  personalize once signed in; logged-in → ranking changes. Feed page now renders
+  `<FeedView>` (selector + note + list). Interaction handlers (Hide/Save) match all
+  `["feed", …]` caches by prefix via `getQueriesData`/`setQueriesData`.
+- **me/stats dashboard** `/me/stats` (guarded) — `GET /api/me/stats?window=` via the authed
+  proxy, with a 7d/14d/30d window selector (persisted). Renders variety indices:
+  distinct-source ratio + top-topic share as percent meters, total interactions, and bar
+  lists for counts-by-interaction-type (localized labels) and topic distribution. Added to
+  the `/me` hub as a third entry.
+- **Search** `/cerca` (public) — `GET /api/articles/search` (free-text, `page`/`pageSize`
+  offset paging, optional `lang`) + tag browse (`GET /api/articles/tags`,
+  `GET /api/articles/tags/{tag}/search`). Results render as article rows; since search DTOs
+  carry **no publisher URL**, rows link to the internal article page (`/article/{id}`),
+  preserving the link-first invariant. Offset paginator (prev/next + "page X of Y"). Tag
+  chips toggle tag-search mode. Seeds from `?q=`. Added "Cerca" to the header nav.
+- New proxies: `api/feed` (forwards `mode`), `api/me/stats`, `api/articles/search`,
+  `api/articles/tags`, `api/articles/tags/[tag]/search`. New aliases in the client:
+  `ReadingStats`, `ArticleSearchResult(sPage)`, `ArticleTag`.
+- Brand tokens, it/en, accessible (labeled select, meter roles, `role="search"`,
+  `aria-pressed` toggles, `aria-live` result count). Tests: **65 passing** (+ feed mode
+  select/persist/anon-note, stats window switch + indices, search text/tag/paginate).
+  Lint + typecheck + build green.
+
 ### Notes / follow-ups
 
 - Note: the contract marks all `FeedItemDto` fields optional (no `required`), so the
   card renders defensively (guards + fallbacks).
+- Stats window values (`7d`/`14d`/`30d`) are sent as the `window` query string verbatim;
+  the backend parses them. `byType` keys are mapped to localized labels with a raw-key
+  fallback, so unknown interaction names still render.
 - Next 16 deprecated the `middleware` file convention → using `src/proxy.ts`.
 - `next/image` `remotePatterns` currently allows any https host (link-first hotlinking);
   tighten to a source allowlist when sources land (PR2/PR3).

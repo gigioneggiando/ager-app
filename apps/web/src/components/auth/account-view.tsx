@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { Bookmark, ChevronRight, LogOut, Sparkles } from "lucide-react";
+import { BarChart3, Bookmark, ChevronRight, LogOut, Sparkles } from "lucide-react";
 import type { UserProfile } from "@ager/api-client";
 
 import { Link } from "@/i18n/navigation";
@@ -115,6 +115,25 @@ export function AccountView() {
               <span className="font-medium">{t("readingLists")}</span>
               <span className="text-xs text-muted-foreground">
                 {t("readingListsHint")}
+              </span>
+            </span>
+          </span>
+          <ChevronRight
+            className="size-4 text-muted-foreground"
+            aria-hidden="true"
+          />
+        </Link>
+
+        <Link
+          href="/me/stats"
+          className="flex items-center justify-between gap-3 rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <span className="flex items-center gap-3">
+            <BarChart3 className="size-5 text-accent" aria-hidden="true" />
+            <span className="flex flex-col">
+              <span className="font-medium">{t("stats")}</span>
+              <span className="text-xs text-muted-foreground">
+                {t("statsHint")}
               </span>
             </span>
           </span>

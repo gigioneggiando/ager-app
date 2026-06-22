@@ -85,8 +85,9 @@ describe("FeedList", () => {
     );
 
     // Cursor threaded: page 2 requested with the nextCursor from page 1.
-    expect(mockFetch).toHaveBeenCalledWith({ cursor: undefined });
-    expect(mockFetch).toHaveBeenCalledWith({ cursor: "cursor-2" });
+    // (mode defaults to "balanced" when FeedList is rendered without a mode prop.)
+    expect(mockFetch).toHaveBeenCalledWith({ cursor: undefined, mode: "balanced" });
+    expect(mockFetch).toHaveBeenCalledWith({ cursor: "cursor-2", mode: "balanced" });
 
     // End of feed → calm caught-up state, no more "load more".
     expect(screen.getByText("Sei in pari")).toBeInTheDocument();

@@ -11,13 +11,16 @@ export const FEED_PAGE_LIMIT = 20;
 export async function fetchFeedPage({
   cursor,
   limit = FEED_PAGE_LIMIT,
+  mode,
 }: {
   cursor?: string;
   limit?: number;
+  mode?: string;
 }): Promise<FeedPage> {
   const params = new URLSearchParams();
   if (cursor) params.set("cursor", cursor);
   if (limit) params.set("limit", String(limit));
+  if (mode) params.set("mode", mode);
 
   const res = await fetch(`/api/feed?${params.toString()}`, {
     headers: { accept: "application/json" },

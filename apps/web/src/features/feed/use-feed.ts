@@ -4,13 +4,19 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import type { FeedItem, FeedPage } from "@ager/api-client";
 
 import { fetchFeedPage } from "./api";
+import { DEFAULT_FEED_MODE, type FeedMode } from "./modes";
 
-/** Cold-start public feed (anonymous). Cursor-paginated infinite query. */
-export function useFeed() {
+/**
+ * The feed (cold-start when anonymous, personalized when authenticated), ranked by the
+ * chosen `mode`. Cursor-paginated infinite query. The mode is part of the query key, so
+ * switching modes fetches a fresh ranking; all feed caches share the `["feed", …]` prefix
+ * (interaction handlers match on it).
+ */
+export function useFeed(mode: FeedMode = DEFAULT_FEED_MODE) {
   return useInfiniteQuery({
-    queryKey: ["feed"],
+    queryKey: ["feed", mode],
     queryFn: ({ pageParam }) =>
-      fetchFeedPage({ cursor: pageParam ?? undefined }),
+      fetchFeedPage({ cursor: pageParam ?? undefined, mode }),
     initialPageParam: undefined as string | undefined,
     // Stop when the backend returns a null/absent cursor.
     getNextPageParam: (lastPage: FeedPage) => lastPage.nextCursor ?? undefined,
