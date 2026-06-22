@@ -7,6 +7,7 @@ import {
   readRefreshToken,
   setSessionCookies,
 } from "./auth-cookies";
+import { isExpiredOrExpiring } from "./jwt";
 
 /**
  * SERVER-ONLY backend access. Imported by route handlers (the same-origin proxies) and
@@ -101,33 +102,49 @@ async function backendCsrf(
 }
 
 /**
- * Exchange the refresh cookie for a fresh token pair and re-set the session cookies.
- * Returns the new access token, or null (and clears the session) when refresh fails.
+ * Exchange the refresh cookie for a fresh token pair and re-set the session cookies (which
+ * also EXTENDS the access-cookie max-age to the new refresh-token lifetime). Returns the new
+ * access token, or null on failure.
+ *
+ * Crucially, the session is cleared ONLY on a definitive auth failure (the backend rejects
+ * the refresh token with 401/403). A transient failure — network error or 5xx — returns null
+ * WITHOUT clearing the cookies, so a blip can never log the user out; the next request retries.
  */
 export async function refreshSession(): Promise<string | null> {
   const refreshToken = await readRefreshToken();
   if (!refreshToken) return null;
 
-  const res = await fetch(backendUrl("/api/auth/refresh"), {
-    method: "POST",
-    headers: { "content-type": "application/json", accept: "application/json" },
-    body: JSON.stringify({ refreshToken }),
-  });
-  if (!res.ok) {
-    await clearSessionCookies();
-    return null;
+  let res: Response;
+  try {
+    res = await fetch(backendUrl("/api/auth/refresh"), {
+      method: "POST",
+      headers: { "content-type": "application/json", accept: "application/json" },
+      body: JSON.stringify({ refreshToken }),
+      cache: "no-store",
+    });
+  } catch {
+    return null; // network blip — keep the session, retry on the next call
   }
 
-  const auth = (await res.json()) as AuthResult;
+  if (res.status === 401 || res.status === 403) {
+    await clearSessionCookies(); // refresh token is invalid/expired/revoked → really logged out
+    return null;
+  }
+  if (!res.ok) return null; // transient (5xx, etc.) — keep the session
+
+  const auth = (await res.json().catch(() => null)) as AuthResult | null;
+  if (!auth?.accessToken) return null;
   await setSessionCookies(auth);
-  return auth.accessToken ?? null;
+  return auth.accessToken;
 }
 
 /**
- * Server-side authenticated fetch to the backend. Reads the access token from the
- * HttpOnly cookie and attaches it as a Bearer. On a 401 it refreshes once and retries.
- * For state-changing methods it runs the CSRF handshake. The refresh token never leaves
- * the server. Call only in route handlers (it can set cookies).
+ * Server-side authenticated fetch to the backend. Reads the access token from the HttpOnly
+ * cookie and attaches it as a Bearer. PROACTIVELY refreshes when the access token is missing
+ * or at/near expiry (so a predictable expiry never costs a 401 round-trip), and REACTIVELY
+ * refreshes once on an unexpected 401, then retries. Either refresh writes the new Set-Cookie
+ * back via the route response. For state-changing methods it runs the CSRF handshake. The
+ * refresh token never leaves the server. Call only in route handlers (it can set cookies).
  */
 export async function authedBackendFetch(
   path: string,
@@ -163,9 +180,21 @@ export async function authedBackendFetch(
     return fetch(backendUrl(path), { ...init, cache: "no-store", headers });
   };
 
-  const access = await readAccessToken();
+  let access = await readAccessToken();
+
+  // Proactive refresh: a missing or about-to-expire access token (and a refresh token to use)
+  // is refreshed BEFORE the call, so an expected expiry never surfaces as a 401 / login prompt.
+  if (isExpiredOrExpiring(access) || !access) {
+    if (await readRefreshToken()) {
+      const refreshed = await refreshSession();
+      if (refreshed) access = refreshed;
+    }
+  }
+
   let res = await doFetch(access);
 
+  // Reactive fallback: an unexpected 401 (clock skew, server-side invalidation) → refresh once
+  // and retry. A single transient 401 does NOT log the user out when the refresh succeeds.
   if (res.status === 401) {
     const refreshed = await refreshSession();
     if (refreshed) {
