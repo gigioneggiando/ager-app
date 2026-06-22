@@ -9,6 +9,7 @@ import { routing } from "@/i18n/routing";
 import { getSession } from "@/lib/server/session";
 import { Providers } from "@/app/providers";
 import { AuthProvider } from "@/components/auth/auth-provider";
+import { ToastProvider } from "@/components/ui/toast";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import "../globals.css";
@@ -71,9 +72,11 @@ export default async function LocaleLayout({
         <NextIntlClientProvider>
           <AuthProvider initialSession={session}>
             <Providers>
-              <Header />
-              <main className="flex flex-1 flex-col">{children}</main>
-              <Footer />
+              <ToastProvider>
+                <Header />
+                <main className="flex flex-1 flex-col">{children}</main>
+                <Footer />
+              </ToastProvider>
             </Providers>
           </AuthProvider>
         </NextIntlClientProvider>

@@ -12,6 +12,8 @@ off `main`, open PR vs `main`, owner ratifies/merges. See
 | **PR3** | Article detail + dynamic OG images + sources (via proxies) | `feat/prompt3` | ✅ Done — PR open vs `main` |
 | **PR4** | Auth — OTP login, HttpOnly session + refresh + CSRF via route-handler proxy, personalized feed | `feat/prompt4` | ✅ Done — PR open vs `main` |
 | **PR5** | Logged-in layer — onboarding interests + interactions + reading lists | `feat/prompt5` | ✅ Done — PR open vs `main` |
+| **Interests** | Interests editor — server truth + no hard cap | `feat/prompt-interests` | ✅ Merged (#9) |
+| **Lists** | Reading-list rich port — multiple lists + add-to-list dialog + default surface + 3s undo | `feat/prompt-lists` | ✅ Done — PR open vs `main` |
 | PR6 | Polish + deploy (PWA, OG, Lighthouse, a11y, Vercel, tag `frontend-web-v1`) | — | ⬜ Not started |
 | 5b | Mobile (Expo, later) | — | ⬜ Not started |
 
@@ -226,9 +228,10 @@ Onboarding interests + interactions + reading lists, all via the PR4 authed prox
 - ~~There is no GET for interests, so onboarding is gated by a per-user cookie.~~
   **Superseded** (see interests-editor PR): `GET /api/me/interests` now exists, so
   onboarding state is server truth and the `ager_onboarded` cookie was dropped.
-- Reading-list item DTOs (`ArticleInListDto`) aren't in the contract (anonymous-wrapped),
-  so they're typed locally in `features/reading-lists/types.ts`. (Backend PR-B now types
-  the item pages; the rich reading-list port is a later frontend PR.)
+- ~~Reading-list item DTOs (`ArticleInListDto`) aren't in the contract, so they're typed
+  locally in `features/reading-lists/types.ts`.~~ **Superseded** by the reading-list rich
+  port: PR-B types the item pages, so the local types file was deleted and the generated
+  `ArticleInListDto` is used.
 
 ## Interests editor — server truth + no hard cap ✅ (`feat/prompt-interests`)
 
@@ -248,6 +251,41 @@ After backend PR-B added `GET /api/me/interests` + the string-enum contract:
   "scegline almeno 5".
 - Tests: 51 passing (soft-min/no-max picker, editor pre-selection, verify→server-truth
   onboarding). Lint + typecheck + build green.
+
+## Reading-list rich port ✅ (`feat/prompt-lists`)
+
+Ports the old ager-web reading-list UX onto the typed PR-B endpoints
+(`ReadingListsPageDto` / `ReadingListItemsPageDto` / `ArticleInListDto`, `isDefault`,
+string-enum interactions). All writes go through the PR4 authed proxy + CSRF.
+
+- **Lists index** `/me/reading-lists`: each list shows name, visibility label, item count
+  (ICU plural), and a delete-confirm (`window.confirm`) — except the default **"Salvati"**
+  (`isDefault`), which is pinned first, badged, and not deletable. "Crea lista" opens the
+  create dialog.
+- **List detail** `/me/reading-lists/[id]`: header (name + created date), typed items via
+  `GET …/items` (note in italics, source · date · reading-time = ⌈wordCount/200⌉,
+  thumbnail or Ager symbol), per-item Remove (optimistic across infinite pages),
+  infinite scroll (IntersectionObserver + "Carica altro"). New proxy
+  `src/app/api/me/reading-lists/[id]/route.ts` for list DELETE.
+- **Add-to-list dialog** (Radix Dialog): pick a target list (with counts + default badge)
+  + optional note; remembers the last-used list in `localStorage` (`ager:lastListId`) and
+  preselects it (last → default → first); toast names the list on success. Secondary to
+  the one-tap fast path.
+- **One-tap Save** stays the fast path → fires `SAVE`; the backend auto-files into the
+  default "Salvati" list (PR-B), so the client no longer creates lists itself.
+- **Default surface**: account menu has a "Salvati" entry resolving to the `isDefault`
+  list id (+ a "Liste di lettura" entry to the index).
+- **3-second optimistic Undo** (Save / Hide): a `ToastProvider` holds the deferred-commit
+  timer (survives the card unmounting on Hide). Hide removes the item from the feed cache
+  immediately; the toast's "Annulla" cancels the commit and restores the snapshot; on
+  expiry it posts `DISCARD`/`SAVE` and invalidates. New `toast.tsx` + `dialog.tsx`
+  primitives; `renderWithProviders` now wraps `ToastProvider`.
+- **Create-list dialog**: name, optional description, visibility (private/public).
+- Optimistic UI + query invalidation, brand tokens, it/en, accessible. Tests: 57 passing
+  (+ deferred-commit/undo on Hide, lists index pin/badge/delete-confirm, add-to-list
+  last-list memory + note, detail optimistic remove, create-via-dialog). Lint + typecheck
+  + build green. Local `features/reading-lists/types.ts` deleted in favor of the generated
+  `ArticleInListDto`.
 
 ### Notes / follow-ups
 

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import type { Session } from "@/lib/session-types";
 import { AuthProvider } from "@/components/auth/auth-provider";
+import { ToastProvider } from "@/components/ui/toast";
 import itMessages from "../../messages/it.json";
 
 const DEFAULT_SESSION: Session = {
@@ -30,7 +31,9 @@ export function renderWithProviders(
     return (
       <NextIntlClientProvider locale="it" messages={itMessages}>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider initialSession={session}>{children}</AuthProvider>
+          <AuthProvider initialSession={session}>
+            <ToastProvider>{children}</ToastProvider>
+          </AuthProvider>
         </QueryClientProvider>
       </NextIntlClientProvider>
     );

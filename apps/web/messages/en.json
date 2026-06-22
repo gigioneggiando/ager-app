@@ -53,14 +53,19 @@
     "interests": "Interests",
     "interestsHint": "Personalize your feed",
     "readingLists": "Reading lists",
-    "readingListsHint": "Articles you've saved"
+    "readingListsHint": "Articles you've saved",
+    "saved": "Saved"
   },
   "Actions": {
     "save": "Save",
     "saved": "Saved",
     "discard": "Hide",
     "share": "Share",
-    "savedListName": "Saved"
+    "addToList": "Add to list",
+    "savedListName": "Saved",
+    "savedToDefault": "Saved to Saved",
+    "hidden": "Hidden",
+    "undo": "Undo"
   },
   "Onboarding": {
     "title": "Choose your interests",
@@ -79,14 +84,43 @@
   "ReadingLists": {
     "title": "Reading lists",
     "subtitle": "Organize the articles you save.",
-    "newListLabel": "New list",
-    "newListPlaceholder": "e.g. To read",
-    "create": "Create",
+    "create": "Create list",
+    "delete": "Delete",
+    "remove": "Remove",
+    "defaultBadge": "Default",
+    "confirmDelete": "Delete the list \"{name}\"? Saved articles won't be removed from your account.",
+    "itemCount": "{count, plural, =0 {no items} one {# item} other {# items}}",
+    "visibility": {
+      "private": "Private",
+      "unlisted": "Unlisted",
+      "public": "Public"
+    },
+    "backToLists": "All lists",
+    "listFallback": "List",
+    "createdOn": "Created on {date}",
+    "readingTime": "{minutes} min read",
     "emptyTitle": "No lists yet",
     "emptyDescription": "Create your first list to organize saved articles.",
     "emptyList": "This list is empty.",
-    "remove": "Remove",
-    "loadError": "Couldn't load your lists."
+    "emptyListHint": "Save an article to add it here.",
+    "loadMore": "Load more",
+    "loadError": "Couldn't load your lists.",
+    "createTitle": "New list",
+    "createHint": "Give your list a name and choose who can see it.",
+    "nameLabel": "Name",
+    "newListPlaceholder": "e.g. To read",
+    "descriptionLabel": "Description (optional)",
+    "descriptionPlaceholder": "What is this list for?",
+    "visibilityLabel": "Visibility",
+    "listCreated": "List \"{name}\" created",
+    "addToList": "Add to a list",
+    "addToListHint": "Choose where to save it and add a note.",
+    "chooseList": "Choose the list",
+    "note": "Note (optional)",
+    "notePlaceholder": "Why are you saving it?",
+    "savedTo": "Saved to \"{name}\"",
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "Feed": {
     "heading": "Your feed",

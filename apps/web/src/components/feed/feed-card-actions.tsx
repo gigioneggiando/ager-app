@@ -4,13 +4,16 @@ import { useState, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useQueryClient, type InfiniteData } from "@tanstack/react-query";
-import { Bookmark, BookmarkCheck, EyeOff, Share2 } from "lucide-react";
+import { Bookmark, BookmarkCheck, EyeOff, FolderPlus, Share2 } from "lucide-react";
 import type { FeedPage } from "@ager/api-client";
 
 import { cn } from "@/lib/utils";
 import { useSession } from "@/components/auth/auth-provider";
-import { useInteraction } from "@/features/interactions/use-interaction";
-import { useSaveArticle } from "@/features/reading-lists/use-reading-lists";
+import { postInteraction } from "@/features/interactions/use-interaction";
+import { useToast } from "@/components/ui/toast";
+import { AddToListDialog } from "@/components/reading-lists/add-to-list-dialog";
+
+const UNDO_MS = 3000;
 
 function ActionButton({
   onClick,
@@ -40,6 +43,20 @@ function ActionButton({
   );
 }
 
+function removeFromFeed(
+  data: InfiniteData<FeedPage> | undefined,
+  articleId: number,
+): InfiniteData<FeedPage> | undefined {
+  if (!data) return data;
+  return {
+    ...data,
+    pages: data.pages.map((page) => ({
+      ...page,
+      items: (page.items ?? []).filter((i) => i.articleId !== articleId),
+    })),
+  };
+}
+
 export function FeedCardActions({
   articleId,
   url,
@@ -55,49 +72,53 @@ export function FeedCardActions({
   const locale = useLocale();
   const queryClient = useQueryClient();
   const { isAuthenticated } = useSession();
-  const interaction = useInteraction();
-  const save = useSaveArticle();
+  const toast = useToast();
   const [saved, setSaved] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  /** Returns true if the action may proceed; otherwise routes anon users to login. */
   function requireAuth(): boolean {
     if (isAuthenticated) return true;
     router.push(`/${locale}/login?next=${encodeURIComponent(pathname)}`);
     return false;
   }
 
+  // One-tap save → default "Salvati" list (backend auto-files on SAVE). 3s deferred commit.
   function handleSave() {
     if (!requireAuth()) return;
     setSaved(true);
-    save.mutate(
-      { articleId, defaultListName: t("savedListName") },
-      { onError: () => setSaved(false) },
-    );
+    toast.show({
+      message: t("savedToDefault"),
+      actionLabel: t("undo"),
+      durationMs: UNDO_MS,
+      onAction: () => setSaved(false),
+      onCommit: () => {
+        void postInteraction(articleId, "SAVE").then(() =>
+          queryClient.invalidateQueries({ queryKey: ["reading-lists"] }),
+        );
+      },
+    });
   }
 
+  // Hide → remove from the feed immediately; 3s deferred DISCARD; Undo restores the snapshot.
   function handleDiscard() {
     if (!requireAuth()) return;
-    // Optimistically drop the card from the feed cache.
-    queryClient.setQueryData<InfiniteData<FeedPage>>(["feed"], (old) =>
-      old
-        ? {
-            ...old,
-            pages: old.pages.map((page) => ({
-              ...page,
-              items: (page.items ?? []).filter(
-                (i) => i.articleId !== articleId,
-              ),
-            })),
-          }
-        : old,
+    const snapshot = queryClient.getQueryData<InfiniteData<FeedPage>>(["feed"]);
+    queryClient.setQueryData<InfiniteData<FeedPage>>(["feed"], (d) =>
+      removeFromFeed(d, articleId),
     );
-    interaction.mutate(
-      { articleId, type: "DISCARD" },
-      {
-        onSettled: () =>
-          void queryClient.invalidateQueries({ queryKey: ["feed"] }),
+    toast.show({
+      message: t("hidden"),
+      actionLabel: t("undo"),
+      durationMs: UNDO_MS,
+      onAction: () => {
+        if (snapshot) queryClient.setQueryData(["feed"], snapshot);
       },
-    );
+      onCommit: () => {
+        void postInteraction(articleId, "DISCARD").then(() =>
+          queryClient.invalidateQueries({ queryKey: ["feed"] }),
+        );
+      },
+    });
   }
 
   async function handleShare() {
@@ -108,19 +129,31 @@ export function FeedCardActions({
         await navigator.clipboard?.writeText(url);
       }
     } catch {
-      // User dismissed the share sheet — nothing to do.
+      /* dismissed */
     }
-    if (isAuthenticated) interaction.mutate({ articleId, type: "SHARE" });
+    if (isAuthenticated) void postInteraction(articleId, "SHARE");
+  }
+
+  function openAddToList() {
+    if (!requireAuth()) return;
+    setDialogOpen(true);
   }
 
   return (
     <>
-      <ActionButton onClick={handleSave} label={saved ? t("saved") : t("save")} active={saved}>
+      <ActionButton
+        onClick={handleSave}
+        label={saved ? t("saved") : t("save")}
+        active={saved}
+      >
         {saved ? (
           <BookmarkCheck className="size-4" aria-hidden="true" />
         ) : (
           <Bookmark className="size-4" aria-hidden="true" />
         )}
+      </ActionButton>
+      <ActionButton onClick={openAddToList} label={t("addToList")}>
+        <FolderPlus className="size-4" aria-hidden="true" />
       </ActionButton>
       <ActionButton onClick={handleDiscard} label={t("discard")}>
         <EyeOff className="size-4" aria-hidden="true" />
@@ -128,6 +161,14 @@ export function FeedCardActions({
       <ActionButton onClick={handleShare} label={t("share")}>
         <Share2 className="size-4" aria-hidden="true" />
       </ActionButton>
+
+      {dialogOpen ? (
+        <AddToListDialog
+          articleId={articleId}
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+        />
+      ) : null}
     </>
   );
 }
