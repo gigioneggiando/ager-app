@@ -30,12 +30,40 @@
     "codePlaceholder": "123456",
     "verify": "Accedi",
     "changeEmail": "Usa un'altra email",
+    "noAccount": "Non hai un account?",
+    "register": "Registrati",
     "privacyNote": "Accedendo accetti il trattamento dei dati secondo la nostra informativa.",
     "errors": {
       "rateLimit": "Troppi tentativi. Riprova tra qualche minuto.",
       "requestFailed": "Non siamo riusciti a inviare il codice. Riprova.",
       "invalidCode": "Codice errato o scaduto. Controlla e riprova.",
       "verifyFailed": "Accesso non riuscito. Riprova.",
+      "network": "Errore di rete. Controlla la connessione e riprova."
+    }
+  },
+  "Register": {
+    "title": "Crea un account",
+    "subtitle": "Scegli un nome utente e inserisci la tua email: ti invieremo un codice.",
+    "codeSubtitle": "Abbiamo inviato un codice a {email}.",
+    "usernameLabel": "Nome utente",
+    "usernamePlaceholder": "iltuonome",
+    "emailLabel": "Email",
+    "emailPlaceholder": "nome@esempio.it",
+    "requestCode": "Invia il codice",
+    "codeLabel": "Codice di verifica",
+    "codePlaceholder": "123456",
+    "verify": "Crea account",
+    "changeDetails": "Modifica i dati",
+    "haveAccount": "Hai già un account?",
+    "signIn": "Accedi",
+    "goToLogin": "Vai all'accesso",
+    "privacyNote": "Registrandoti accetti il trattamento dei dati secondo la nostra informativa.",
+    "errors": {
+      "alreadyRegistered": "Esiste già un account con questa email o nome utente. Prova ad accedere.",
+      "rateLimit": "Troppi tentativi. Riprova tra qualche minuto.",
+      "requestFailed": "Non siamo riusciti a inviare il codice. Riprova.",
+      "invalidCode": "Codice errato o scaduto. Controlla e riprova.",
+      "verifyFailed": "Registrazione non riuscita. Riprova.",
       "network": "Errore di rete. Controlla la connessione e riprova."
     }
   },
