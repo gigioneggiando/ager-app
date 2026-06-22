@@ -84,4 +84,17 @@ describe("FeedCardActions", () => {
     });
     expect(interactions()).toHaveLength(0);
   });
+
+  it("opens the add-to-list dialog from the secondary caret (no one-tap save)", () => {
+    renderWithProviders(
+      <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
+    );
+
+    // The bookmark is one-tap save; the small caret is the secondary "add to a list" action.
+    fireEvent.click(screen.getByRole("button", { name: "Aggiungi a lista" }));
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    // Opening the list picker must not fire a save interaction.
+    expect(interactions()).toHaveLength(0);
+  });
 });
