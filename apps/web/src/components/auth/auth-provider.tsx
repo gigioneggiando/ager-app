@@ -30,14 +30,18 @@ export function AuthProvider({
 }) {
   const [session, setSession] = useState<Session | null>(initialSession);
 
+  // Re-read the session from the server (the source of truth — it reflects cookies refreshed
+  // by an authed request). Only an explicit `session: null` clears the UI session; a transient
+  // failure (non-OK / network blip) keeps the current session so one hiccup isn't a logout.
   const refresh = useCallback(async () => {
-    const res = await fetch("/api/auth/session", { cache: "no-store" });
-    if (!res.ok) {
-      setSession(null);
-      return;
+    try {
+      const res = await fetch("/api/auth/session", { cache: "no-store" });
+      if (!res.ok) return;
+      const data = (await res.json()) as { session: Session | null };
+      setSession(data.session ?? null);
+    } catch {
+      /* network blip — keep the current session */
     }
-    const data = (await res.json()) as { session: Session | null };
-    setSession(data.session ?? null);
   }, []);
 
   const logout = useCallback(async () => {

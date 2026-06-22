@@ -40,6 +40,17 @@ const authResult = {
   role: "user",
 };
 
+/** A decodable (unsigned) JWT whose `exp` is `secondsFromNow` away — for expiry tests. */
+function makeJwt(secondsFromNow: number): string {
+  const header = Buffer.from(JSON.stringify({ alg: "none", typ: "JWT" })).toString(
+    "base64url",
+  );
+  const payload = Buffer.from(
+    JSON.stringify({ sub: "u1", exp: Math.floor(Date.now() / 1000) + secondsFromNow }),
+  ).toString("base64url");
+  return `${header}.${payload}.sig`;
+}
+
 type FetchArgs = { url: string; init?: RequestInit };
 let calls: FetchArgs[] = [];
 
@@ -125,6 +136,59 @@ describe("authedBackendFetch", () => {
     expect(headers.get("authorization")).toBe("Bearer access-1");
     // Authed (per-user) calls must never be cached by Next's URL-keyed Data Cache.
     expect(write?.init?.cache).toBe("no-store");
+  });
+
+  it("proactively refreshes an expired access token before the call (no 401 round-trip)", async () => {
+    cookieJar.set("ager_at", makeJwt(-60)); // already expired
+    cookieJar.set("ager_rt", "good-refresh");
+    let meCalls = 0;
+    global.fetch = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = String(input);
+      calls.push({ url, init });
+      if (url.includes("/api/auth/refresh")) return jsonResponse(authResult, 200);
+      if (url.includes("/api/me")) {
+        meCalls += 1;
+        return jsonResponse({ ok: true }, 200);
+      }
+      return new Response(null, { status: 404 });
+    }) as unknown as typeof fetch;
+
+    const res = await authedBackendFetch("/api/me");
+
+    expect(res.status).toBe(200);
+    expect(meCalls).toBe(1); // one call, with the fresh token — never hit a 401
+    // Refresh happened BEFORE /api/me.
+    const order = calls.map((c) => c.url);
+    const refreshIdx = order.findIndex((u) => u.includes("/api/auth/refresh"));
+    const meIdx = order.findIndex((u) => u.includes("/api/me"));
+    expect(refreshIdx).toBeGreaterThanOrEqual(0);
+    expect(refreshIdx).toBeLessThan(meIdx);
+    // The call carried the refreshed Bearer, and the session cookie was rotated + extended.
+    const meReq = calls.find((c) => c.url.includes("/api/me"));
+    expect(new Headers(meReq?.init?.headers).get("authorization")).toBe(
+      "Bearer new-access",
+    );
+    expect(cookieJar.get("ager_at")).toBe("new-access");
+  });
+
+  it("keeps the session when the refresh endpoint fails transiently (5xx)", async () => {
+    const expired = makeJwt(-60);
+    cookieJar.set("ager_at", expired);
+    cookieJar.set("ager_rt", "good-refresh");
+    global.fetch = vi.fn(async (input: string | URL | Request) => {
+      const url = String(input);
+      if (url.includes("/api/auth/refresh")) return new Response(null, { status: 503 });
+      if (url.includes("/api/me")) return new Response(null, { status: 401 });
+      return new Response(null, { status: 404 });
+    }) as unknown as typeof fetch;
+
+    const res = await authedBackendFetch("/api/me");
+
+    // The backend call still 401s, but a transient refresh failure must NOT clear the
+    // session — the cookies survive so the next request can retry (no spurious logout).
+    expect(res.status).toBe(401);
+    expect(cookieJar.get("ager_at")).toBe(expired);
+    expect(cookieJar.get("ager_rt")).toBe("good-refresh");
   });
 
   it("refreshes once on 401 and retries with the new access token", async () => {
