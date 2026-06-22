@@ -155,7 +155,12 @@ export async function authedBackendFetch(
       }
     }
 
-    return fetch(backendUrl(path), { ...init, headers });
+    // Per-user responses must NEVER enter Next's Data Cache: its key is the URL (+ method /
+    // body), NOT the Authorization header — so a cached anonymous (cold-start) response could
+    // be served to a logged-in user, and one user's private data could be served to another.
+    // Force no-store on every authed call so the request always reaches the backend as the
+    // current user. (`headers` and `cache` win over any caller-supplied init.)
+    return fetch(backendUrl(path), { ...init, cache: "no-store", headers });
   };
 
   const access = await readAccessToken();
