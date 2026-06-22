@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Inter, Merriweather } from "next/font/google";
 import { notFound } from "next/navigation";
@@ -12,6 +12,7 @@ import { AuthProvider } from "@/components/auth/auth-provider";
 import { ToastProvider } from "@/components/ui/toast";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import "../globals.css";
 
 // Sans — UI + body.
@@ -35,14 +36,37 @@ const siteUrl =
     ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000");
 
+const siteDescription =
+  "Ager — riduce il rumore, aumenta la comprensione. Notizie civiche italiane, prima il link.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  applicationName: "Ager",
   title: {
     default: "Ager",
     template: "%s · Ager",
   },
-  description:
-    "Ager — riduce il rumore, aumenta la comprensione. Notizie civiche italiane, prima il link.",
+  description: siteDescription,
+  alternates: { canonical: "/" },
+  appleWebApp: { capable: true, title: "Ager", statusBarStyle: "default" },
+  openGraph: {
+    type: "website",
+    siteName: "Ager",
+    title: "Ager",
+    description: siteDescription,
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ager",
+    description: siteDescription,
+  },
+};
+
+// Brand theme color (ager-blue) for the browser/PWA chrome.
+export const viewport: Viewport = {
+  themeColor: "#0F2A44",
+  colorScheme: "light",
 };
 
 export function generateStaticParams() {
@@ -76,6 +100,7 @@ export default async function LocaleLayout({
                 <Header />
                 <main className="flex flex-1 flex-col">{children}</main>
                 <Footer />
+                <ServiceWorkerRegister />
               </ToastProvider>
             </Providers>
           </AuthProvider>

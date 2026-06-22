@@ -59,6 +59,12 @@ async function main() {
     .resize(512, 512)
     .png()
     .toFile(resolve(webRoot, "public/brand/ager-icon-512.png"));
+  // PWA manifest icon (192). The full-bleed editorial-white tile keeps the symbol
+  // within the 14% clear space, so it doubles as a maskable icon.
+  await sharp(iconBuf, { density: 512 })
+    .resize(192, 192)
+    .png()
+    .toFile(resolve(webRoot, "public/brand/ager-icon-192.png"));
 
   console.log("Brand icons generated.");
 }
