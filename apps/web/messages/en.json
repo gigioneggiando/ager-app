@@ -30,12 +30,40 @@
     "codePlaceholder": "123456",
     "verify": "Sign in",
     "changeEmail": "Use a different email",
+    "noAccount": "Don't have an account?",
+    "register": "Sign up",
     "privacyNote": "By signing in you agree to our data processing as described in our policy.",
     "errors": {
       "rateLimit": "Too many attempts. Try again in a few minutes.",
       "requestFailed": "We couldn't send the code. Please try again.",
       "invalidCode": "Wrong or expired code. Check it and try again.",
       "verifyFailed": "Sign-in failed. Please try again.",
+      "network": "Network error. Check your connection and try again."
+    }
+  },
+  "Register": {
+    "title": "Create an account",
+    "subtitle": "Pick a username and enter your email — we'll send you a code.",
+    "codeSubtitle": "We sent a code to {email}.",
+    "usernameLabel": "Username",
+    "usernamePlaceholder": "yourname",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@example.com",
+    "requestCode": "Send the code",
+    "codeLabel": "Verification code",
+    "codePlaceholder": "123456",
+    "verify": "Create account",
+    "changeDetails": "Edit details",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "goToLogin": "Go to sign in",
+    "privacyNote": "By signing up you agree to our data processing as described in our policy.",
+    "errors": {
+      "alreadyRegistered": "An account with this email or username already exists. Try signing in.",
+      "rateLimit": "Too many attempts. Try again in a few minutes.",
+      "requestFailed": "We couldn't send the code. Please try again.",
+      "invalidCode": "Wrong or expired code. Check it and try again.",
+      "verifyFailed": "Registration failed. Please try again.",
       "network": "Network error. Check your connection and try again."
     }
   },
