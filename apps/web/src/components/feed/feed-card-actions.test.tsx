@@ -1,5 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { act, fireEvent, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { renderWithProviders } from "@/test/test-utils";
@@ -17,6 +16,7 @@ let calls: { url: string; body: unknown }[] = [];
 beforeEach(() => {
   calls = [];
   push.mockClear();
+  vi.useFakeTimers();
   global.fetch = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
     const url = String(input);
     calls.push({ url, body: init?.body ? JSON.parse(String(init.body)) : null });
@@ -24,37 +24,64 @@ beforeEach(() => {
   }) as unknown as typeof fetch;
 });
 afterEach(() => {
+  vi.useRealTimers();
   global.fetch = realFetch;
   vi.restoreAllMocks();
 });
 
+const interactions = () => calls.filter((c) => c.url.includes("/api/interactions"));
+
 describe("FeedCardActions", () => {
-  it("posts a DISCARD interaction when a signed-in user hides a card", async () => {
-    const user = userEvent.setup();
+  it("defers the DISCARD interaction and commits it after the undo window", async () => {
     renderWithProviders(
       <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
     );
 
-    await user.click(screen.getByRole("button", { name: /Nascondi/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
 
-    await waitFor(() => {
-      const discard = calls.find((c) => c.url.includes("/api/interactions"));
-      expect(discard?.body).toMatchObject({ articleId: 42, type: "DISCARD" });
+    // The commit is deferred — nothing posted yet, the undo toast is showing.
+    expect(interactions()).toHaveLength(0);
+    expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
+
+    // Let the 3s undo window elapse: the DISCARD commits.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+    expect(interactions()[0]?.body).toMatchObject({
+      articleId: 42,
+      type: "DISCARD",
     });
   });
 
+  it("cancels the deferred commit when the user clicks Annulla", async () => {
+    renderWithProviders(
+      <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Annulla/i }));
+
+    // Even after the window elapses, no interaction is posted.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+    expect(interactions()).toHaveLength(0);
+  });
+
   it("prompts anonymous users to log in instead of calling the API", async () => {
-    const user = userEvent.setup();
     renderWithProviders(
       <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
       { session: null },
     );
 
-    await user.click(screen.getByRole("button", { name: /Salva/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^Salva/i }));
 
     expect(push).toHaveBeenCalledWith(
       expect.stringContaining("/it/login?next="),
     );
-    expect(calls.find((c) => c.url.includes("/api/interactions"))).toBeUndefined();
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+    expect(interactions()).toHaveLength(0);
   });
 });

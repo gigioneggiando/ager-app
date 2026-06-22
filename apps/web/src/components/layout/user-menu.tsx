@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ChevronDown, LogOut, User } from "lucide-react";
+import { ChevronDown, List, LogOut, User } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/components/auth/auth-provider";
+import { SavedListLink } from "@/components/layout/saved-list-link";
 import { Button } from "@/components/ui/button";
 
 export function UserMenu() {
@@ -74,6 +75,16 @@ export function UserMenu() {
             >
               <User className="size-4" aria-hidden="true" />
               {t("myAccount")}
+            </Link>
+            <SavedListLink onNavigate={() => setOpen(false)} />
+            <Link
+              href="/me/reading-lists"
+              role="menuitem"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-secondary"
+            >
+              <List className="size-4" aria-hidden="true" />
+              {t("readingLists")}
             </Link>
             <button
               type="button"

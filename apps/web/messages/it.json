@@ -53,14 +53,19 @@
     "interests": "Interessi",
     "interestsHint": "Personalizza il tuo feed",
     "readingLists": "Liste di lettura",
-    "readingListsHint": "Gli articoli che hai salvato"
+    "readingListsHint": "Gli articoli che hai salvato",
+    "saved": "Salvati"
   },
   "Actions": {
     "save": "Salva",
     "saved": "Salvato",
     "discard": "Nascondi",
     "share": "Condividi",
-    "savedListName": "Salvati"
+    "addToList": "Aggiungi a lista",
+    "savedListName": "Salvati",
+    "savedToDefault": "Salvato in Salvati",
+    "hidden": "Nascosto",
+    "undo": "Annulla"
   },
   "Onboarding": {
     "title": "Scegli i tuoi interessi",
@@ -79,14 +84,43 @@
   "ReadingLists": {
     "title": "Liste di lettura",
     "subtitle": "Organizza gli articoli che salvi.",
-    "newListLabel": "Nuova lista",
-    "newListPlaceholder": "Es. Da leggere",
-    "create": "Crea",
+    "create": "Crea lista",
+    "delete": "Elimina",
+    "remove": "Rimuovi",
+    "defaultBadge": "Predefinita",
+    "confirmDelete": "Eliminare la lista \"{name}\"? Gli articoli salvati non verranno rimossi dal tuo account.",
+    "itemCount": "{count, plural, =0 {nessun elemento} one {# elemento} other {# elementi}}",
+    "visibility": {
+      "private": "Privata",
+      "unlisted": "Non in elenco",
+      "public": "Pubblica"
+    },
+    "backToLists": "Tutte le liste",
+    "listFallback": "Lista",
+    "createdOn": "Creata il {date}",
+    "readingTime": "{minutes} min di lettura",
     "emptyTitle": "Nessuna lista",
     "emptyDescription": "Crea la tua prima lista per organizzare gli articoli salvati.",
     "emptyList": "Questa lista è vuota.",
-    "remove": "Rimuovi",
-    "loadError": "Impossibile caricare le liste."
+    "emptyListHint": "Salva un articolo per aggiungerlo qui.",
+    "loadMore": "Carica altro",
+    "loadError": "Impossibile caricare le liste.",
+    "createTitle": "Nuova lista",
+    "createHint": "Dai un nome alla tua lista e scegli chi può vederla.",
+    "nameLabel": "Nome",
+    "newListPlaceholder": "Es. Da leggere",
+    "descriptionLabel": "Descrizione (facoltativa)",
+    "descriptionPlaceholder": "A cosa serve questa lista?",
+    "visibilityLabel": "Visibilità",
+    "listCreated": "Lista \"{name}\" creata",
+    "addToList": "Aggiungi a una lista",
+    "addToListHint": "Scegli dove salvarlo e aggiungi una nota.",
+    "chooseList": "Scegli la lista",
+    "note": "Nota (facoltativa)",
+    "notePlaceholder": "Perché lo salvi?",
+    "savedTo": "Salvato in \"{name}\"",
+    "cancel": "Annulla",
+    "save": "Salva"
   },
   "Feed": {
     "heading": "Il tuo feed",

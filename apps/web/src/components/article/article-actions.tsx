@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowUpRight, Bookmark, BookmarkCheck, Share2 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { ArrowUpRight, Bookmark, BookmarkCheck, FolderPlus, Share2 } from "lucide-react";
 
 import { useSession } from "@/components/auth/auth-provider";
-import { useInteraction } from "@/features/interactions/use-interaction";
-import { useSaveArticle } from "@/features/reading-lists/use-reading-lists";
+import { postInteraction } from "@/features/interactions/use-interaction";
+import { useToast } from "@/components/ui/toast";
+import { AddToListDialog } from "@/components/reading-lists/add-to-list-dialog";
 import { Button } from "@/components/ui/button";
+
+const UNDO_MS = 3000;
 
 export function ArticleActions({
   articleId,
@@ -27,10 +31,11 @@ export function ArticleActions({
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
+  const queryClient = useQueryClient();
   const { isAuthenticated } = useSession();
-  const interaction = useInteraction();
-  const save = useSaveArticle();
+  const toast = useToast();
   const [saved, setSaved] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   function requireAuth(): boolean {
     if (isAuthenticated) return true;
@@ -41,10 +46,17 @@ export function ArticleActions({
   function handleSave() {
     if (!requireAuth()) return;
     setSaved(true);
-    save.mutate(
-      { articleId, defaultListName: t("savedListName") },
-      { onError: () => setSaved(false) },
-    );
+    toast.show({
+      message: t("savedToDefault"),
+      actionLabel: t("undo"),
+      durationMs: UNDO_MS,
+      onAction: () => setSaved(false),
+      onCommit: () => {
+        void postInteraction(articleId, "SAVE").then(() =>
+          queryClient.invalidateQueries({ queryKey: ["reading-lists"] }),
+        );
+      },
+    });
   }
 
   async function handleShare() {
@@ -55,9 +67,9 @@ export function ArticleActions({
         await navigator.clipboard?.writeText(url);
       }
     } catch {
-      // dismissed
+      /* dismissed */
     }
-    if (isAuthenticated) interaction.mutate({ articleId, type: "SHARE" });
+    if (isAuthenticated) void postInteraction(articleId, "SHARE");
   }
 
   return (
@@ -69,9 +81,7 @@ export function ArticleActions({
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => {
-              if (isAuthenticated) {
-                interaction.mutate({ articleId, type: "OPENED_EXTERNAL" });
-              }
+              if (isAuthenticated) void postInteraction(articleId, "OPENED_EXTERNAL");
             }}
           >
             {openLabel}
@@ -86,12 +96,24 @@ export function ArticleActions({
           )}
           {saved ? t("saved") : t("save")}
         </Button>
+        <Button variant="ghost" onClick={() => requireAuth() && setDialogOpen(true)}>
+          <FolderPlus aria-hidden="true" />
+          {t("addToList")}
+        </Button>
         <Button variant="ghost" onClick={handleShare}>
           <Share2 aria-hidden="true" />
           {t("share")}
         </Button>
       </div>
       <p className="text-xs text-muted-foreground">{linkFirstNote}</p>
+
+      {dialogOpen ? (
+        <AddToListDialog
+          articleId={articleId}
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+        />
+      ) : null}
     </div>
   );
 }
