@@ -1894,6 +1894,36 @@
       }
     },
     "/api/me/interests": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "List the caller's current interests (id, slug, weight, source).",
+        "operationId": "GetMyInterests",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MyInterestDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      },
       "post": {
         "tags": [
           "Me"
@@ -2005,7 +2035,14 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadingListsPageDto"
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -2101,6 +2138,7 @@
         "tags": [
           "ReadingLists"
         ],
+        "summary": "List items in a reading list. Pass expand=article for full article previews.",
         "operationId": "GetReadingListItems",
         "parameters": [
           {
@@ -2137,7 +2175,14 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadingListItemsPageDto"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -2316,7 +2361,14 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadingListsPageDto"
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -2405,7 +2457,14 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadingListItemsPageDto"
+                }
+              }
+            }
           },
           "404": {
             "description": "Not Found"
@@ -2576,6 +2635,84 @@
           "estimatedReadingMinutes": {
             "type": "integer",
             "format": "int32"
+          },
+          "licenseType": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayMode": {
+            "type": "string",
+            "nullable": true
+          },
+          "paywallDetected": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ArticleInListDto": {
+        "type": "object",
+        "properties": {
+          "readingListId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "articleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "addedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "canonicalUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "author": {
+            "type": "string",
+            "nullable": true
+          },
+          "wordCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "lang": {
+            "type": "string",
+            "nullable": true
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "sourceName": {
+            "type": "string",
+            "nullable": true
           },
           "licenseType": {
             "type": "string",
@@ -3296,18 +3433,6 @@
         },
         "additionalProperties": false
       },
-      "InteractionType": {
-        "enum": [
-          0,
-          2,
-          3,
-          6,
-          7,
-          8
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
       "InterestDto": {
         "type": "object",
         "properties": {
@@ -3347,6 +3472,28 @@
             "nullable": true
           },
           "otpCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MyInterestDto": {
+        "type": "object",
+        "properties": {
+          "interestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "weight": {
+            "type": "number",
+            "format": "double"
+          },
+          "source": {
             "type": "string",
             "nullable": true
           }
@@ -3406,7 +3553,15 @@
             "format": "int32"
           },
           "type": {
-            "$ref": "#/components/schemas/InteractionType"
+            "enum": [
+              "VIEW",
+              "SAVE",
+              "DISCARD",
+              "OPENED_EXTERNAL",
+              "READ_COMPLETED",
+              "SHARE"
+            ],
+            "type": "string"
           },
           "reason": {
             "type": "string",
@@ -3482,6 +3637,43 @@
           "itemsCount": {
             "type": "integer",
             "format": "int32"
+          },
+          "isDefault": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReadingListItemsPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ArticleInListDto"
+            },
+            "nullable": true
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReadingListsPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReadingListDto"
+            },
+            "nullable": true
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

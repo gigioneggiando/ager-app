@@ -57,6 +57,8 @@ describe("verify route (login)", () => {
         return jsonResponse({ token: "req-token" }, 200, "XSRF-TOKEN=cookie-token; path=/");
       }
       if (url.includes("/api/auth/login")) return jsonResponse(authResult, 200);
+      // Server-truth onboarding check: no interests yet → needsOnboarding.
+      if (url.includes("/api/me/interests")) return jsonResponse([], 200);
       return new Response(null, { status: 404 });
     }) as unknown as typeof fetch;
 
@@ -74,7 +76,7 @@ describe("verify route (login)", () => {
       needsOnboarding: boolean;
     };
     expect(body).toMatchObject({ userId: authResult.userId, role: "user" });
-    expect(body.needsOnboarding).toBe(true); // no ager_onboarded cookie for this user
+    expect(body.needsOnboarding).toBe(true); // server truth: the user has no interests
     // Tokens land in cookies, never in the response body.
     expect(JSON.stringify(body)).not.toContain("new-access");
     expect(cookieJar.get("ager_at")).toBe("new-access");

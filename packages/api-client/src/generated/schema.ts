@@ -1035,7 +1035,8 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /** List the caller's current interests (id, slug, weight, source). */
+    get: operations["GetMyInterests"];
     put?: never;
     /** Replace the user's onboarding interests (Source=Explicit, default weight 3.0). */
     post: operations["SetMyInterests"];
@@ -1086,6 +1087,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
+    /** List items in a reading list. Pass expand=article for full article previews. */
     get: operations["GetReadingListItems"];
     put?: never;
     post: operations["AddReadingListItem"];
@@ -1268,6 +1270,30 @@ export interface components {
       topics?: string[] | null;
       /** Format: int32 */
       estimatedReadingMinutes?: number;
+      licenseType?: string | null;
+      displayMode?: string | null;
+      paywallDetected?: boolean;
+    };
+    ArticleInListDto: {
+      /** Format: int32 */
+      readingListId?: number;
+      /** Format: int32 */
+      articleId?: number;
+      /** Format: date-time */
+      addedAt?: string;
+      note?: string | null;
+      title?: string | null;
+      url?: string | null;
+      canonicalUrl?: string | null;
+      imageUrl?: string | null;
+      author?: string | null;
+      /** Format: int32 */
+      wordCount?: number | null;
+      lang?: string | null;
+      /** Format: date-time */
+      publishedAt?: string | null;
+      topics?: string[] | null;
+      sourceName?: string | null;
       licenseType?: string | null;
       displayMode?: string | null;
       paywallDetected?: boolean;
@@ -1507,11 +1533,6 @@ export interface components {
       to?: string;
       points?: components["schemas"]["IngestionLogStatsPoint"][] | null;
     };
-    /**
-     * Format: int32
-     * @enum {integer}
-     */
-    InteractionType: 0 | 2 | 3 | 6 | 7 | 8;
     InterestDto: {
       /** Format: int32 */
       id?: number;
@@ -1525,6 +1546,14 @@ export interface components {
       email?: string | null;
       password?: string | null;
       otpCode?: string | null;
+    };
+    MyInterestDto: {
+      /** Format: int32 */
+      interestId?: number;
+      slug?: string | null;
+      /** Format: double */
+      weight?: number;
+      source?: string | null;
     };
     PasswordStrengthRequest: {
       /** Format: int32 */
@@ -1544,7 +1573,14 @@ export interface components {
     PostInteractionRequest: {
       /** Format: int32 */
       articleId?: number;
-      type?: components["schemas"]["InteractionType"];
+      /** @enum {string} */
+      type?:
+        | "VIEW"
+        | "SAVE"
+        | "DISCARD"
+        | "OPENED_EXTERNAL"
+        | "READ_COMPLETED"
+        | "SHARE";
       reason?: string | null;
     };
     ProblemDetails: {
@@ -1573,6 +1609,15 @@ export interface components {
       updatedAt?: string;
       /** Format: int32 */
       itemsCount?: number;
+      isDefault?: boolean;
+    };
+    ReadingListItemsPageDto: {
+      items?: components["schemas"]["ArticleInListDto"][] | null;
+      nextCursor?: string | null;
+    };
+    ReadingListsPageDto: {
+      items?: components["schemas"]["ReadingListDto"][] | null;
+      nextCursor?: string | null;
     };
     ReadingStatsDto: {
       window?: string | null;
@@ -2994,6 +3039,33 @@ export interface operations {
       };
     };
   };
+  GetMyInterests: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MyInterestDto"][];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   SetMyInterests: {
     parameters: {
       query?: never;
@@ -3085,7 +3157,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["ReadingListsPageDto"];
+        };
       };
       /** @description Unauthorized */
       401: {
@@ -3152,7 +3226,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["ReadingListItemsPageDto"];
+        };
       };
       /** @description Bad Request */
       400: {
@@ -3359,7 +3435,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["ReadingListsPageDto"];
+        };
       };
       /** @description Unauthorized */
       401: {
@@ -3419,7 +3497,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["ReadingListItemsPageDto"];
+        };
       };
       /** @description Not Found */
       404: {
