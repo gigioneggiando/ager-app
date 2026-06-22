@@ -32,6 +32,8 @@ export type ReadingStats = components["schemas"]["ReadingStatsDto"];
 export type ArticleSearchResult = components["schemas"]["ArticleSearchResultDto"];
 export type ArticleSearchResultsPage = components["schemas"]["ArticleSearchResultsPageDto"];
 export type ArticleTag = components["schemas"]["ArticleTagDto"];
+export type TakedownRequestAdmin = components["schemas"]["TakedownRequestAdminResponse"];
+export type TakedownRequestAdminUpdate = components["schemas"]["TakedownRequestAdminUpdate"];
 
 /**
  * Article-detail response. The contract does not declare a schema for
