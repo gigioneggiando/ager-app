@@ -53,6 +53,8 @@ describe("GET /api/feed (auth-aware proxy)", () => {
     expect(url.searchParams.get("cursor")).toBe("c1");
     expect(url.searchParams.get("limit")).toBe("20");
     expect(new Headers(call.init?.headers).get("authorization")).toBeNull();
+    // The backend call is never served from Next's URL-keyed Data Cache.
+    expect(call.init?.cache).toBe("no-store");
   });
 
   it("authenticated: attaches Bearer and marks the response private", async () => {
@@ -72,5 +74,8 @@ describe("GET /api/feed (auth-aware proxy)", () => {
     expect(new Headers(call.init?.headers).get("authorization")).toBe(
       "Bearer the-access-token",
     );
+    // Per-user request must bypass Next's Data Cache (its key ignores Authorization), so the
+    // backend always sees this as the logged-in user — no stale cold-start feed.
+    expect(call.init?.cache).toBe("no-store");
   });
 });

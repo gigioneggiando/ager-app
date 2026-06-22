@@ -123,6 +123,8 @@ describe("authedBackendFetch", () => {
     expect(headers.get("x-csrf-token")).toBe("req-token");
     expect(headers.get("cookie")).toContain("XSRF-TOKEN=cookie-token");
     expect(headers.get("authorization")).toBe("Bearer access-1");
+    // Authed (per-user) calls must never be cached by Next's URL-keyed Data Cache.
+    expect(write?.init?.cache).toBe("no-store");
   });
 
   it("refreshes once on 401 and retries with the new access token", async () => {

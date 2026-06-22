@@ -4,11 +4,16 @@ import type { FeedPage } from "@ager/api-client";
 import { authedBackendFetch } from "@/lib/server/backend";
 import { readAccessToken } from "@/lib/server/auth-cookies";
 
+// Reads the session cookie and personalizes per user → always run on request, never
+// statically optimize or cache the route itself.
+export const dynamic = "force-dynamic";
+
 /**
  * Server-side proxy for the feed. Same-origin (no CORS); backend base URL stays
- * server-only. When a session exists the proxy attaches the user's Bearer (refreshing on
- * 401) → the backend returns the PERSONALIZED feed; anonymous requests get cold-start.
- * Forwards cursor + limit.
+ * server-only. Goes through `authedBackendFetch`, which attaches the user's Bearer from the
+ * session cookie (refreshing on 401) and forces `no-store` so the per-user request always
+ * reaches the backend as that user → PERSONALIZED ranking + `recommendation_events` with the
+ * user_id/mode set. Anonymous (no cookie) → no Bearer → cold-start. Forwards cursor/limit/mode.
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
