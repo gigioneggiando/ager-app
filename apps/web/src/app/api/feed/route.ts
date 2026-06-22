@@ -15,8 +15,10 @@ export async function GET(request: Request) {
   const query = new URLSearchParams();
   const cursor = searchParams.get("cursor");
   const limit = searchParams.get("limit");
+  const mode = searchParams.get("mode");
   if (cursor) query.set("cursor", cursor);
   if (limit) query.set("limit", limit);
+  if (mode) query.set("mode", mode);
   const qs = query.toString();
   const path = `/api/feed${qs ? `?${qs}` : ""}`;
 

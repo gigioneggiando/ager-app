@@ -2,6 +2,7 @@
   "Nav": {
     "primary": "Primary navigation",
     "feed": "Feed",
+    "search": "Search",
     "sources": "Sources",
     "insights": "Insights",
     "styleguide": "Styleguide",
@@ -54,7 +55,9 @@
     "interestsHint": "Personalize your feed",
     "readingLists": "Reading lists",
     "readingListsHint": "Articles you've saved",
-    "saved": "Saved"
+    "saved": "Saved",
+    "stats": "Reading stats",
+    "statsHint": "The variety of your reading"
   },
   "Actions": {
     "save": "Save",
@@ -122,9 +125,87 @@
     "cancel": "Cancel",
     "save": "Save"
   },
+  "Stats": {
+    "title": "Reading stats",
+    "subtitle": "Variety indices for your reading: how much you diversify sources and topics.",
+    "windowLabel": "Window",
+    "windows": {
+      "7d": "7 days",
+      "14d": "14 days",
+      "30d": "30 days"
+    },
+    "distinctSources": "Source diversity",
+    "distinctSourcesHint": "Share of distinct sources across your interactions: the higher it is, the more varied the publishers you read.",
+    "topTopicShare": "Top-topic concentration",
+    "topTopicShareHint": "How much your most frequent topic weighs: lower values mean more varied reading.",
+    "totalInteractions": "Total interactions",
+    "totalInteractionsHint": "Actions recorded in the selected window.",
+    "byType": "Interactions by type",
+    "topics": "Most-read topics",
+    "noData": "No data for this window.",
+    "loadError": "Couldn't load your stats.",
+    "emptyTitle": "No data yet",
+    "emptyDescription": "Read and interact with a few articles — your reading variety will show up here.",
+    "types": {
+      "VIEW": "Views",
+      "OPENED_EXTERNAL": "Opened on publisher",
+      "READ_COMPLETED": "Reads completed",
+      "SAVE": "Saves",
+      "DISCARD": "Hidden",
+      "SHARE": "Shares"
+    }
+  },
+  "Search": {
+    "title": "Search",
+    "subtitle": "Search articles by keyword or browse by topic. Results link out to the publisher.",
+    "inputLabel": "Search articles",
+    "placeholder": "Keywords, name, topic…",
+    "submit": "Search",
+    "browseByTag": "Browse by topic",
+    "idleTitle": "Start a search",
+    "idleDescription": "Type a keyword or pick a topic to see results.",
+    "emptyTitle": "No results",
+    "emptyDescription": "No articles for \"{term}\". Try other words or a topic.",
+    "resultsCount": "{count, plural, =0 {no results} one {# result} other {# results}}",
+    "loadError": "Couldn't run the search.",
+    "untitled": "Untitled",
+    "paywall": "Paywall",
+    "pagination": "Results pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {total}"
+  },
   "Feed": {
     "heading": "Your feed",
     "subheading": "An ordered selection of what matters, with the source always visible. Tap a headline to read on the publisher.",
+    "modeLabel": "Sort by",
+    "modeAnonNote": "Modes personalize the feed once you sign in. While signed out you see a neutral cold-start selection.",
+    "modes": {
+      "balanced": {
+        "label": "Balanced",
+        "help": "A calibrated mix of recency, relevance and variety."
+      },
+      "most_recent": {
+        "label": "Most recent",
+        "help": "Prioritizes the latest published news."
+      },
+      "more_pluralism": {
+        "label": "More pluralism",
+        "help": "Broadens the range of sources and viewpoints."
+      },
+      "most_personalized": {
+        "label": "Most personalized",
+        "help": "Leans more on your interests and actions."
+      },
+      "less_personalized": {
+        "label": "Less personalized",
+        "help": "Reduces the weight of your profile for a wider view."
+      },
+      "chronological": {
+        "label": "Chronological",
+        "help": "In time order, with no algorithmic re-ranking."
+      }
+    },
     "card": {
       "untitled": "Untitled",
       "openExternal": "open on publisher",

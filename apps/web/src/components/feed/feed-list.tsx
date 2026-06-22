@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { AlertTriangle, Check, Inbox } from "lucide-react";
 
 import { useFeed, dedupeFeedItems, feedMeta } from "@/features/feed/use-feed";
+import { DEFAULT_FEED_MODE, type FeedMode } from "@/features/feed/modes";
 import { useSession } from "@/components/auth/auth-provider";
 import { useInteraction } from "@/features/interactions/use-interaction";
 import { FeedCard, FeedCardSkeleton } from "@/components/feed/feed-card";
@@ -37,7 +38,7 @@ function CaughtUp() {
   );
 }
 
-export function FeedList() {
+export function FeedList({ mode = DEFAULT_FEED_MODE }: { mode?: FeedMode }) {
   const t = useTranslations("Feed.list");
   const {
     data,
@@ -47,7 +48,7 @@ export function FeedList() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useFeed();
+  } = useFeed(mode);
 
   const items = dedupeFeedItems(data?.pages);
   const { feedMode, recommenderVersion } = feedMeta(data?.pages);

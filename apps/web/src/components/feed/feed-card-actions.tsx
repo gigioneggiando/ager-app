@@ -100,18 +100,24 @@ export function FeedCardActions({
   }
 
   // Hide → remove from the feed immediately; 3s deferred DISCARD; Undo restores the snapshot.
+  // The feed cache is keyed by mode (["feed", mode]); match every feed query by prefix.
   function handleDiscard() {
     if (!requireAuth()) return;
-    const snapshot = queryClient.getQueryData<InfiniteData<FeedPage>>(["feed"]);
-    queryClient.setQueryData<InfiniteData<FeedPage>>(["feed"], (d) =>
-      removeFromFeed(d, articleId),
+    const snapshots = queryClient.getQueriesData<InfiniteData<FeedPage>>({
+      queryKey: ["feed"],
+    });
+    queryClient.setQueriesData<InfiniteData<FeedPage>>(
+      { queryKey: ["feed"] },
+      (d) => removeFromFeed(d, articleId),
     );
     toast.show({
       message: t("hidden"),
       actionLabel: t("undo"),
       durationMs: UNDO_MS,
       onAction: () => {
-        if (snapshot) queryClient.setQueryData(["feed"], snapshot);
+        for (const [key, data] of snapshots) {
+          queryClient.setQueryData(key, data);
+        }
       },
       onCommit: () => {
         void postInteraction(articleId, "DISCARD").then(() =>
