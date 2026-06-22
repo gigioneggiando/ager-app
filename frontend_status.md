@@ -221,11 +221,33 @@ Onboarding interests + interactions + reading lists, all via the PR4 authed prox
 ### Contract notes (PR5)
 
 - `InteractionType` shows as an int enum in swagger but the DTO binds **by name**
-  (`JsonStringEnumConverter`) — we send the string names.
-- There is **no GET for interests**, so onboarding is gated by a per-user cookie
-  (`ager_onboarded`), not server truth. Acceptable (onboarding is skippable + editable).
+  (`JsonStringEnumConverter`) — we send the string names. (Backend PR-B now emits it as a
+  string enum in the contract.)
+- ~~There is no GET for interests, so onboarding is gated by a per-user cookie.~~
+  **Superseded** (see interests-editor PR): `GET /api/me/interests` now exists, so
+  onboarding state is server truth and the `ager_onboarded` cookie was dropped.
 - Reading-list item DTOs (`ArticleInListDto`) aren't in the contract (anonymous-wrapped),
-  so they're typed locally in `features/reading-lists/types.ts`.
+  so they're typed locally in `features/reading-lists/types.ts`. (Backend PR-B now types
+  the item pages; the rich reading-list port is a later frontend PR.)
+
+## Interests editor — server truth + no hard cap ✅ (`feat/prompt-interests`)
+
+After backend PR-B added `GET /api/me/interests` + the string-enum contract:
+
+- **Contract refreshed** (copied `swagger.json`, `pnpm gen:api`): `GET /api/me/interests`,
+  string-enum interactions, typed reading-list pages now in the client.
+- **Onboarding = server truth**: the verify route detects onboarding via
+  `GET /api/me/interests` (empty → `/onboarding`) and the `ager_onboarded` cookie + the
+  `/api/me/onboarding/skip` route were **removed**. Skip is now plain client navigation.
+- **Interests editor** `/me/interests`: loads the user's current interests
+  (`useMyInterests`) and pre-selects them; add/remove from the full taxonomy; save via
+  `POST /api/me/interests`; on save it invalidates the feed + my-interests caches and
+  hints that the feed will personalize.
+- **No hard 10 cap**: `InterestPicker` removed the max (pick as many as you like); a soft
+  ~5 minimum is a hint only (save needs ≥1, the backend min). Onboarding copy now says
+  "scegline almeno 5".
+- Tests: 51 passing (soft-min/no-max picker, editor pre-selection, verify→server-truth
+  onboarding). Lint + typecheck + build green.
 
 ### Notes / follow-ups
 

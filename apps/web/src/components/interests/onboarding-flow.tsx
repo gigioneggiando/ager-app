@@ -21,8 +21,9 @@ export function OnboardingFlow() {
     router.refresh();
   }
 
-  async function skip() {
-    await fetch("/api/me/onboarding/skip", { method: "POST" });
+  // Skip just moves on — no server flag. Onboarding state is server truth (interests),
+  // so a user who skips without choosing will be prompted again next login.
+  function skip() {
     finish();
   }
 

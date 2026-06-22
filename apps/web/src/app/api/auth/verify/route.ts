@@ -1,6 +1,5 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import type { AuthResult } from "@ager/api-client";
+import type { AuthResult, MyInterest } from "@ager/api-client";
 
 import { authedBackendFetch } from "@/lib/server/backend";
 import { setSessionCookies } from "@/lib/server/auth-cookies";
@@ -36,14 +35,22 @@ export async function POST(request: Request) {
   const auth = (await res.json()) as AuthResult;
   await setSessionCookies(auth);
 
-  // Onboard once per user: trigger the interests flow unless this user already completed it
-  // (tracked by the ager_onboarded cookie set on save/skip).
-  const onboarded = (await cookies()).get("ager_onboarded")?.value;
-  const needsOnboarding = onboarded !== auth.userId;
-
+  // Onboarding = SERVER TRUTH: a user with no interests is routed to /onboarding.
   return NextResponse.json({
     userId: auth.userId,
     role: auth.role,
-    needsOnboarding,
+    needsOnboarding: await hasNoInterests(),
   });
+}
+
+/** True when the just-signed-in user has no interests yet (→ onboarding). */
+async function hasNoInterests(): Promise<boolean> {
+  try {
+    const res = await authedBackendFetch("/api/me/interests");
+    if (!res.ok) return false;
+    const interests = (await res.json()) as MyInterest[];
+    return Array.isArray(interests) && interests.length === 0;
+  } catch {
+    return false;
+  }
 }

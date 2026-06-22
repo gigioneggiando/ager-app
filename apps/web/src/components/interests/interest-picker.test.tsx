@@ -10,7 +10,7 @@ let saveBody: unknown = null;
 
 const taxonomy = [
   { id: 1, name: "Macro", parentId: null, slug: "m", description: null },
-  ...Array.from({ length: 7 }, (_, i) => ({
+  ...Array.from({ length: 14 }, (_, i) => ({
     id: i + 2,
     name: `Topic ${i + 1}`,
     parentId: 1,
@@ -45,28 +45,29 @@ afterEach(() => {
 });
 
 describe("InterestPicker", () => {
-  it("requires >=5 selections then saves the chosen interest ids", async () => {
+  it("has a soft minimum (no hard 5-gate) and no hard maximum", async () => {
     const user = userEvent.setup();
     const onSaved = vi.fn();
-    renderWithProviders(
-      <InterestPicker onSaved={onSaved} saveLabel="Salva" />,
-    );
+    renderWithProviders(<InterestPicker onSaved={onSaved} saveLabel="Salva" />);
 
     await waitFor(() =>
       expect(screen.getByRole("button", { name: "Topic 1" })).toBeInTheDocument(),
     );
 
     const save = screen.getByRole("button", { name: "Salva" });
-    expect(save).toBeDisabled(); // fewer than 5 selected
+    expect(save).toBeDisabled(); // nothing selected → backend rejects empty
 
-    for (let i = 1; i <= 5; i++) {
-      await user.click(screen.getByRole("button", { name: `Topic ${i}` }));
-    }
+    // A single selection already enables save (soft minimum, not a hard gate).
+    await user.click(screen.getByRole("button", { name: "Topic 1" }));
     expect(save).toBeEnabled();
 
+    // No hard maximum: select 12 (> the old 10 cap) and they all stay selectable.
+    for (let i = 2; i <= 12; i++) {
+      await user.click(screen.getByRole("button", { name: `Topic ${i}` }));
+    }
     await user.click(save);
 
     await waitFor(() => expect(onSaved).toHaveBeenCalled());
-    expect(saveBody).toEqual({ interestIds: [2, 3, 4, 5, 6] });
+    expect((saveBody as { interestIds: number[] }).interestIds).toHaveLength(12);
   });
 });

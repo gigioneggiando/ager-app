@@ -64,15 +64,17 @@
   },
   "Onboarding": {
     "title": "Scegli i tuoi interessi",
-    "subtitle": "Seleziona da 5 a 10 argomenti: useremo i tuoi interessi per ordinare il feed. Puoi modificarli in qualsiasi momento.",
+    "subtitle": "Scegline almeno 5: useremo i tuoi interessi per ordinare il feed. Puoi modificarli in qualsiasi momento.",
     "save": "Salva e continua",
     "skip": "Salta per ora",
-    "selectedCount": "{count} selezionati (min {min}, max {max})",
+    "selectedCount": "{count} selezionati",
+    "suggestMin": "scegline almeno {min}",
     "loadError": "Impossibile caricare gli argomenti.",
     "saveError": "Salvataggio non riuscito. Riprova.",
     "saved": "Interessi salvati.",
+    "savedHint": "Interessi salvati. Il tuo feed si personalizzerà di conseguenza.",
     "editTitle": "I tuoi interessi",
-    "editSubtitle": "Aggiorna gli argomenti che orientano il tuo feed."
+    "editSubtitle": "Aggiungi o rimuovi gli argomenti che orientano il tuo feed."
   },
   "ReadingLists": {
     "title": "Liste di lettura",

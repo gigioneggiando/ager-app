@@ -10,8 +10,9 @@ import { useInterests, useSaveInterests } from "@/features/interests/use-interes
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const MIN = 5;
-const MAX = 10;
+// Soft minimum (a hint, not enforced). No hard maximum — pick as many as you like.
+// The backend rejects an empty set, so save needs at least 1.
+const SUGGESTED_MIN = 5;
 
 interface InterestPickerProps {
   /** Called after a successful save. */
@@ -66,13 +67,13 @@ export function InterestPicker({
     setSelected((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
-      else if (next.size < MAX) next.add(id);
+      else next.add(id); // no hard maximum
       return next;
     });
   }
 
   const count = selected.size;
-  const canSave = count >= MIN && count <= MAX && !saveInterests.isPending;
+  const canSave = count >= 1 && !saveInterests.isPending;
 
   function handleSave() {
     if (!canSave) return;
@@ -105,20 +106,17 @@ export function InterestPicker({
             <div className="flex flex-wrap gap-2">
               {section.items.map((interest) => {
                 const isSelected = selected.has(interest.id!);
-                const atMax = !isSelected && count >= MAX;
                 return (
                   <button
                     key={interest.id}
                     type="button"
                     onClick={() => toggle(interest.id!)}
                     aria-pressed={isSelected}
-                    disabled={atMax}
                     className={cn(
                       "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       isSelected
                         ? "border-primary bg-primary text-primary-foreground"
                         : "border-border bg-background text-foreground hover:bg-secondary",
-                      atMax && "cursor-not-allowed opacity-50",
                     )}
                   >
                     {isSelected ? (
@@ -139,7 +137,10 @@ export function InterestPicker({
           className="text-sm text-muted-foreground"
           aria-live="polite"
         >
-          {t("selectedCount", { count, min: MIN, max: MAX })}
+          {t("selectedCount", { count })}
+          {count < SUGGESTED_MIN
+            ? ` · ${t("suggestMin", { min: SUGGESTED_MIN })}`
+            : ""}
         </p>
         <div className="flex items-center gap-3">
           {onSkip ? (
