@@ -4,7 +4,7 @@ import { useState, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useQueryClient, type InfiniteData } from "@tanstack/react-query";
-import { Bookmark, BookmarkCheck, EyeOff, FolderPlus, Share2 } from "lucide-react";
+import { Bookmark, BookmarkCheck, ChevronDown, EyeOff, Share2 } from "lucide-react";
 import type { FeedPage } from "@ager/api-client";
 
 import { cn } from "@/lib/utils";
@@ -147,20 +147,31 @@ export function FeedCardActions({
 
   return (
     <>
-      <ActionButton
-        onClick={handleSave}
-        label={saved ? t("saved") : t("save")}
-        active={saved}
-      >
-        {saved ? (
-          <BookmarkCheck className="size-4" aria-hidden="true" />
-        ) : (
-          <Bookmark className="size-4" aria-hidden="true" />
-        )}
-      </ActionButton>
-      <ActionButton onClick={openAddToList} label={t("addToList")}>
-        <FolderPlus className="size-4" aria-hidden="true" />
-      </ActionButton>
+      {/* Save is one-tap → default "Salvati" list; the small caret is the secondary action,
+          opening the add-to-list dialog (choose a list + note). Grouped so the bookmark stays a
+          compact icon button consistent with hide/share, and nothing dominates the row. */}
+      <div className="inline-flex items-center">
+        <ActionButton
+          onClick={handleSave}
+          label={saved ? t("saved") : t("save")}
+          active={saved}
+        >
+          {saved ? (
+            <BookmarkCheck className="size-4" aria-hidden="true" />
+          ) : (
+            <Bookmark className="size-4" aria-hidden="true" />
+          )}
+        </ActionButton>
+        <button
+          type="button"
+          onClick={openAddToList}
+          aria-label={t("addToList")}
+          title={t("addToList")}
+          className="-ml-1 rounded-md px-1 py-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <ChevronDown className="size-3.5" aria-hidden="true" />
+        </button>
+      </div>
       <ActionButton onClick={handleDiscard} label={t("discard")}>
         <EyeOff className="size-4" aria-hidden="true" />
       </ActionButton>
