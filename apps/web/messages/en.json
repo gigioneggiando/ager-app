@@ -57,7 +57,58 @@
     "readingListsHint": "Articles you've saved",
     "saved": "Saved",
     "stats": "Reading stats",
-    "statsHint": "The variety of your reading"
+    "statsHint": "The variety of your reading",
+    "admin": "Admin",
+    "adminHint": "Administrator tools"
+  },
+  "Admin": {
+    "section": "Admin",
+    "nav": {
+      "takedown": "Takedown requests"
+    },
+    "takedown": {
+      "title": "Takedown requests",
+      "subtitle": "Handle DSA (art. 16/17) notices: review and resolve removal requests.",
+      "filterLabel": "Filter",
+      "filters": {
+        "pending": "Pending",
+        "recent": "Recent",
+        "all": "All"
+      },
+      "status": {
+        "pending": "Pending",
+        "resolved": "Resolved"
+      },
+      "actions": {
+        "removed": "Removed",
+        "disputed": "Disputed",
+        "referred": "Referred",
+        "none": "No action"
+      },
+      "unknownTarget": "Unknown target",
+      "loadError": "Couldn't load the requests.",
+      "emptyTitle": "No requests",
+      "emptyDescription": "There are no takedown requests for this filter.",
+      "backToQueue": "All requests",
+      "requestTitle": "Request #{id}",
+      "target": "Reported content",
+      "article": "Article",
+      "articleStatus": "Article status",
+      "source": "Source",
+      "requester": "Requester",
+      "email": "Email",
+      "role": "Role",
+      "received": "Received on",
+      "reasonLabel": "Reason",
+      "resolveTitle": "Resolve",
+      "actionLabel": "Action",
+      "removedWarning": "\"Removed\" takes the article out of the feed (status: takedown_done). Applied immediately.",
+      "notesLabel": "Notes (optional)",
+      "notesPlaceholder": "Decision rationale, references…",
+      "apply": "Apply",
+      "resolved": "Request resolved: {action}",
+      "resolveError": "Save failed. Please try again."
+    }
   },
   "Actions": {
     "save": "Save",

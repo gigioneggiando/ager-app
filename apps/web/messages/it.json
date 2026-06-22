@@ -57,7 +57,58 @@
     "readingListsHint": "Gli articoli che hai salvato",
     "saved": "Salvati",
     "stats": "Statistiche di lettura",
-    "statsHint": "La varietà delle tue letture"
+    "statsHint": "La varietà delle tue letture",
+    "admin": "Amministrazione",
+    "adminHint": "Strumenti per amministratori"
+  },
+  "Admin": {
+    "section": "Amministrazione",
+    "nav": {
+      "takedown": "Richieste di rimozione"
+    },
+    "takedown": {
+      "title": "Richieste di rimozione",
+      "subtitle": "Gestisci le segnalazioni DSA (art. 16/17): esamina e risolvi le richieste di rimozione.",
+      "filterLabel": "Filtro",
+      "filters": {
+        "pending": "In sospeso",
+        "recent": "Recenti",
+        "all": "Tutte"
+      },
+      "status": {
+        "pending": "In sospeso",
+        "resolved": "Risolta"
+      },
+      "actions": {
+        "removed": "Rimosso",
+        "disputed": "Contestato",
+        "referred": "Inoltrato",
+        "none": "Nessuna azione"
+      },
+      "unknownTarget": "Bersaglio sconosciuto",
+      "loadError": "Impossibile caricare le richieste.",
+      "emptyTitle": "Nessuna richiesta",
+      "emptyDescription": "Non ci sono richieste di rimozione per questo filtro.",
+      "backToQueue": "Tutte le richieste",
+      "requestTitle": "Richiesta #{id}",
+      "target": "Contenuto segnalato",
+      "article": "Articolo",
+      "articleStatus": "Stato articolo",
+      "source": "Fonte",
+      "requester": "Richiedente",
+      "email": "Email",
+      "role": "Ruolo",
+      "received": "Ricevuta il",
+      "reasonLabel": "Motivazione",
+      "resolveTitle": "Risolvi",
+      "actionLabel": "Azione",
+      "removedWarning": "\"Rimosso\" toglie l'articolo dal feed (stato: takedown_done). L'operazione viene applicata subito.",
+      "notesLabel": "Note (facoltative)",
+      "notesPlaceholder": "Motivazione della decisione, riferimenti…",
+      "apply": "Applica",
+      "resolved": "Richiesta risolta: {action}",
+      "resolveError": "Salvataggio non riuscito. Riprova."
+    }
   },
   "Actions": {
     "save": "Salva",
