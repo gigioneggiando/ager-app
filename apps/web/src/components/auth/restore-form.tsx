@@ -1,32 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useLocale, useTranslations } from "next-intl";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
-import { useSession } from "@/components/auth/auth-provider";
-import { GoogleAuthSection } from "@/components/auth/google-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-type Step = "email" | "code";
+type Step = "email" | "code" | "done";
 
-/** Sanitize the post-login redirect: only allow same-origin app paths. */
-function safeNext(next: string | null): string {
-  if (!next || !next.startsWith("/") || next.startsWith("//")) return "/";
-  return next;
-}
-
-export function LoginForm() {
-  const t = useTranslations("Login");
-  const router = useRouter();
-  const locale = useLocale();
+/**
+ * Account restore within the 30-day grace window. email → restore OTP → restore. The
+ * backend revokes all sessions on restore and returns no tokens, so we end on a "now sign
+ * in" step rather than an authenticated session.
+ */
+export function RestoreForm() {
+  const t = useTranslations("Restore");
   const searchParams = useSearchParams();
-  const { refresh } = useSession();
 
-  const next = safeNext(searchParams.get("next"));
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState(searchParams.get("email") ?? "");
   const [code, setCode] = useState("");
@@ -38,7 +31,7 @@ export function LoginForm() {
     setError(null);
     setPending(true);
     try {
-      const res = await fetch("/api/auth/request-code", {
+      const res = await fetch("/api/auth/restore/request-code", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ email }),
@@ -57,39 +50,43 @@ export function LoginForm() {
     }
   }
 
-  async function verifyCode(e: React.FormEvent) {
+  async function restore(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setPending(true);
     try {
-      const res = await fetch("/api/auth/verify", {
+      const res = await fetch("/api/auth/restore", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ email, code }),
       });
       if (res.ok) {
-        const data = (await res.json().catch(() => null)) as {
-          needsOnboarding?: boolean;
-        } | null;
-        await refresh();
-        if (data?.needsOnboarding) {
-          router.replace(
-            `/${locale}/onboarding?next=${encodeURIComponent(next)}`,
-          );
-        } else {
-          router.replace(next);
-        }
-        router.refresh();
+        setStep("done");
         return;
       }
       if (res.status === 401) setError(t("errors.invalidCode"));
       else if (res.status === 429) setError(t("errors.rateLimit"));
-      else setError(t("errors.verifyFailed"));
+      else setError(t("errors.restoreFailed"));
     } catch {
       setError(t("errors.network"));
     } finally {
       setPending(false);
     }
+  }
+
+  if (step === "done") {
+    return (
+      <div className="mx-auto flex w-full max-w-sm flex-col items-center gap-4 text-center">
+        <CheckCircle2 className="size-10 text-primary" aria-hidden="true" />
+        <h1 className="text-2xl font-bold tracking-tight">{t("doneTitle")}</h1>
+        <p className="text-sm text-muted-foreground">{t("doneBody")}</p>
+        <Button asChild className="w-full">
+          <Link href={`/login?email=${encodeURIComponent(email)}`}>
+            {t("goToLogin")}
+          </Link>
+        </Button>
+      </div>
+    );
   }
 
   return (
@@ -100,8 +97,6 @@ export function LoginForm() {
           {step === "email" ? t("subtitle") : t("codeSubtitle", { email })}
         </p>
       </div>
-
-      {step === "email" ? <GoogleAuthSection next={next} /> : null}
 
       {step === "email" ? (
         <form onSubmit={requestCode} className="flex flex-col gap-4" noValidate>
@@ -128,7 +123,7 @@ export function LoginForm() {
           </Button>
         </form>
       ) : (
-        <form onSubmit={verifyCode} className="flex flex-col gap-4" noValidate>
+        <form onSubmit={restore} className="flex flex-col gap-4" noValidate>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="code" className="text-sm font-medium">
               {t("codeLabel")}
@@ -148,7 +143,7 @@ export function LoginForm() {
             {pending ? (
               <Loader2 className="animate-spin" aria-hidden="true" />
             ) : null}
-            {t("verify")}
+            {t("restore")}
           </Button>
           <button
             type="button"
@@ -174,21 +169,9 @@ export function LoginForm() {
       </p>
 
       <p className="text-center text-sm text-muted-foreground">
-        {t("noAccount")}{" "}
-        <Link href="/register" className="font-medium text-link hover:underline">
-          {t("register")}
+        <Link href="/login" className="font-medium text-link hover:underline">
+          {t("backToLogin")}
         </Link>
-      </p>
-
-      <p className="text-center text-xs text-muted-foreground">
-        {t("deletedAccount")}{" "}
-        <Link href="/restore" className="font-medium text-link hover:underline">
-          {t("restoreLink")}
-        </Link>
-      </p>
-
-      <p className="text-center text-xs text-muted-foreground">
-        {t("privacyNote")}
       </p>
     </div>
   );

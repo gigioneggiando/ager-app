@@ -42,7 +42,9 @@
       "invalidCode": "Wrong or expired code. Check it and try again.",
       "verifyFailed": "Sign-in failed. Please try again.",
       "network": "Network error. Check your connection and try again."
-    }
+    },
+    "deletedAccount": "Deleted your account?",
+    "restoreLink": "Restore it"
   },
   "Register": {
     "title": "Create an account",
@@ -68,7 +70,9 @@
       "invalidCode": "Wrong or expired code. Check it and try again.",
       "verifyFailed": "Registration failed. Please try again.",
       "network": "Network error. Check your connection and try again."
-    }
+    },
+    "deletedAccount": "Had you deleted this account?",
+    "restoreLink": "Restore it"
   },
   "Account": {
     "signIn": "Sign in",
@@ -708,5 +712,40 @@
     "methodTitle": "Method",
     "methodBody": "We aggregate verified sources, declare their licences and provenance, and always show the path back to the original publisher. The relevance score is transparent and topics are browsable: you decide what to dig into.",
     "closing": "Ager is an independent editorial project. If you'd like to suggest a source or report an issue, get in touch."
+  },
+  "OAuth": {
+    "continueWithGoogle": "Continue with Google",
+    "or": "or",
+    "beginError": "Couldn't start Google sign-in. Try again.",
+    "signingIn": "Signing in…",
+    "errorTitle": "Sign-in failed",
+    "errorBody": "We couldn't complete your Google sign-in. Please try again.",
+    "backToLogin": "Back to sign in",
+    "deletedTitle": "Account deleted",
+    "deletedBody": "This account was deleted but is still within the restore window. You can recover it now.",
+    "restoreCta": "Restore account"
+  },
+  "Restore": {
+    "title": "Restore your account",
+    "subtitle": "If you deleted your account in the last 30 days, enter your email and we'll send a code to recover it.",
+    "codeSubtitle": "We sent a restore code to {email}.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "requestCode": "Send the code",
+    "codeLabel": "Restore code",
+    "codePlaceholder": "123456",
+    "restore": "Restore account",
+    "changeEmail": "Change email",
+    "backToLogin": "Back to sign in",
+    "doneTitle": "Account restored",
+    "doneBody": "Your account is active again. For security, sign in again to continue.",
+    "goToLogin": "Go to sign in",
+    "errors": {
+      "rateLimit": "Too many attempts. Try again in a few minutes.",
+      "requestFailed": "Couldn't send the code. Try again.",
+      "invalidCode": "Wrong or expired code.",
+      "restoreFailed": "Couldn't restore the account. Try again.",
+      "network": "Network error. Check your connection and try again."
+    }
   }
 }

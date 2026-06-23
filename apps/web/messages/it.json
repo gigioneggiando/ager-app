@@ -42,7 +42,9 @@
       "invalidCode": "Codice errato o scaduto. Controlla e riprova.",
       "verifyFailed": "Accesso non riuscito. Riprova.",
       "network": "Errore di rete. Controlla la connessione e riprova."
-    }
+    },
+    "deletedAccount": "Hai eliminato il tuo account?",
+    "restoreLink": "Ripristinalo"
   },
   "Register": {
     "title": "Crea un account",
@@ -68,7 +70,9 @@
       "invalidCode": "Codice errato o scaduto. Controlla e riprova.",
       "verifyFailed": "Registrazione non riuscita. Riprova.",
       "network": "Errore di rete. Controlla la connessione e riprova."
-    }
+    },
+    "deletedAccount": "Avevi eliminato questo account?",
+    "restoreLink": "Ripristinalo"
   },
   "Account": {
     "signIn": "Accedi",
@@ -708,5 +712,40 @@
     "methodTitle": "Metodo",
     "methodBody": "Aggreghiamo fonti verificate, ne dichiariamo licenze e provenienza, e mostriamo sempre il percorso che porta all'editore originale. Il punteggio di rilevanza è trasparente e gli argomenti sono navigabili: sei tu a decidere cosa approfondire.",
     "closing": "Ager è un progetto editoriale indipendente. Se vuoi proporci una fonte o segnalarci un problema, scrivici."
+  },
+  "OAuth": {
+    "continueWithGoogle": "Continua con Google",
+    "or": "oppure",
+    "beginError": "Impossibile avviare l'accesso con Google. Riprova.",
+    "signingIn": "Accesso in corso…",
+    "errorTitle": "Accesso non riuscito",
+    "errorBody": "Non siamo riusciti a completare l'accesso con Google. Riprova.",
+    "backToLogin": "Torna all'accesso",
+    "deletedTitle": "Account eliminato",
+    "deletedBody": "Questo account è stato eliminato ma è ancora nel periodo di ripristino. Puoi recuperarlo ora.",
+    "restoreCta": "Ripristina l'account"
+  },
+  "Restore": {
+    "title": "Ripristina il tuo account",
+    "subtitle": "Se hai eliminato l'account negli ultimi 30 giorni, inserisci la tua email: ti invieremo un codice per recuperarlo.",
+    "codeSubtitle": "Abbiamo inviato un codice di ripristino a {email}.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "tu@esempio.com",
+    "requestCode": "Invia il codice",
+    "codeLabel": "Codice di ripristino",
+    "codePlaceholder": "123456",
+    "restore": "Ripristina l'account",
+    "changeEmail": "Cambia email",
+    "backToLogin": "Torna all'accesso",
+    "doneTitle": "Account ripristinato",
+    "doneBody": "Il tuo account è di nuovo attivo. Per sicurezza accedi di nuovo per continuare.",
+    "goToLogin": "Vai all'accesso",
+    "errors": {
+      "rateLimit": "Troppi tentativi. Riprova tra qualche minuto.",
+      "requestFailed": "Impossibile inviare il codice. Riprova.",
+      "invalidCode": "Codice errato o scaduto.",
+      "restoreFailed": "Impossibile ripristinare l'account. Riprova.",
+      "network": "Errore di rete. Controlla la connessione e riprova."
+    }
   }
 }

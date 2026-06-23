@@ -7,6 +7,7 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
 import { useSession } from "@/components/auth/auth-provider";
+import { GoogleAuthSection } from "@/components/auth/google-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -111,6 +112,8 @@ export function RegisterForm() {
           {step === "details" ? t("subtitle") : t("codeSubtitle", { email })}
         </p>
       </div>
+
+      {step === "details" ? <GoogleAuthSection next={next} /> : null}
 
       {step === "details" ? (
         <form onSubmit={requestCode} className="flex flex-col gap-4" noValidate>
@@ -228,6 +231,15 @@ export function RegisterForm() {
           </>
         )}
       </p>
+
+      {alreadyRegistered ? (
+        <p className="text-center text-xs text-muted-foreground">
+          {t("deletedAccount")}{" "}
+          <Link href="/restore" className="font-medium text-link hover:underline">
+            {t("restoreLink")}
+          </Link>
+        </p>
+      ) : null}
 
       <p className="text-center text-xs text-muted-foreground">{t("privacyNote")}</p>
     </div>
