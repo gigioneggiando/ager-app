@@ -29,6 +29,18 @@ export function Footer() {
             >
               {t("styleguide")}
             </Link>
+            <Link
+              href="/dsa-contact"
+              className="text-foreground/80 transition-colors hover:text-link"
+            >
+              {t("dsaContact")}
+            </Link>
+            <Link
+              href="/bot"
+              className="text-foreground/80 transition-colors hover:text-link"
+            >
+              {t("botPolicy")}
+            </Link>
             <span className="text-muted-foreground/70">{t("sourcesSoon")}</span>
             <span className="text-muted-foreground/70">{t("aboutSoon")}</span>
           </nav>

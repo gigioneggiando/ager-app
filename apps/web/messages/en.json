@@ -14,6 +14,8 @@
     "mission": "We put quality back at the center of the news: visible sources, declared context, respect for your time and your intelligence.",
     "nav": "Footer navigation",
     "styleguide": "Styleguide",
+    "dsaContact": "DSA contact",
+    "botPolicy": "AgerBot",
     "sourcesSoon": "Sources (soon)",
     "aboutSoon": "About (soon)",
     "rights": "All rights reserved.",
@@ -155,7 +157,8 @@
     "section": "Admin",
     "nav": {
       "takedown": "Takedown requests",
-      "sources": "Sources"
+      "sources": "Sources",
+      "ingestion": "Ingestion log"
     },
     "common": {
       "yes": "Yes",
@@ -289,7 +292,60 @@
       "tosChanged": "The ToS changed since the last check.",
       "tosUnchanged": "No ToS changes.",
       "tosError": "Refresh failed."
+    },
+    "ingestion": {
+      "title": "Ingestion log",
+      "subtitle": "RSS ingestion history with counts and forensic policy-file hashes (robots/tdmrep/ai.txt).",
+      "filterLabel": "Filter",
+      "filters": {
+        "all": "All",
+        "errors": "Errors only"
+      },
+      "loadError": "Couldn't load the log.",
+      "emptyTitle": "No runs",
+      "emptyDescription": "No log rows for this filter.",
+      "errorsBadge": "Errors",
+      "counts": "{ingested} ingested · {skipped} skipped",
+      "pagination": "Log pagination",
+      "pageN": "Page {page}",
+      "previous": "Previous",
+      "next": "Next",
+      "chartTitle": "Ingestion · last {days} days",
+      "chartAria": "{total} articles ingested over the last {days} days.",
+      "backToList": "All runs",
+      "runTitle": "Run",
+      "fetchedAt": "Fetched at",
+      "ingested": "Articles ingested",
+      "skipped": "Articles skipped",
+      "sourceId": "Source ID",
+      "policySnapshot": "Policy snapshot (DSA / AI Act audit)",
+      "present": "Present",
+      "absent": "Absent",
+      "errorsTitle": "Errors"
     }
+  },
+  "DsaContact": {
+    "title": "DSA contact",
+    "intro": "Under Regulation (EU) 2022/2065 (Digital Services Act), Ager provides a single point of contact for authorities and for users.",
+    "authoritiesTitle": "Point of contact for authorities (art. 11)",
+    "authoritiesBody": "Member State authorities, the Commission and the European Board for Digital Services may contact us electronically at the address below for any communication relating to the DSA.",
+    "recipientsTitle": "Point of contact for users (art. 12)",
+    "recipientsBody": "Users can communicate with us directly and rapidly, by electronic means, at the address below.",
+    "illegalTitle": "Reporting illegal content",
+    "illegalBody": "To report allegedly illegal content (art. 16) use our takedown request form, or write to the address below with the content URL or identifier and your reasons.",
+    "contactTitle": "Contact",
+    "languages": "Languages accepted: Italian and English."
+  },
+  "Bot": {
+    "title": "AgerBot",
+    "intro": "AgerBot is Ager's crawler. It collects headlines and metadata from sources for our link-first feed: we never host article full text and always link back to the publisher.",
+    "uaTitle": "User-Agent",
+    "uaBody": "AgerBot's requests carry this User-Agent, so you can identify them in your logs:",
+    "respectTitle": "What we respect",
+    "respectBody": "Before each fetch we read and record robots.txt, /.well-known/tdmrep.json (text & data mining opt-out), and /.well-known/ai.txt. We honour exclusion directives and the TDM opt-out.",
+    "optoutTitle": "How to exclude AgerBot",
+    "optoutBody": "To prevent collection, add a rule for \"Ager-Bot\" in your robots.txt or declare a TDM opt-out in tdmrep.json. We apply changes on the next fetch.",
+    "contactLabel": "Questions?"
   },
   "Actions": {
     "save": "Save",
