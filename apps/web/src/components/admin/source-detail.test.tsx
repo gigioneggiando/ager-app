@@ -47,6 +47,7 @@ beforeEach(() => {
       return new Response(null, { status: 204 });
     if (url.includes("/disable")) return new Response(null, { status: 204 });
     if (url.includes("/refresh-tos")) return json({ previousHash: "a", currentHash: "b", changed: true });
+    if (url.includes("/pull")) return new Response(null, { status: 200 });
     return new Response(null, { status: 404 });
   }) as unknown as typeof fetch;
 });
@@ -71,6 +72,24 @@ describe("SourceDetail", () => {
       );
       expect(patch?.body).toMatchObject({ licensingStatus: "licensed_direct" });
     });
+  });
+
+  it("forces ingestion of the source after confirming", async () => {
+    const user = userEvent.setup();
+    const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
+    renderWithProviders(<SourceDetail id={5} />);
+    await screen.findByRole("heading", { name: "ANSA" });
+
+    await user.click(screen.getByRole("button", { name: "Forza ingestion" }));
+
+    expect(confirmSpy).toHaveBeenCalled();
+    await waitFor(() =>
+      expect(
+        calls.some(
+          (c) => c.method === "POST" && c.url.includes("/api/ingestion/sources/5/pull"),
+        ),
+      ).toBe(true),
+    );
   });
 
   it("disables an enabled source", async () => {

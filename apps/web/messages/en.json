@@ -8,7 +8,8 @@
     "styleguide": "Styleguide",
     "soon": "soon",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "explore": "Explore"
   },
   "Footer": {
     "mission": "We put quality back at the center of the news: visible sources, declared context, respect for your time and your intelligence.",
@@ -17,9 +18,9 @@
     "dsaContact": "DSA contact",
     "botPolicy": "AgerBot",
     "sourcesSoon": "Sources (soon)",
-    "aboutSoon": "About (soon)",
     "rights": "All rights reserved.",
-    "claim": "Reduces the noise, increases understanding."
+    "claim": "Reduces the noise, increases understanding.",
+    "about": "About"
   },
   "Login": {
     "title": "Sign in",
@@ -291,7 +292,14 @@
       "refreshTos": "Refresh ToS",
       "tosChanged": "The ToS changed since the last check.",
       "tosUnchanged": "No ToS changes.",
-      "tosError": "Refresh failed."
+      "tosError": "Refresh failed.",
+      "pull": "Force ingestion",
+      "pullAll": "Force all",
+      "confirmPull": "Start a manual ingestion of this source now?",
+      "confirmPullAll": "Start a manual ingestion of all active sources now?",
+      "pullQueued": "Source ingestion started.",
+      "pullAllQueued": "Ingestion of all sources started.",
+      "pullError": "Couldn't start ingestion. Try again."
     },
     "ingestion": {
       "title": "Ingestion log",
@@ -411,7 +419,9 @@
     "notePlaceholder": "Why are you saving it?",
     "savedTo": "Saved to \"{name}\"",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "share": "Share",
+    "shareCopied": "Public link copied to clipboard."
   },
   "Stats": {
     "title": "Reading stats",
@@ -662,5 +672,41 @@
     "feed": {
       "note": "The reusable feed component: only title, excerpt, source, image and topics. Link-first — no article body. The third card shows the image placeholder. Sample data."
     }
+  },
+  "Explore": {
+    "title": "Explore by topic",
+    "subtitle": "Pick a theme and browse the most relevant articles, with sources always in plain sight.",
+    "loadError": "Couldn't load topics.",
+    "pickTitle": "Pick a topic",
+    "pickDescription": "Tap a tag above to see related articles.",
+    "emptyTitle": "No articles",
+    "emptyDescription": "There are no articles for “{tag}” yet.",
+    "resultsFor": "{count, plural, =0 {No articles} one {# article} other {# articles}} for “{tag}”",
+    "pagination": "Results pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {total}"
+  },
+  "PublicList": {
+    "metaTitle": "Public reading list",
+    "metaDescription": "A collection of articles shared on Ager.",
+    "publicList": "Public list",
+    "notFoundTitle": "List not found",
+    "notFoundDescription": "This list doesn't exist or is no longer public.",
+    "emptyTitle": "Empty list",
+    "emptyDescription": "This list has no articles yet.",
+    "readingTime": "{minutes} min read",
+    "loadMore": "Load more"
+  },
+  "About": {
+    "title": "About us",
+    "intro": "Ager puts quality back at the heart of the news: visible sources, declared context, respect for your time and your intelligence.",
+    "missionTitle": "Mission",
+    "missionBody": "We want to cut the noise and raise understanding. We curate and organise the news to give you the picture, not just the headline: every article comes with its source in plain sight and the context you need to judge it.",
+    "visionTitle": "Vision",
+    "visionBody": "We imagine news where trust isn't assumed but earned. No tricks to keep you scrolling, no notifications engineered for addiction: just tools that help you understand the world and then get back to your life.",
+    "methodTitle": "Method",
+    "methodBody": "We aggregate verified sources, declare their licences and provenance, and always show the path back to the original publisher. The relevance score is transparent and topics are browsable: you decide what to dig into.",
+    "closing": "Ager is an independent editorial project. If you'd like to suggest a source or report an issue, get in touch."
   }
 }

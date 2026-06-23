@@ -44,6 +44,11 @@ export type SourceAdminCreate = components["schemas"]["SourceAdminCreate"];
 export type SourceAdminUpdate = components["schemas"]["SourceAdminUpdate"];
 export type RssProbeRequest = components["schemas"]["RssProbeRequest"];
 export type RssProbeResponse = components["schemas"]["RssProbeResponse"];
+export type ExternalIdTokenRequest = components["schemas"]["ExternalIdTokenRequest"];
+export type RestoreAccountByOtpRequest =
+  components["schemas"]["RestoreAccountByOtpRequest"];
+export type RequestRestoreOtpRequest =
+  components["schemas"]["RequestRestoreOtpRequest"];
 
 /**
  * Article-detail response. The contract does not declare a schema for

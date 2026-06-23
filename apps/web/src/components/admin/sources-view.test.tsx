@@ -57,6 +57,31 @@ describe("SourcesView", () => {
     await waitFor(() => expect(calls.some((u) => u.includes("expiringIn=30"))).toBe(true));
   });
 
+  it("forces ingestion of all sources after confirming", async () => {
+    const user = userEvent.setup();
+    const confirmSpy = vi.spyOn(window, "confirm").mockReturnValue(true);
+    renderWithProviders(<SourcesView />);
+    await screen.findByText("ANSA");
+
+    await user.click(screen.getByRole("button", { name: "Forza tutte" }));
+
+    expect(confirmSpy).toHaveBeenCalled();
+    await waitFor(() =>
+      expect(calls.some((u) => u.includes("/api/ingestion/pull-all"))).toBe(true),
+    );
+  });
+
+  it("does not call the API when the force-all confirm is dismissed", async () => {
+    const user = userEvent.setup();
+    vi.spyOn(window, "confirm").mockReturnValue(false);
+    renderWithProviders(<SourcesView />);
+    await screen.findByText("ANSA");
+
+    await user.click(screen.getByRole("button", { name: "Forza tutte" }));
+
+    expect(calls.some((u) => u.includes("/api/ingestion/pull-all"))).toBe(false);
+  });
+
   it("filters by licensing status client-side", async () => {
     const user = userEvent.setup();
     renderWithProviders(<SourcesView />);

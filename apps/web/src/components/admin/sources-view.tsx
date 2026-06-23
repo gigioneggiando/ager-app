@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronRight, Plus } from "lucide-react";
+import { ChevronRight, Plus, RefreshCw } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,8 @@ import {
   useSourceList,
   type SourceServerFilter,
 } from "@/features/admin/use-sources";
+import { usePullAllSources } from "@/features/admin/use-source-ingest";
+import { useToast } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +32,17 @@ export function SourcesView() {
   const [filter, setFilter] = useState<SourceServerFilter>("all");
   const [licensing, setLicensing] = useState<string>("all");
   const [createOpen, setCreateOpen] = useState(false);
+  const toast = useToast();
+  const pullAll = usePullAllSources();
   const { data, isPending, isError } = useSourceList(filter);
+
+  function forceIngestAll() {
+    if (!window.confirm(t("sources.confirmPullAll"))) return;
+    pullAll.mutate(undefined, {
+      onSuccess: () => toast.show({ message: t("sources.pullAllQueued") }),
+      onError: () => toast.show({ message: t("sources.pullError") }),
+    });
+  }
 
   const rows = (data ?? []).filter(
     (s) => licensing === "all" || s.licensingStatus === licensing,
@@ -45,10 +57,20 @@ export function SourcesView() {
             {t("sources.subtitle")}
           </p>
         </div>
-        <Button onClick={() => setCreateOpen(true)}>
-          <Plus aria-hidden="true" />
-          {t("sources.create")}
-        </Button>
+        <div className="flex shrink-0 items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={forceIngestAll}
+            disabled={pullAll.isPending}
+          >
+            <RefreshCw aria-hidden="true" />
+            {t("sources.pullAll")}
+          </Button>
+          <Button onClick={() => setCreateOpen(true)}>
+            <Plus aria-hidden="true" />
+            {t("sources.create")}
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
