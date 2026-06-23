@@ -34,6 +34,11 @@ export type ArticleSearchResultsPage = components["schemas"]["ArticleSearchResul
 export type ArticleTag = components["schemas"]["ArticleTagDto"];
 export type TakedownRequestAdmin = components["schemas"]["TakedownRequestAdminResponse"];
 export type TakedownRequestAdminUpdate = components["schemas"]["TakedownRequestAdminUpdate"];
+export type SourceAdmin = components["schemas"]["SourceAdminResponse"];
+export type SourceAdminCreate = components["schemas"]["SourceAdminCreate"];
+export type SourceAdminUpdate = components["schemas"]["SourceAdminUpdate"];
+export type RssProbeRequest = components["schemas"]["RssProbeRequest"];
+export type RssProbeResponse = components["schemas"]["RssProbeResponse"];
 
 /**
  * Article-detail response. The contract does not declare a schema for

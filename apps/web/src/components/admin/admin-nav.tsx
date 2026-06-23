@@ -6,7 +6,10 @@ import { ShieldAlert } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
-const ITEMS = [{ key: "takedown", href: "/admin/takedown" }] as const;
+const ITEMS = [
+  { key: "takedown", href: "/admin/takedown" },
+  { key: "sources", href: "/admin/sources" },
+] as const;
 
 /** Admin section header + nav. Rendered inside the role-gated admin layout. */
 export function AdminNav() {
