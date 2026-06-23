@@ -14,6 +14,8 @@
     "mission": "Riportiamo la qualità al centro dell'informazione: fonti visibili, contesto dichiarato, rispetto del tuo tempo e della tua intelligenza.",
     "nav": "Navigazione del footer",
     "styleguide": "Styleguide",
+    "dsaContact": "Contatto DSA",
+    "botPolicy": "AgerBot",
     "sourcesSoon": "Fonti (presto)",
     "aboutSoon": "Chi siamo (presto)",
     "rights": "Tutti i diritti riservati.",
@@ -93,7 +95,8 @@
     "section": "Amministrazione",
     "nav": {
       "takedown": "Richieste di rimozione",
-      "sources": "Fonti"
+      "sources": "Fonti",
+      "ingestion": "Log di ingestione"
     },
     "common": {
       "yes": "Sì",
@@ -227,7 +230,60 @@
       "tosChanged": "I ToS sono cambiati dall'ultimo controllo.",
       "tosUnchanged": "Nessuna modifica ai ToS.",
       "tosError": "Aggiornamento non riuscito."
+    },
+    "ingestion": {
+      "title": "Log di ingestione",
+      "subtitle": "Storico delle acquisizioni RSS con conteggi ed evidenze forensi (robots/tdmrep/ai.txt).",
+      "filterLabel": "Filtro",
+      "filters": {
+        "all": "Tutti",
+        "errors": "Solo con errori"
+      },
+      "loadError": "Impossibile caricare il log.",
+      "emptyTitle": "Nessuna acquisizione",
+      "emptyDescription": "Nessuna riga di log per questo filtro.",
+      "errorsBadge": "Errori",
+      "counts": "{ingested} acquisiti · {skipped} scartati",
+      "pagination": "Paginazione del log",
+      "pageN": "Pagina {page}",
+      "previous": "Precedente",
+      "next": "Successiva",
+      "chartTitle": "Acquisizioni · ultimi {days} giorni",
+      "chartAria": "{total} articoli acquisiti negli ultimi {days} giorni.",
+      "backToList": "Tutto il log",
+      "runTitle": "Acquisizione",
+      "fetchedAt": "Data",
+      "ingested": "Articoli acquisiti",
+      "skipped": "Articoli scartati",
+      "sourceId": "ID fonte",
+      "policySnapshot": "Snapshot delle policy (audit DSA / AI Act)",
+      "present": "Presente",
+      "absent": "Assente",
+      "errorsTitle": "Errori"
     }
+  },
+  "DsaContact": {
+    "title": "Contatto DSA",
+    "intro": "Ai sensi del Regolamento (UE) 2022/2065 (Digital Services Act), Ager mette a disposizione un punto di contatto unico per le autorità e per gli utenti.",
+    "authoritiesTitle": "Punto di contatto per le autorità (art. 11)",
+    "authoritiesBody": "Le autorità degli Stati membri, la Commissione e il Comitato europeo per i servizi digitali possono contattarci per via elettronica all'indirizzo indicato qui sotto per ogni comunicazione relativa all'applicazione del DSA.",
+    "recipientsTitle": "Punto di contatto per gli utenti (art. 12)",
+    "recipientsBody": "Gli utenti possono comunicare direttamente e rapidamente con noi, per via elettronica, scrivendo all'indirizzo indicato qui sotto.",
+    "illegalTitle": "Segnalazione di contenuti illegali",
+    "illegalBody": "Per segnalare un contenuto presunto illegale (art. 16) puoi usare il nostro modulo di richiesta di rimozione oppure scrivere al recapito qui sotto, indicando l'URL o l'identificativo del contenuto e le motivazioni.",
+    "contactTitle": "Recapito",
+    "languages": "Lingue accettate: italiano e inglese."
+  },
+  "Bot": {
+    "title": "AgerBot",
+    "intro": "AgerBot è il crawler di Ager. Raccoglie titoli e metadati dalle fonti per il nostro feed link-first: non ospitiamo il testo integrale degli articoli, rimandiamo sempre all'editore.",
+    "uaTitle": "User-Agent",
+    "uaBody": "Le richieste di AgerBot riportano questo User-Agent, così puoi identificarle nei tuoi log:",
+    "respectTitle": "Cosa rispettiamo",
+    "respectBody": "Prima di ogni acquisizione consultiamo e registriamo robots.txt, /.well-known/tdmrep.json (opt-out per il text & data mining) e /.well-known/ai.txt. Rispettiamo le direttive di esclusione e l'opt-out TDM.",
+    "optoutTitle": "Come escludere AgerBot",
+    "optoutBody": "Per impedire la raccolta, aggiungi una regola per \"Ager-Bot\" nel tuo robots.txt o dichiara l'opt-out TDM in tdmrep.json. Applichiamo le modifiche alla successiva acquisizione.",
+    "contactLabel": "Domande?"
   },
   "Actions": {
     "save": "Salva",
