@@ -16,14 +16,11 @@ import type { UserProfile } from "@ager/api-client";
 import { Link } from "@/i18n/navigation";
 import { useSession } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AccountProfileForm } from "@/components/account/account-profile-form";
+import { AccountDataExport } from "@/components/account/account-data-export";
+import { AccountDangerZone } from "@/components/account/account-danger-zone";
 
 async function fetchProfile(): Promise<UserProfile> {
   const res = await fetch("/api/me", { headers: { accept: "application/json" } });
@@ -57,40 +54,22 @@ export function AccountView() {
         </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("profile")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {isPending ? (
-            <div className="flex flex-col gap-3">
-              <Skeleton className="h-5 w-48" />
-              <Skeleton className="h-5 w-64" />
-            </div>
-          ) : isError || !data ? (
+      {isPending ? (
+        <Card>
+          <CardContent className="flex flex-col gap-3">
+            <Skeleton className="h-5 w-48" />
+            <Skeleton className="h-9 w-full" />
+          </CardContent>
+        </Card>
+      ) : isError || !data ? (
+        <Card>
+          <CardContent>
             <p className="text-sm text-muted-foreground">{t("loadError")}</p>
-          ) : (
-            <dl className="flex flex-col gap-3 text-sm">
-              <div className="flex justify-between gap-4">
-                <dt className="text-muted-foreground">{t("username")}</dt>
-                <dd className="font-medium">{data.username}</dd>
-              </div>
-              <div className="flex justify-between gap-4">
-                <dt className="text-muted-foreground">{t("email")}</dt>
-                <dd className="font-medium">{data.email}</dd>
-              </div>
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-muted-foreground">{t("role")}</dt>
-                <dd>
-                  <Badge variant={data.role === "admin" ? "primary" : "neutral"}>
-                    {data.role}
-                  </Badge>
-                </dd>
-              </div>
-            </dl>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      ) : (
+        <AccountProfileForm profile={data} />
+      )}
 
       <nav className="grid gap-3 sm:grid-cols-2" aria-label={t("manage")}>
         <Link
@@ -171,6 +150,9 @@ export function AccountView() {
           </Link>
         ) : null}
       </nav>
+
+      <AccountDataExport />
+      <AccountDangerZone />
     </div>
   );
 }

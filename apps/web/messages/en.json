@@ -87,7 +87,69 @@
     "stats": "Reading stats",
     "statsHint": "The variety of your reading",
     "admin": "Admin",
-    "adminHint": "Administrator tools"
+    "adminHint": "Administrator tools",
+    "language": "Language",
+    "languages": {
+      "it": "Italiano",
+      "en": "English"
+    },
+    "avatarUrl": "Avatar URL",
+    "timezone": "Timezone",
+    "saveProfile": "Save profile",
+    "profileSaved": "Profile updated.",
+    "dataTitle": "Your data",
+    "dataDescription": "Download a copy of your personal data (GDPR art. 15) as JSON.",
+    "exportData": "Export my data",
+    "exportLimit": "Available once every 24 hours.",
+    "dangerZone": "Danger zone",
+    "deleteDescription": "Delete your account. Reversible within 30 days, then permanent.",
+    "deleteAccount": "Delete account",
+    "deleteConfirmTitle": "Delete your account?",
+    "deleteConfirmBody": "Your account will be disabled and sessions revoked. You have 30 days to restore it before permanent deletion.",
+    "deleteConfirm": "Yes, delete",
+    "cancel": "Cancel",
+    "errors": {
+      "usernameTaken": "That username is already taken.",
+      "usernameTooLong": "Username is too long (max 30 characters).",
+      "saveFailed": "Save failed. Please try again.",
+      "exportRateLimited": "You already requested an export in the last 24 hours. Try again later.",
+      "exportFailed": "Export failed. Please try again.",
+      "deleteFailed": "Deletion failed. Please try again."
+    }
+  },
+  "Takedown": {
+    "title": "Takedown request",
+    "subtitle": "Report content under the DSA (art. 16). Your notice is logged and reviewed by our team.",
+    "targetLabel": "Content to report",
+    "targetType": {
+      "article": "Article",
+      "source": "Source"
+    },
+    "targetIdLabel": "Content ID",
+    "targetIdPlaceholder": "e.g. 12345",
+    "targetHint": "The article ID is the trailing number in the article page URL. For a source, give the source ID.",
+    "emailLabel": "Your email",
+    "roleLabel": "You are reporting as",
+    "roles": {
+      "publisher": "Publisher",
+      "author": "Author",
+      "third_party": "Third party",
+      "anonymous": "Anonymous"
+    },
+    "reasonLabel": "Reason",
+    "reasonPlaceholder": "Describe why the content should be removed (min. 10 characters).",
+    "reasonHint": "Be specific: legal basis, rights infringed, references.",
+    "submit": "Submit notice",
+    "sentTitle": "Notice submitted",
+    "sentWithId": "We received your request (ref. #{id}). We'll review it as soon as possible.",
+    "sentDescription": "We received your request. We'll review it as soon as possible.",
+    "backHome": "Back to home",
+    "errors": {
+      "rateLimit": "Too many requests. Try again in a few minutes.",
+      "targetNotFound": "Content not found. Check the ID and try again.",
+      "submitFailed": "Submission failed. Check the details and try again.",
+      "network": "Network error. Check your connection and try again."
+    }
   },
   "Admin": {
     "section": "Admin",
