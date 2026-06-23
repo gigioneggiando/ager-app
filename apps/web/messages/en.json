@@ -92,7 +92,12 @@
   "Admin": {
     "section": "Admin",
     "nav": {
-      "takedown": "Takedown requests"
+      "takedown": "Takedown requests",
+      "sources": "Sources"
+    },
+    "common": {
+      "yes": "Yes",
+      "no": "No"
     },
     "takedown": {
       "title": "Takedown requests",
@@ -136,6 +141,92 @@
       "apply": "Apply",
       "resolved": "Request resolved: {action}",
       "resolveError": "Save failed. Please try again."
+    },
+    "sources": {
+      "title": "Sources",
+      "subtitle": "Manage sources: licensing, negotiation, ToS, and enablement.",
+      "create": "New source",
+      "filterLabel": "Filter",
+      "filters": {
+        "all": "All",
+        "expiring": "Expiring",
+        "tdmOptout": "TDM opt-out",
+        "negotiating": "In negotiation"
+      },
+      "licensingLabel": "Licensing",
+      "licensing": {
+        "all": "All licensing",
+        "licensed_direct": "Licensed (direct)",
+        "licensed_via_agency": "Licensed (via agency)",
+        "rss_permissive": "RSS permissive",
+        "rss_silent": "RSS unstated",
+        "rss_restrictive": "RSS restrictive",
+        "no_agreement_linking_only": "No agreement (linking only)",
+        "opted_out": "Opted out"
+      },
+      "negotiationLabel": "Negotiation",
+      "negotiation": {
+        "none": "None",
+        "initiated": "Initiated",
+        "in_progress": "In progress",
+        "agreed": "Agreed",
+        "declined": "Declined"
+      },
+      "types": {
+        "RSS": "RSS",
+        "MANUAL": "Manual",
+        "API": "API",
+        "AGENCY": "Agency"
+      },
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "tdmOptout": "TDM opt-out",
+      "expiresOn": "Expires {date}",
+      "loadError": "Couldn't load the sources.",
+      "emptyTitle": "No sources",
+      "emptyDescription": "No sources for this filter.",
+      "createTitle": "New source",
+      "createHint": "For RSS sources, validate the feed before creating.",
+      "created": "Source \"{name}\" created",
+      "typeLabel": "Type",
+      "nameLabel": "Name",
+      "urlLabel": "URL",
+      "rssLabel": "RSS feed",
+      "probe": "Validate feed",
+      "probeValid": "Valid feed (root: {root}).",
+      "probeInvalid": "Invalid feed: {reason}.",
+      "probeHint": "Validate the RSS feed before creating the source.",
+      "countryLabel": "Country",
+      "langLabel": "Language",
+      "countryLang": "Country / language",
+      "cancel": "Cancel",
+      "errors": {
+        "duplicateUrl": "A source with this URL already exists.",
+        "invalidUrl": "Invalid URL.",
+        "createFailed": "Creation failed. Please try again."
+      },
+      "backToList": "All sources",
+      "enable": "Enable",
+      "disable": "Disable",
+      "enabledToast": "Source enabled.",
+      "disabledToast": "Source disabled.",
+      "details": "Details",
+      "governance": "Governance",
+      "licenseExpires": "License expiry",
+      "contactEmail": "Contact email",
+      "notesLabel": "Notes",
+      "imageHotlink": "Allow image hotlinking",
+      "save": "Save",
+      "saved": "Changes saved.",
+      "saveError": "Save failed. Please try again.",
+      "tos": "ToS monitoring",
+      "tosUrl": "ToS URL",
+      "tosChecked": "Last checked",
+      "tosHash": "ToS hash",
+      "refreshTos": "Refresh ToS",
+      "tosChanged": "The ToS changed since the last check.",
+      "tosUnchanged": "No ToS changes.",
+      "tosError": "Refresh failed."
     }
   },
   "Actions": {

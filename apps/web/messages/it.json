@@ -92,7 +92,12 @@
   "Admin": {
     "section": "Amministrazione",
     "nav": {
-      "takedown": "Richieste di rimozione"
+      "takedown": "Richieste di rimozione",
+      "sources": "Fonti"
+    },
+    "common": {
+      "yes": "Sì",
+      "no": "No"
     },
     "takedown": {
       "title": "Richieste di rimozione",
@@ -136,6 +141,92 @@
       "apply": "Applica",
       "resolved": "Richiesta risolta: {action}",
       "resolveError": "Salvataggio non riuscito. Riprova."
+    },
+    "sources": {
+      "title": "Fonti",
+      "subtitle": "Gestisci le fonti: licenze, negoziazione, ToS e abilitazione.",
+      "create": "Crea fonte",
+      "filterLabel": "Filtro",
+      "filters": {
+        "all": "Tutte",
+        "expiring": "In scadenza",
+        "tdmOptout": "TDM opt-out",
+        "negotiating": "In negoziazione"
+      },
+      "licensingLabel": "Licenza",
+      "licensing": {
+        "all": "Tutte le licenze",
+        "licensed_direct": "Licenza diretta",
+        "licensed_via_agency": "Licenza via agenzia",
+        "rss_permissive": "RSS permissivo",
+        "rss_silent": "RSS non dichiarato",
+        "rss_restrictive": "RSS restrittivo",
+        "no_agreement_linking_only": "Nessun accordo (solo link)",
+        "opted_out": "Opt-out"
+      },
+      "negotiationLabel": "Negoziazione",
+      "negotiation": {
+        "none": "Nessuna",
+        "initiated": "Avviata",
+        "in_progress": "In corso",
+        "agreed": "Conclusa",
+        "declined": "Rifiutata"
+      },
+      "types": {
+        "RSS": "RSS",
+        "MANUAL": "Manuale",
+        "API": "API",
+        "AGENCY": "Agenzia"
+      },
+      "enabled": "Attiva",
+      "disabled": "Disattivata",
+      "tdmOptout": "TDM opt-out",
+      "expiresOn": "Scade il {date}",
+      "loadError": "Impossibile caricare le fonti.",
+      "emptyTitle": "Nessuna fonte",
+      "emptyDescription": "Nessuna fonte per questo filtro.",
+      "createTitle": "Nuova fonte",
+      "createHint": "Per le fonti RSS, verifica il feed prima di creare.",
+      "created": "Fonte \"{name}\" creata",
+      "typeLabel": "Tipo",
+      "nameLabel": "Nome",
+      "urlLabel": "URL",
+      "rssLabel": "Feed RSS",
+      "probe": "Verifica feed",
+      "probeValid": "Feed valido (root: {root}).",
+      "probeInvalid": "Feed non valido: {reason}.",
+      "probeHint": "Verifica il feed RSS prima di creare la fonte.",
+      "countryLabel": "Paese",
+      "langLabel": "Lingua",
+      "countryLang": "Paese / lingua",
+      "cancel": "Annulla",
+      "errors": {
+        "duplicateUrl": "Esiste già una fonte con questo URL.",
+        "invalidUrl": "URL non valido.",
+        "createFailed": "Creazione non riuscita. Riprova."
+      },
+      "backToList": "Tutte le fonti",
+      "enable": "Abilita",
+      "disable": "Disabilita",
+      "enabledToast": "Fonte abilitata.",
+      "disabledToast": "Fonte disabilitata.",
+      "details": "Dettagli",
+      "governance": "Governance",
+      "licenseExpires": "Scadenza licenza",
+      "contactEmail": "Email di contatto",
+      "notesLabel": "Note",
+      "imageHotlink": "Consenti hotlinking delle immagini",
+      "save": "Salva",
+      "saved": "Modifiche salvate.",
+      "saveError": "Salvataggio non riuscito. Riprova.",
+      "tos": "Monitoraggio ToS",
+      "tosUrl": "URL dei ToS",
+      "tosChecked": "Ultimo controllo",
+      "tosHash": "Hash ToS",
+      "refreshTos": "Aggiorna ToS",
+      "tosChanged": "I ToS sono cambiati dall'ultimo controllo.",
+      "tosUnchanged": "Nessuna modifica ai ToS.",
+      "tosError": "Aggiornamento non riuscito."
     }
   },
   "Actions": {
