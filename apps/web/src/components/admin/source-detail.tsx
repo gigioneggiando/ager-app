@@ -16,6 +16,7 @@ import {
   useSourceDetail,
   useUpdateSource,
 } from "@/features/admin/use-sources";
+import { usePullSource } from "@/features/admin/use-source-ingest";
 import { useToast } from "@/components/ui/toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +32,15 @@ export function SourceDetail({ id }: { id: number }) {
   const enable = useEnableSource(id);
   const disable = useDisableSource(id);
   const refreshTos = useRefreshTos(id);
+  const pull = usePullSource(id);
+
+  function forceIngest() {
+    if (!window.confirm(t("sources.confirmPull"))) return;
+    pull.mutate(undefined, {
+      onSuccess: () => toast.show({ message: t("sources.pullQueued") }),
+      onError: () => toast.show({ message: t("sources.pullError") }),
+    });
+  }
 
   if (isPending) {
     return (
@@ -63,22 +73,37 @@ export function SourceDetail({ id }: { id: number }) {
             {data.enabled ? t("sources.enabled") : t("sources.disabled")}
           </Badge>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={enable.isPending || disable.isPending}
-          onClick={() =>
-            data.enabled
-              ? disable.mutate(undefined, {
-                  onSuccess: () => toast.show({ message: t("sources.disabledToast") }),
-                })
-              : enable.mutate(undefined, {
-                  onSuccess: () => toast.show({ message: t("sources.enabledToast") }),
-                })
-          }
-        >
-          {data.enabled ? t("sources.disable") : t("sources.enable")}
-        </Button>
+        <div className="flex shrink-0 items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={pull.isPending}
+            onClick={forceIngest}
+          >
+            {pull.isPending ? (
+              <Loader2 className="animate-spin" aria-hidden="true" />
+            ) : (
+              <RefreshCw aria-hidden="true" />
+            )}
+            {t("sources.pull")}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={enable.isPending || disable.isPending}
+            onClick={() =>
+              data.enabled
+                ? disable.mutate(undefined, {
+                    onSuccess: () => toast.show({ message: t("sources.disabledToast") }),
+                  })
+                : enable.mutate(undefined, {
+                    onSuccess: () => toast.show({ message: t("sources.enabledToast") }),
+                  })
+            }
+          >
+            {data.enabled ? t("sources.disable") : t("sources.enable")}
+          </Button>
+        </div>
       </div>
 
       {/* Read-only attributes */}

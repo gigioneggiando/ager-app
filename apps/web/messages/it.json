@@ -8,16 +8,17 @@
     "styleguide": "Styleguide",
     "soon": "presto",
     "openMenu": "Apri il menu",
-    "closeMenu": "Chiudi il menu"
+    "closeMenu": "Chiudi il menu",
+    "explore": "Esplora"
   },
   "Footer": {
     "mission": "Riportiamo la qualità al centro dell'informazione: fonti visibili, contesto dichiarato, rispetto del tuo tempo e della tua intelligenza.",
     "nav": "Navigazione del footer",
     "styleguide": "Styleguide",
     "sourcesSoon": "Fonti (presto)",
-    "aboutSoon": "Chi siamo (presto)",
     "rights": "Tutti i diritti riservati.",
-    "claim": "Riduce il rumore, aumenta la comprensione."
+    "claim": "Riduce il rumore, aumenta la comprensione.",
+    "about": "Chi siamo"
   },
   "Login": {
     "title": "Accedi",
@@ -288,7 +289,14 @@
       "refreshTos": "Aggiorna ToS",
       "tosChanged": "I ToS sono cambiati dall'ultimo controllo.",
       "tosUnchanged": "Nessuna modifica ai ToS.",
-      "tosError": "Aggiornamento non riuscito."
+      "tosError": "Aggiornamento non riuscito.",
+      "pull": "Forza ingestion",
+      "pullAll": "Forza tutte",
+      "confirmPull": "Avviare subito un'ingestion manuale di questa fonte?",
+      "confirmPullAll": "Avviare subito un'ingestion manuale di tutte le fonti attive?",
+      "pullQueued": "Ingestion della fonte avviata.",
+      "pullAllQueued": "Ingestion di tutte le fonti avviata.",
+      "pullError": "Impossibile avviare l'ingestion. Riprova."
     }
   },
   "Actions": {
@@ -355,7 +363,9 @@
     "notePlaceholder": "Perché lo salvi?",
     "savedTo": "Salvato in \"{name}\"",
     "cancel": "Annulla",
-    "save": "Salva"
+    "save": "Salva",
+    "share": "Condividi",
+    "shareCopied": "Link pubblico copiato negli appunti."
   },
   "Stats": {
     "title": "Statistiche di lettura",
@@ -606,5 +616,41 @@
     "feed": {
       "note": "Il componente riutilizzabile del feed: solo titolo, anteprima, fonte, immagine e argomenti. Link-first — nessun corpo dell'articolo. La terza card mostra il segnaposto immagine. Dati di esempio."
     }
+  },
+  "Explore": {
+    "title": "Esplora per argomento",
+    "subtitle": "Scegli un tema e sfoglia gli articoli più rilevanti, con le fonti sempre in chiaro.",
+    "loadError": "Impossibile caricare gli argomenti.",
+    "pickTitle": "Scegli un argomento",
+    "pickDescription": "Tocca un tag qui sopra per vedere gli articoli collegati.",
+    "emptyTitle": "Nessun articolo",
+    "emptyDescription": "Non ci sono ancora articoli per «{tag}».",
+    "resultsFor": "{count, plural, =0 {Nessun articolo} one {# articolo} other {# articoli}} per «{tag}»",
+    "pagination": "Paginazione risultati",
+    "previous": "Precedente",
+    "next": "Successivo",
+    "pageOf": "Pagina {page} di {total}"
+  },
+  "PublicList": {
+    "metaTitle": "Lista di lettura pubblica",
+    "metaDescription": "Una raccolta di articoli condivisa su Ager.",
+    "publicList": "Lista pubblica",
+    "notFoundTitle": "Lista non trovata",
+    "notFoundDescription": "Questa lista non esiste o non è più pubblica.",
+    "emptyTitle": "Lista vuota",
+    "emptyDescription": "Questa lista non contiene ancora articoli.",
+    "readingTime": "{minutes} min di lettura",
+    "loadMore": "Carica altri"
+  },
+  "About": {
+    "title": "Chi siamo",
+    "intro": "Ager riporta la qualità al centro dell'informazione: fonti visibili, contesto dichiarato, rispetto del tuo tempo e della tua intelligenza.",
+    "missionTitle": "Missione",
+    "missionBody": "Vogliamo ridurre il rumore e aumentare la comprensione. Selezioniamo e organizziamo le notizie per darti il quadro, non solo il titolo: ogni articolo arriva con la sua fonte in chiaro e il contesto necessario per valutarlo.",
+    "visionTitle": "Visione",
+    "visionBody": "Immaginiamo un'informazione in cui la fiducia non si dà per scontata ma si dimostra. Niente trucchi per trattenerti, niente notifiche progettate per creare dipendenza: solo strumenti che ti aiutano a capire il mondo e poi a tornare alla tua vita.",
+    "methodTitle": "Metodo",
+    "methodBody": "Aggreghiamo fonti verificate, ne dichiariamo licenze e provenienza, e mostriamo sempre il percorso che porta all'editore originale. Il punteggio di rilevanza è trasparente e gli argomenti sono navigabili: sei tu a decidere cosa approfondire.",
+    "closing": "Ager è un progetto editoriale indipendente. Se vuoi proporci una fonte o segnalarci un problema, scrivici."
   }
 }

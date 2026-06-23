@@ -30,7 +30,12 @@ export function Footer() {
               {t("styleguide")}
             </Link>
             <span className="text-muted-foreground/70">{t("sourcesSoon")}</span>
-            <span className="text-muted-foreground/70">{t("aboutSoon")}</span>
+            <Link
+              href="/chi-siamo"
+              className="text-foreground/80 transition-colors hover:text-link"
+            >
+              {t("about")}
+            </Link>
           </nav>
         </div>
 

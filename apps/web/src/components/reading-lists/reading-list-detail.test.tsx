@@ -79,6 +79,54 @@ afterEach(() => {
 });
 
 describe("ReadingListDetail", () => {
+  it("shows a Condividi button on a public list and copies the public URL", async () => {
+    const user = userEvent.setup();
+    const writeText = vi.fn(() => Promise.resolve());
+    Object.defineProperty(navigator, "clipboard", {
+      value: { writeText },
+      configurable: true,
+    });
+
+    global.fetch = vi.fn(async (input: string | URL | Request) => {
+      const url = String(input);
+      if (url.endsWith("/api/me/reading-lists")) {
+        return json({
+          items: [
+            {
+              id: 3,
+              name: "Pubblica",
+              isDefault: false,
+              visibility: 2,
+              ownerUserId: "user-7",
+              slug: "la-mia-lista",
+              createdAt: "2026-01-01T10:00:00Z",
+            },
+          ],
+          nextCursor: null,
+        });
+      }
+      return json({ items: [], nextCursor: null });
+    }) as unknown as typeof fetch;
+
+    renderWithProviders(<ReadingListDetail listId={3} />);
+
+    const shareButton = await screen.findByRole("button", { name: /Condividi/i });
+    await user.click(shareButton);
+
+    expect(writeText).toHaveBeenCalledTimes(1);
+    expect(writeText).toHaveBeenCalledWith(
+      expect.stringContaining("/l/user-7/la-mia-lista"),
+    );
+  });
+
+  it("does not show a Condividi button on a private list", async () => {
+    renderWithProviders(<ReadingListDetail listId={3} />);
+    await screen.findByText("Articolo Uno");
+    expect(
+      screen.queryByRole("button", { name: /Condividi/i }),
+    ).not.toBeInTheDocument();
+  });
+
   it("renders the item with its note and removes it optimistically", async () => {
     const user = userEvent.setup();
     renderWithProviders(<ReadingListDetail listId={3} />);
