@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 const ITEMS = [
   { key: "takedown", href: "/admin/takedown" },
   { key: "sources", href: "/admin/sources" },
+  { key: "ingestion", href: "/admin/ingestion-log" },
 ] as const;
 
 /** Admin section header + nav. Rendered inside the role-gated admin layout. */
