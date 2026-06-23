@@ -87,7 +87,69 @@
     "stats": "Statistiche di lettura",
     "statsHint": "La varietà delle tue letture",
     "admin": "Amministrazione",
-    "adminHint": "Strumenti per amministratori"
+    "adminHint": "Strumenti per amministratori",
+    "language": "Lingua",
+    "languages": {
+      "it": "Italiano",
+      "en": "English"
+    },
+    "avatarUrl": "URL avatar",
+    "timezone": "Fuso orario",
+    "saveProfile": "Salva profilo",
+    "profileSaved": "Profilo aggiornato.",
+    "dataTitle": "I tuoi dati",
+    "dataDescription": "Scarica una copia dei tuoi dati personali (GDPR art. 15) in formato JSON.",
+    "exportData": "Esporta i miei dati",
+    "exportLimit": "Disponibile una volta ogni 24 ore.",
+    "dangerZone": "Zona pericolosa",
+    "deleteDescription": "Elimina il tuo account. L'eliminazione è reversibile entro 30 giorni, poi è definitiva.",
+    "deleteAccount": "Elimina account",
+    "deleteConfirmTitle": "Eliminare l'account?",
+    "deleteConfirmBody": "Il tuo account verrà disattivato e le sessioni revocate. Hai 30 giorni per ripristinarlo prima dell'eliminazione definitiva.",
+    "deleteConfirm": "Sì, elimina",
+    "cancel": "Annulla",
+    "errors": {
+      "usernameTaken": "Questo nome utente è già in uso.",
+      "usernameTooLong": "Il nome utente è troppo lungo (max 30 caratteri).",
+      "saveFailed": "Salvataggio non riuscito. Riprova.",
+      "exportRateLimited": "Hai già richiesto un'esportazione nelle ultime 24 ore. Riprova più tardi.",
+      "exportFailed": "Esportazione non riuscita. Riprova.",
+      "deleteFailed": "Eliminazione non riuscita. Riprova."
+    }
+  },
+  "Takedown": {
+    "title": "Richiesta di rimozione",
+    "subtitle": "Segnala un contenuto ai sensi del DSA (art. 16). La richiesta viene registrata e valutata dal nostro team.",
+    "targetLabel": "Contenuto da segnalare",
+    "targetType": {
+      "article": "Articolo",
+      "source": "Fonte"
+    },
+    "targetIdLabel": "ID del contenuto",
+    "targetIdPlaceholder": "Es. 12345",
+    "targetHint": "L'ID dell'articolo è nell'URL della pagina in fondo all'URL dell'articolo. Per una fonte, usa l'ID della fonte.",
+    "emailLabel": "La tua email",
+    "roleLabel": "In quale veste segnali",
+    "roles": {
+      "publisher": "Editore",
+      "author": "Autore",
+      "third_party": "Terza parte",
+      "anonymous": "Anonimo"
+    },
+    "reasonLabel": "Motivazione",
+    "reasonPlaceholder": "Descrivi perché il contenuto dovrebbe essere rimosso (min. 10 caratteri).",
+    "reasonHint": "Sii specifico: base giuridica, diritti violati, riferimenti.",
+    "submit": "Invia la segnalazione",
+    "sentTitle": "Segnalazione inviata",
+    "sentWithId": "Abbiamo ricevuto la tua richiesta (rif. #{id}). La valuteremo al più presto.",
+    "sentDescription": "Abbiamo ricevuto la tua richiesta. La valuteremo al più presto.",
+    "backHome": "Torna alla home",
+    "errors": {
+      "rateLimit": "Troppe richieste. Riprova tra qualche minuto.",
+      "targetNotFound": "Contenuto non trovato. Controlla l'ID e riprova.",
+      "submitFailed": "Invio non riuscito. Controlla i dati e riprova.",
+      "network": "Errore di rete. Controlla la connessione e riprova."
+    }
   },
   "Admin": {
     "section": "Amministrazione",
