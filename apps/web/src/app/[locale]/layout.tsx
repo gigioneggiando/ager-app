@@ -6,6 +6,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 
 import { routing } from "@/i18n/routing";
+import { siteUrl } from "@/lib/site";
 import { getSession } from "@/lib/server/session";
 import { Providers } from "@/app/providers";
 import { AuthProvider } from "@/components/auth/auth-provider";
@@ -29,12 +30,6 @@ const merriweather = Merriweather({
   weight: ["300", "400", "700", "900"],
   display: "swap",
 });
-
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000");
 
 const siteDescription =
   "Ager — riduce il rumore, aumenta la comprensione. Notizie civiche italiane, prima il link.";
