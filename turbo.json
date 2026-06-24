@@ -2,7 +2,11 @@
   "$schema": "https://turborepo.com/schema.json",
   "ui": "stream",
   "globalEnv": ["NODE_ENV"],
-  "globalPassThroughEnv": ["NEXT_PUBLIC_API_BASE_URL"],
+  "globalPassThroughEnv": [
+    "NEXT_PUBLIC_API_BASE_URL",
+    "NEXT_PUBLIC_APP_URL",
+    "NEXT_PUBLIC_SITE_URL"
+  ],
   "tasks": {
     "gen:api": {
       "inputs": ["openapi/swagger.json"],

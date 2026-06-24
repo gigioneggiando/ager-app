@@ -1,0 +1,73 @@
+{
+  "Meta": {
+    "title": "Ager — riduce il rumore, aumenta la comprensione",
+    "description": "Ager riporta la qualità al centro dell'informazione: notizie civiche italiane, prima il link, con le fonti sempre visibili e il perché di ogni scelta."
+  },
+  "Header": {
+    "nav": "Navigazione",
+    "values": "Valori",
+    "how": "Come funziona",
+    "openApp": "Apri Ager",
+    "language": "Lingua"
+  },
+  "Hero": {
+    "eyebrow": "Informazione civica, prima il link",
+    "title": "Riportare la qualità al centro dell'informazione",
+    "claim": "Riduce il rumore, aumenta la comprensione.",
+    "body": "Ager seleziona notizie civiche italiane e ti porta alla fonte originale. Niente clickbait, niente loop infiniti: solo ciò che aiuta davvero a capire.",
+    "ctaPrimary": "Apri Ager",
+    "ctaSecondary": "Come funziona",
+    "panel": "Capire prima di reagire."
+  },
+  "Values": {
+    "title": "I nostri valori",
+    "subtitle": "Un metodo, non un algoritmo che insegue la tua attenzione.",
+    "transparency": {
+      "title": "Trasparenza",
+      "body": "Mostriamo perché vedi una notizia: criteri, punteggio e fonti restano sempre verificabili."
+    },
+    "authority": {
+      "title": "Autorevolezza",
+      "body": "Diamo rilievo a fonti riconosciute e segnaliamo contesto e affidabilità di ciò che leggi."
+    },
+    "clarity": {
+      "title": "Chiarezza",
+      "body": "Sintesi, contesto e approfondimento restano distinti: prima capisci, poi scegli quanto andare a fondo."
+    },
+    "curiosity": {
+      "title": "Curiosità",
+      "body": "Allarghiamo lo sguardo oltre la tua bolla, senza forzature: la scelta resta tua."
+    }
+  },
+  "How": {
+    "title": "Come funziona",
+    "subtitle": "Tre principi, applicati a ogni notizia.",
+    "linkFirst": {
+      "title": "Prima il link",
+      "body": "Non riscriviamo gli articoli: ti portiamo all'editore originale. Il merito resta a chi fa informazione."
+    },
+    "sources": {
+      "title": "Fonti visibili",
+      "body": "Ogni notizia mostra la sua fonte e il suo contesto. Niente contenuti anonimi o non verificabili."
+    },
+    "whyShown": {
+      "title": "«Perché lo vedo»",
+      "body": "Per ogni notizia puoi vedere i criteri che l'hanno selezionata. Nessuna scatola nera."
+    }
+  },
+  "Cta": {
+    "title": "Inizia a leggere meglio",
+    "body": "Apri Ager e prova un'informazione più chiara, trasparente e rispettosa del tuo tempo.",
+    "button": "Apri Ager"
+  },
+  "Footer": {
+    "mission": "Riportare la qualità al centro dell'informazione.",
+    "nav": "Collegamenti",
+    "about": "Chi siamo",
+    "dsaContact": "Contatto DSA",
+    "botPolicy": "AgerBot",
+    "openApp": "Apri Ager",
+    "rights": "Tutti i diritti riservati.",
+    "claim": "Riduce il rumore, aumenta la comprensione."
+  }
+}
