@@ -7,6 +7,7 @@ import {
   BarChart3,
   Bookmark,
   ChevronRight,
+  EyeOff,
   LogOut,
   ShieldAlert,
   Sparkles,
@@ -101,6 +102,25 @@ export function AccountView() {
               <span className="font-medium">{t("readingLists")}</span>
               <span className="text-xs text-muted-foreground">
                 {t("readingListsHint")}
+              </span>
+            </span>
+          </span>
+          <ChevronRight
+            className="size-4 text-muted-foreground"
+            aria-hidden="true"
+          />
+        </Link>
+
+        <Link
+          href="/me/muted"
+          className="flex items-center justify-between gap-3 rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <span className="flex items-center gap-3">
+            <EyeOff className="size-5 text-accent" aria-hidden="true" />
+            <span className="flex flex-col">
+              <span className="font-medium">{t("muted")}</span>
+              <span className="text-xs text-muted-foreground">
+                {t("mutedHint")}
               </span>
             </span>
           </span>

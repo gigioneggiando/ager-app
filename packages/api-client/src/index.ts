@@ -26,6 +26,9 @@ export type TakedownRequestInput = components["schemas"]["TakedownRequestInput"]
 export type Interest = components["schemas"]["InterestDto"];
 export type UserInterest = components["schemas"]["UserInterestDto"];
 export type MyInterest = components["schemas"]["MyInterestDto"];
+export type MutedInterest = components["schemas"]["MutedInterestDto"];
+export type AddMutedInterestRequest =
+  components["schemas"]["AddMutedInterestRequest"];
 export type ReadingList = components["schemas"]["ReadingListDto"];
 export type ReadingListsPage = components["schemas"]["ReadingListsPageDto"];
 export type ReadingListItemsPage = components["schemas"]["ReadingListItemsPageDto"];

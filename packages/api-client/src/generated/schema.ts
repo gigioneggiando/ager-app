@@ -1063,6 +1063,128 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/me/muted-interests": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List the topics the caller has muted ("non mi interessa questo argomento"). */
+    get: operations["GetMutedInterests"];
+    put?: never;
+    /** Mute a topic (hard exclusion from the feed). Idempotent. */
+    post: operations["AddMutedInterest"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/me/muted-interests/{interestId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** Un-mute a topic. Idempotent. */
+    delete: operations["RemoveMutedInterest"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/me/muted-sources/{sourceId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Mute a source (UserSourcePreference.IsMuted). Idempotent. */
+    post: operations["MuteSource"];
+    /** Un-mute a source. Idempotent. */
+    delete: operations["UnmuteSource"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/me/blacklisted-clusters/{clusterId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Hide a story cluster from the feed (24h-style hard exclusion). Idempotent. */
+    post: operations["BlacklistCluster"];
+    /** Un-hide a story cluster. Idempotent. */
+    delete: operations["UnblacklistCluster"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/me/suggested-interests": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Implicit-interest candidates past the notify threshold (the "vuoi allargare il feed?" nudge). */
+    get: operations["GetSuggestedInterests"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/me/suggested-interests/{interestId}/confirm": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Promote a suggested interest to an explicit interest (weight 3.0, confidence 1.0). */
+    post: operations["ConfirmSuggestedInterest"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/me/suggested-interests/{interestId}/dismiss": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Dismiss a suggested interest (records the rejection and purges its recent signals). */
+    post: operations["DismissSuggestedInterest"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/me/reading-lists": {
     parameters: {
       query?: never;
@@ -1246,6 +1368,10 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    AddMutedInterestRequest: {
+      /** Format: int32 */
+      interestId?: number;
+    };
     AddReadingListItemRequest: {
       /** Format: int32 */
       articleId?: number;
@@ -1547,6 +1673,13 @@ export interface components {
       password?: string | null;
       otpCode?: string | null;
     };
+    MutedInterestDto: {
+      /** Format: int32 */
+      interestId?: number;
+      slug?: string | null;
+      /** Format: date-time */
+      createdAt?: string;
+    };
     MyInterestDto: {
       /** Format: int32 */
       interestId?: number;
@@ -1755,6 +1888,19 @@ export interface components {
       country?: string | null;
       lang?: string | null;
       url?: string | null;
+    };
+    SuggestedInterestDto: {
+      /** Format: int32 */
+      interestId?: number;
+      slug?: string | null;
+      /** Format: int32 */
+      signalCount?: number;
+      /** Format: double */
+      cumulativeWeight?: number;
+      /** Format: date-time */
+      firstSeenAt?: string;
+      /** Format: date-time */
+      lastSeenAt?: string;
     };
     TakedownRequestAdminResponse: {
       /** Format: int64 */
@@ -3133,6 +3279,313 @@ export interface operations {
       };
       /** @description Unprocessable Content */
       422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetMutedInterests: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MutedInterestDto"][];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AddMutedInterest: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AddMutedInterestRequest"];
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  RemoveMutedInterest: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        interestId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  MuteSource: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        sourceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UnmuteSource: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        sourceId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  BlacklistCluster: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clusterId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UnblacklistCluster: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        clusterId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetSuggestedInterests: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SuggestedInterestDto"][];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ConfirmSuggestedInterest: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        interestId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  DismissSuggestedInterest: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        interestId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
         headers: {
           [name: string]: unknown;
         };

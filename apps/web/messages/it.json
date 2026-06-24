@@ -122,7 +122,9 @@
       "exportRateLimited": "Hai già richiesto un'esportazione nelle ultime 24 ore. Riprova più tardi.",
       "exportFailed": "Esportazione non riuscita. Riprova.",
       "deleteFailed": "Eliminazione non riuscita. Riprova."
-    }
+    },
+    "muted": "Argomenti nascosti",
+    "mutedHint": "Gestisci gli argomenti che non vuoi vedere"
   },
   "Takedown": {
     "title": "Richiesta di rimozione",
@@ -368,7 +370,11 @@
     "savedListName": "Salvati",
     "savedToDefault": "Salvato in Salvati",
     "hidden": "Nascosto",
-    "undo": "Annulla"
+    "undo": "Annulla",
+    "notInterested": "Non mi interessa",
+    "hideTopicHeading": "Nascondi un argomento",
+    "hideTopic": "Nascondi «{topic}»",
+    "topicHidden": "Argomento «{topic}» nascosto"
   },
   "Onboarding": {
     "title": "Scegli i tuoi interessi",
@@ -747,5 +753,16 @@
       "restoreFailed": "Impossibile ripristinare l'account. Riprova.",
       "network": "Errore di rete. Controlla la connessione e riprova."
     }
+  },
+  "Muted": {
+    "title": "Argomenti nascosti",
+    "subtitle": "Gli argomenti che hai scelto di non vedere nel feed. Puoi ripristinarli quando vuoi.",
+    "topicsHeading": "Argomenti",
+    "unmute": "Ripristina",
+    "unmuted": "«{topic}» di nuovo visibile",
+    "unmuteError": "Impossibile ripristinare l'argomento. Riprova.",
+    "loadError": "Impossibile caricare gli argomenti nascosti.",
+    "emptyTitle": "Nessun argomento nascosto",
+    "emptyDescription": "Quando nascondi un argomento dal feed con «Non mi interessa», lo trovi qui."
   }
 }
