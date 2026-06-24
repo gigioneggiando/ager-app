@@ -32,24 +32,60 @@ afterEach(() => {
 const interactions = () => calls.filter((c) => c.url.includes("/api/interactions"));
 
 describe("FeedCardActions", () => {
-  it("defers the DISCARD interaction and commits it after the undo window", async () => {
+  it("hides with no reason (plain Nascondi) and commits DISCARD after the undo window", async () => {
     renderWithProviders(
       <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
     );
 
+    // Click "Nascondi" → the optional-reason menu opens; choose "hide, no reason".
     fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
+    fireEvent.click(
+      screen.getByRole("menuitem", { name: /Nascondi senza motivo/i }),
+    );
 
     // The commit is deferred — nothing posted yet, the undo toast is showing.
     expect(interactions()).toHaveLength(0);
     expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
 
-    // Let the 3s undo window elapse: the DISCARD commits.
+    // Let the 3s undo window elapse: the DISCARD commits, with no reason.
     await act(async () => {
       await vi.advanceTimersByTimeAsync(3000);
     });
     expect(interactions()[0]?.body).toMatchObject({
       articleId: 42,
       type: "DISCARD",
+    });
+    expect(interactions()[0]?.body).not.toHaveProperty("reason");
+  });
+
+  it("forwards the chosen §11.2 reason on the deferred DISCARD", async () => {
+    renderWithProviders(
+      <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
+    // The four skippable reason chips are offered.
+    for (const chip of [
+      "Clickbait",
+      "Fonte sgradita",
+      "Non interessante",
+      "Già letto altrove",
+    ]) {
+      expect(screen.getByRole("menuitem", { name: chip })).toBeInTheDocument();
+    }
+
+    fireEvent.click(screen.getByRole("menuitem", { name: "Fonte sgradita" }));
+
+    expect(interactions()).toHaveLength(0);
+    expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+    expect(interactions()[0]?.body).toMatchObject({
+      articleId: 42,
+      type: "DISCARD",
+      reason: "unwanted_source",
     });
   });
 
@@ -59,6 +95,9 @@ describe("FeedCardActions", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
+    fireEvent.click(
+      screen.getByRole("menuitem", { name: /Nascondi senza motivo/i }),
+    );
     fireEvent.click(screen.getByRole("button", { name: /Annulla/i }));
 
     // Even after the window elapses, no interaction is posted.

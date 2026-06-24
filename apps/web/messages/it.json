@@ -378,7 +378,13 @@
     "hideSourceHeading": "Nascondi una fonte",
     "hideSource": "Nascondi «{source}»",
     "sourceHidden": "Fonte «{source}» nascosta",
-    "thisSource": "questa fonte"
+    "thisSource": "questa fonte",
+    "discardReasonHeading": "Perché lo nascondi? (facoltativo)",
+    "reasonClickbait": "Clickbait",
+    "reasonUnwantedSource": "Fonte sgradita",
+    "reasonNotInteresting": "Non interessante",
+    "reasonReadElsewhere": "Già letto altrove",
+    "discardNoReason": "Nascondi senza motivo"
   },
   "Onboarding": {
     "title": "Scegli i tuoi interessi",
