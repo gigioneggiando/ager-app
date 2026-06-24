@@ -378,7 +378,12 @@
     "hideSourceHeading": "Hide a source",
     "hideSource": "Hide “{source}”",
     "sourceHidden": "Source “{source}” hidden",
-    "thisSource": "this source"
+    "thisSource": "this source",
+    "discardReasonHeading": "Why are you hiding it? (optional)",
+    "reasonClickbait": "Clickbait",
+    "reasonUnwantedSource": "Unwanted source",
+    "reasonNotInteresting": "Not interesting",
+    "reasonReadElsewhere": "Read elsewhere"
   },
   "Onboarding": {
     "title": "Choose your interests",

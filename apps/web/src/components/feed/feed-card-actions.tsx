@@ -24,6 +24,18 @@ import { AddToListDialog } from "@/components/reading-lists/add-to-list-dialog";
 
 const UNDO_MS = 3000;
 
+/**
+ * Optional §11.2 DISCARD reasons (skippable). The `code` is the wire value sent as
+ * `reason`; the backend normalises + routes the penalty: clickbait / unwanted_source →
+ * source, read_elsewhere → cluster, not_interesting (and "no reason") → topic.
+ */
+const DISCARD_REASONS = [
+  { code: "clickbait", labelKey: "reasonClickbait" },
+  { code: "unwanted_source", labelKey: "reasonUnwantedSource" },
+  { code: "not_interesting", labelKey: "reasonNotInteresting" },
+  { code: "read_elsewhere", labelKey: "reasonReadElsewhere" },
+] as const;
+
 function ActionButton({
   onClick,
   label,
@@ -246,8 +258,10 @@ export function FeedCardActions({
     });
   }
 
-  // Hide → remove from the feed immediately; 3s deferred DISCARD; Undo restores the snapshot.
-  // The feed cache is keyed by mode (["feed", mode]); match every feed query by prefix.
+  // Hide → ONE TAP: remove from the feed immediately; 3s deferred DISCARD; Undo restores the
+  // snapshot. The undo toast carries OPTIONAL §11.2 reason chips (skippable): tapping one rides
+  // its code along on the deferred DISCARD as `reason`; no tap → plain DISCARD, no reason. The
+  // feed cache is keyed by mode (["feed", mode]); match every feed query by prefix.
   function handleDiscard() {
     if (!requireAuth()) return;
     const snapshots = queryClient.getQueriesData<InfiniteData<FeedPage>>({
@@ -261,13 +275,15 @@ export function FeedCardActions({
       message: t("hidden"),
       actionLabel: t("undo"),
       durationMs: UNDO_MS,
+      chips: DISCARD_REASONS.map((r) => ({ label: t(r.labelKey), value: r.code })),
+      chipsLabel: t("discardReasonHeading"),
       onAction: () => {
         for (const [key, data] of snapshots) {
           queryClient.setQueryData(key, data);
         }
       },
-      onCommit: () => {
-        void postInteraction(articleId, "DISCARD").then(() =>
+      onCommit: (reason) => {
+        void postInteraction(articleId, "DISCARD", reason).then(() =>
           queryClient.invalidateQueries({ queryKey: ["feed"] }),
         );
       },
