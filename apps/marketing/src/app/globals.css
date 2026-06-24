@@ -1,0 +1,70 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+/* AGER brand palette (single source of truth — shared with the app, light only). */
+@import "@ager/shared/brand.css";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Functional state colors → utilities (text-link, …). */
+  --color-link: var(--link);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  /* Raw brand colors (for explicit, intentional use). */
+  --color-ager-blue: var(--ager-blue);
+  --color-editorial-white: var(--editorial-white);
+  --color-neutral-beige: var(--neutral-beige);
+  --color-ink-gray: var(--ink-gray);
+  --color-ethical-green: var(--ethical-green);
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+  --radius-image: var(--radius-image);
+  --radius-image-lg: var(--radius-image-lg); /* hero/large imagery only (80px) */
+
+  /* Fonts (next/font injects the variables in the root layout). */
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-merriweather);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  /* Headings + wordmark use the serif (Merriweather). */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-merriweather), ui-serif, Georgia, serif;
+    color: var(--primary);
+    text-wrap: balance;
+  }
+}

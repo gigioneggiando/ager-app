@@ -1,0 +1,73 @@
+{
+  "Meta": {
+    "title": "Ager — cut the noise, grow understanding",
+    "description": "Ager puts quality back at the centre of the news: Italian civic reporting, link-first, with sources always visible and the reason behind every choice."
+  },
+  "Header": {
+    "nav": "Navigation",
+    "values": "Values",
+    "how": "How it works",
+    "openApp": "Open Ager",
+    "language": "Language"
+  },
+  "Hero": {
+    "eyebrow": "Civic news, link-first",
+    "title": "Putting quality back at the centre of the news",
+    "claim": "Cut the noise, grow understanding.",
+    "body": "Ager curates Italian civic news and takes you to the original source. No clickbait, no endless loops: only what genuinely helps you understand.",
+    "ctaPrimary": "Open Ager",
+    "ctaSecondary": "How it works",
+    "panel": "Understand before you react."
+  },
+  "Values": {
+    "title": "Our values",
+    "subtitle": "A method — not an algorithm chasing your attention.",
+    "transparency": {
+      "title": "Transparency",
+      "body": "We show why you see a story: criteria, score and sources stay verifiable at all times."
+    },
+    "authority": {
+      "title": "Authority",
+      "body": "We give weight to recognised sources and flag the context and reliability of what you read."
+    },
+    "clarity": {
+      "title": "Clarity",
+      "body": "Summary, context and depth stay distinct: understand first, then choose how far to go."
+    },
+    "curiosity": {
+      "title": "Curiosity",
+      "body": "We widen your view beyond your bubble, never forcing it: the choice stays yours."
+    }
+  },
+  "How": {
+    "title": "How it works",
+    "subtitle": "Three principles, applied to every story.",
+    "linkFirst": {
+      "title": "Link-first",
+      "body": "We never rewrite articles: we send you to the original publisher. Credit stays with those who do the reporting."
+    },
+    "sources": {
+      "title": "Visible sources",
+      "body": "Every story shows its source and its context. No anonymous or unverifiable content."
+    },
+    "whyShown": {
+      "title": "“Why am I seeing this”",
+      "body": "For every story you can see the criteria that selected it. No black box."
+    }
+  },
+  "Cta": {
+    "title": "Start reading better",
+    "body": "Open Ager and try news that's clearer, more transparent and respectful of your time.",
+    "button": "Open Ager"
+  },
+  "Footer": {
+    "mission": "Putting quality back at the centre of the news.",
+    "nav": "Links",
+    "about": "About us",
+    "dsaContact": "DSA contact",
+    "botPolicy": "AgerBot",
+    "openApp": "Open Ager",
+    "rights": "All rights reserved.",
+    "claim": "Cut the noise, grow understanding."
+  }
+}
