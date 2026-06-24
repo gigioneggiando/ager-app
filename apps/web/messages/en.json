@@ -383,8 +383,7 @@
     "reasonClickbait": "Clickbait",
     "reasonUnwantedSource": "Unwanted source",
     "reasonNotInteresting": "Not interesting",
-    "reasonReadElsewhere": "Read elsewhere",
-    "discardNoReason": "Hide without a reason"
+    "reasonReadElsewhere": "Read elsewhere"
   },
   "Onboarding": {
     "title": "Choose your interests",

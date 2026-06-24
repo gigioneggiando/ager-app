@@ -66,90 +66,6 @@ function ActionButton({
   );
 }
 
-/**
- * The "Nascondi" (DISCARD) control with an OPTIONAL reason prompt (§11.2). Clicking it opens
- * a small menu of skippable reason chips plus a plain "hide, no reason" item; choosing any of
- * them calls `onDiscard(reason?)`. Mirrors the topic-mute menu's outside-click / Escape close.
- */
-function DiscardReasonMenu({
-  onDiscard,
-}: {
-  onDiscard: (reason?: string) => void;
-}) {
-  const t = useTranslations("Actions");
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    function onPointer(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
-    }
-    document.addEventListener("mousedown", onPointer);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onPointer);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
-
-  function choose(reason?: string) {
-    setOpen(false);
-    onDiscard(reason);
-  }
-
-  return (
-    <div className="relative" ref={ref}>
-      <ActionButton
-        onClick={() => setOpen((v) => !v)}
-        label={t("discard")}
-        aria-haspopup="menu"
-        aria-expanded={open}
-      >
-        <EyeOff className="size-4" aria-hidden="true" />
-      </ActionButton>
-      {open ? (
-        <div
-          role="menu"
-          aria-label={t("discardReasonHeading")}
-          className="absolute right-0 z-20 mt-1 min-w-60 overflow-hidden rounded-md border border-border bg-card py-1 shadow-md"
-        >
-          <p className="px-3 py-1.5 text-xs font-medium text-muted-foreground">
-            {t("discardReasonHeading")}
-          </p>
-          <div className="flex flex-wrap gap-1.5 px-3 pb-2 pt-1">
-            {DISCARD_REASONS.map((r) => (
-              <button
-                key={r.code}
-                type="button"
-                role="menuitem"
-                onClick={() => choose(r.code)}
-                className="rounded-full border border-border bg-secondary px-2.5 py-1 text-xs font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {t(r.labelKey)}
-              </button>
-            ))}
-          </div>
-          <div className="border-t border-border">
-            <button
-              type="button"
-              role="menuitem"
-              onClick={() => choose(undefined)}
-              className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-secondary focus-visible:bg-secondary focus-visible:outline-none"
-            >
-              <EyeOff className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
-              {t("discardNoReason")}
-            </button>
-          </div>
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
 function removeFromFeed(
   data: InfiniteData<FeedPage> | undefined,
   articleId: number,
@@ -342,11 +258,11 @@ export function FeedCardActions({
     });
   }
 
-  // Hide → remove from the feed immediately; 3s deferred DISCARD; Undo restores the snapshot.
-  // An OPTIONAL §11.2 reason (skippable) rides along on the deferred DISCARD; the backend
-  // routes the penalty (source/cluster/topic). The feed cache is keyed by mode (["feed",
-  // mode]); match every feed query by prefix.
-  function handleDiscard(reason?: string) {
+  // Hide → ONE TAP: remove from the feed immediately; 3s deferred DISCARD; Undo restores the
+  // snapshot. The undo toast carries OPTIONAL §11.2 reason chips (skippable): tapping one rides
+  // its code along on the deferred DISCARD as `reason`; no tap → plain DISCARD, no reason. The
+  // feed cache is keyed by mode (["feed", mode]); match every feed query by prefix.
+  function handleDiscard() {
     if (!requireAuth()) return;
     const snapshots = queryClient.getQueriesData<InfiniteData<FeedPage>>({
       queryKey: ["feed"],
@@ -359,12 +275,14 @@ export function FeedCardActions({
       message: t("hidden"),
       actionLabel: t("undo"),
       durationMs: UNDO_MS,
+      chips: DISCARD_REASONS.map((r) => ({ label: t(r.labelKey), value: r.code })),
+      chipsLabel: t("discardReasonHeading"),
       onAction: () => {
         for (const [key, data] of snapshots) {
           queryClient.setQueryData(key, data);
         }
       },
-      onCommit: () => {
+      onCommit: (reason) => {
         void postInteraction(articleId, "DISCARD", reason).then(() =>
           queryClient.invalidateQueries({ queryKey: ["feed"] }),
         );
@@ -417,7 +335,9 @@ export function FeedCardActions({
           <ChevronDown className="size-3.5" aria-hidden="true" />
         </button>
       </div>
-      <DiscardReasonMenu onDiscard={handleDiscard} />
+      <ActionButton onClick={handleDiscard} label={t("discard")}>
+        <EyeOff className="size-4" aria-hidden="true" />
+      </ActionButton>
 
       {/* "Non mi interessa" → hide the article's topics and/or its source feed-wide. Shown when
           at least one topic resolves to a mutable interest OR the article has a source id.

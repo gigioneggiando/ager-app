@@ -32,18 +32,13 @@ afterEach(() => {
 const interactions = () => calls.filter((c) => c.url.includes("/api/interactions"));
 
 describe("FeedCardActions", () => {
-  it("hides with no reason (plain Nascondi) and commits DISCARD after the undo window", async () => {
+  it("hides in one tap and commits DISCARD with no reason after the undo window", async () => {
     renderWithProviders(
       <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
     );
 
-    // Click "Nascondi" → the optional-reason menu opens; choose "hide, no reason".
+    // ONE TAP hides immediately; nothing posted yet, the undo toast is showing.
     fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
-    fireEvent.click(
-      screen.getByRole("menuitem", { name: /Nascondi senza motivo/i }),
-    );
-
-    // The commit is deferred — nothing posted yet, the undo toast is showing.
     expect(interactions()).toHaveLength(0);
     expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
 
@@ -58,27 +53,27 @@ describe("FeedCardActions", () => {
     expect(interactions()[0]?.body).not.toHaveProperty("reason");
   });
 
-  it("forwards the chosen §11.2 reason on the deferred DISCARD", async () => {
+  it("attaches the §11.2 reason when a chip in the undo toast is tapped", async () => {
     renderWithProviders(
       <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
     );
 
     fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
-    // The four skippable reason chips are offered.
+
+    // The four skippable reason chips appear INSIDE the undo toast (as buttons).
     for (const chip of [
       "Clickbait",
       "Fonte sgradita",
       "Non interessante",
       "Già letto altrove",
     ]) {
-      expect(screen.getByRole("menuitem", { name: chip })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: chip })).toBeInTheDocument();
     }
 
-    fireEvent.click(screen.getByRole("menuitem", { name: "Fonte sgradita" }));
+    fireEvent.click(screen.getByRole("button", { name: "Fonte sgradita" }));
 
+    // Tapping a chip keeps the window open; the reason rides the deferred DISCARD.
     expect(interactions()).toHaveLength(0);
-    expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
-
     await act(async () => {
       await vi.advanceTimersByTimeAsync(3000);
     });
@@ -95,12 +90,27 @@ describe("FeedCardActions", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
-    fireEvent.click(
-      screen.getByRole("menuitem", { name: /Nascondi senza motivo/i }),
-    );
     fireEvent.click(screen.getByRole("button", { name: /Annulla/i }));
 
     // Even after the window elapses, no interaction is posted.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+    expect(interactions()).toHaveLength(0);
+  });
+
+  it("cancels the deferred DISCARD on Escape", async () => {
+    renderWithProviders(
+      <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
+    expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    // The toast is dismissed and nothing commits.
+    expect(screen.queryByText(/Nascosto/i)).not.toBeInTheDocument();
     await act(async () => {
       await vi.advanceTimersByTimeAsync(3000);
     });
