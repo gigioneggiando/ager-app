@@ -69,5 +69,10 @@
     "openApp": "Apri Ager",
     "rights": "Tutti i diritti riservati.",
     "claim": "Riduce il rumore, aumenta la comprensione."
+  },
+  "Error": {
+    "title": "Qualcosa è andato storto",
+    "description": "Si è verificato un errore imprevisto. Riprova tra poco.",
+    "retry": "Riprova"
   }
 }

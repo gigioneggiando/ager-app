@@ -11,10 +11,21 @@
  * is loaded), so `script-src` stays tight — we do NOT add Google to `script-src`. We do
  * allow the Google origin in `frame-src` (One Tap / provider frames), `connect-src`, and
  * `form-action` so the provider hand-off is not blocked.
+ *
+ * `sentryIngestOrigin` (when set) is added to `connect-src` only, so the browser SDK can POST
+ * error events to the Sentry/GlitchTip ingest endpoint. It is `null` when no DSN is
+ * configured, leaving the policy unchanged. No other directive is loosened.
  */
 export const GOOGLE_OAUTH_ORIGIN = "https://accounts.google.com";
 
-export function buildContentSecurityPolicy(isDev: boolean): string {
+export function buildContentSecurityPolicy(
+  isDev: boolean,
+  sentryIngestOrigin?: string | null,
+): string {
+  const connectSrc = ["'self'", GOOGLE_OAUTH_ORIGIN];
+  if (sentryIngestOrigin) connectSrc.push(sentryIngestOrigin);
+  if (isDev) connectSrc.push("ws:");
+
   return [
     "default-src 'self'",
     "base-uri 'self'",
@@ -26,7 +37,7 @@ export function buildContentSecurityPolicy(isDev: boolean): string {
     "font-src 'self' data:",
     "style-src 'self' 'unsafe-inline'",
     `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
-    `connect-src 'self' ${GOOGLE_OAUTH_ORIGIN}${isDev ? " ws:" : ""}`,
+    `connect-src ${connectSrc.join(" ")}`,
     "worker-src 'self'",
     "manifest-src 'self'",
     "media-src 'self'",

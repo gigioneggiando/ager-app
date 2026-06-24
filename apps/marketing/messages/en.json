@@ -69,5 +69,10 @@
     "openApp": "Open Ager",
     "rights": "All rights reserved.",
     "claim": "Cut the noise, grow understanding."
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again shortly.",
+    "retry": "Try again"
   }
 }

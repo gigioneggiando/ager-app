@@ -37,4 +37,25 @@ describe("buildContentSecurityPolicy", () => {
     expect(csp).not.toContain("'unsafe-eval'");
     expect(csp).not.toContain("ws:");
   });
+
+  it("leaves connect-src untouched when no Sentry ingest origin is configured", () => {
+    expect(directive(csp, "connect-src")).toBe(
+      `connect-src 'self' ${GOOGLE_OAUTH_ORIGIN}`,
+    );
+    expect(directive(buildContentSecurityPolicy(false, null), "connect-src")).toBe(
+      `connect-src 'self' ${GOOGLE_OAUTH_ORIGIN}`,
+    );
+  });
+
+  it("adds the Sentry ingest origin to connect-src (only) when configured", () => {
+    const ingest = "https://o123.ingest.example.com";
+    const withSentry = buildContentSecurityPolicy(false, ingest);
+    expect(directive(withSentry, "connect-src")).toBe(
+      `connect-src 'self' ${GOOGLE_OAUTH_ORIGIN} ${ingest}`,
+    );
+    // No other directive is loosened by the Sentry origin.
+    expect(directive(withSentry, "script-src")).toBe("script-src 'self' 'unsafe-inline'");
+    expect(directive(withSentry, "frame-ancestors")).toBe("frame-ancestors 'none'");
+    expect(directive(withSentry, "default-src")).toBe("default-src 'self'");
+  });
 });
