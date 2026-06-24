@@ -774,5 +774,19 @@
     "sourcesLoadError": "Couldn't load your hidden sources.",
     "sourcesEmptyTitle": "No hidden sources",
     "sourcesEmptyDescription": "When you hide a source from the feed with “Hide source”, it shows up here."
+  },
+  "Suggested": {
+    "title": "Want to broaden your feed?",
+    "subtitle": "Lately you seem interested in these topics. Add them to see more — your call.",
+    "listTitle": "Suggested topics",
+    "listSubtitle": "Suggestions based on what you read. Add them to your interests whenever you like.",
+    "confirm": "Add",
+    "ignore": "Dismiss",
+    "confirmAria": "Add “{topic}”",
+    "ignoreAria": "Dismiss “{topic}”",
+    "skip": "Not now",
+    "confirmed": "“{topic}” added to your interests",
+    "ignored": "“{topic}” dismissed",
+    "actionError": "Something went wrong. Try again."
   }
 }

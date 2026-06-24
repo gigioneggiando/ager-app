@@ -6,6 +6,7 @@ import { CheckCircle2 } from "lucide-react";
 
 import { useMyInterests } from "@/features/interests/use-interests";
 import { InterestPicker } from "@/components/interests/interest-picker";
+import { SuggestedInterestsList } from "@/components/interests/suggested-interests-list";
 import { Skeleton } from "@/components/ui/skeleton";
 
 /** Edit-mode for /me/interests: pre-selects the user's current interests, saves changes. */
@@ -22,6 +23,9 @@ export function InterestsEditor() {
           {t("editSubtitle")}
         </p>
       </header>
+
+      {/* Implicit-learning candidates — self-hides when there are none. */}
+      <SuggestedInterestsList />
 
       {saved ? (
         <p
