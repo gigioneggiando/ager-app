@@ -4,22 +4,19 @@ import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
 
 /**
- * The apex landing is a single page; its in-page sections (`#valori`, `#come-funziona`)
- * are the only sub-routes. Emitted for every locale (routing is `localePrefix: "always"`).
+ * The apex landing is the only page on the marketing site, emitted once per locale
+ * (routing is `localePrefix: "always"`). In-page anchors are not listed — a sitemap
+ * enumerates pages, not fragments.
  */
-const SECTIONS = ["", "#valori", "#come-funziona"];
-
 export default function sitemap(): MetadataRoute.Sitemap {
-  return routing.locales.flatMap((locale) =>
-    SECTIONS.map((hash) => ({
-      url: `${SITE_URL}/${locale}${hash}`,
-      changeFrequency: "monthly" as const,
-      priority: hash === "" ? 1 : 0.5,
-      alternates: {
-        languages: Object.fromEntries(
-          routing.locales.map((l) => [l, `${SITE_URL}/${l}${hash}`]),
-        ),
-      },
-    })),
-  );
+  return routing.locales.map((locale) => ({
+    url: `${SITE_URL}/${locale}`,
+    changeFrequency: "monthly" as const,
+    priority: 1,
+    alternates: {
+      languages: Object.fromEntries(
+        routing.locales.map((l) => [l, `${SITE_URL}/${l}`]),
+      ),
+    },
+  }));
 }

@@ -6,12 +6,12 @@ describe("marketing sitemap", () => {
   const entries = sitemap();
   const urls = entries.map((e) => e.url);
 
-  it("lists the landing and its sections for both locales", () => {
+  it("lists only the landing page per locale (no anchor fragments)", () => {
     for (const locale of ["it", "en"]) {
-      for (const suffix of ["", "#valori", "#come-funziona"]) {
-        expect(urls.some((u) => u.endsWith(`/${locale}${suffix}`))).toBe(true);
-      }
+      expect(urls.some((u) => u.endsWith(`/${locale}`))).toBe(true);
     }
+    expect(urls).toHaveLength(2);
+    expect(urls.some((u) => u.includes("#"))).toBe(false);
     expect(urls.every((u) => /^https?:\/\//.test(u))).toBe(true);
   });
 
