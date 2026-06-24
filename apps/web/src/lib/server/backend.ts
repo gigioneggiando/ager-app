@@ -8,6 +8,7 @@ import {
   setSessionCookies,
 } from "./auth-cookies";
 import { isExpiredOrExpiring } from "./jwt";
+import { captureUpstreamError } from "./observability";
 
 /**
  * SERVER-ONLY backend access. Imported by route handlers (the same-origin proxies) and
@@ -39,9 +40,21 @@ export async function backendGet<T>(
       headers: { accept: "application/json" },
       next: { revalidate: 60 },
     });
-    if (!res.ok) return { ok: false, status: res.status, data: null };
+    if (!res.ok) {
+      // 4xx (e.g. 404) is a normal upstream outcome; only report 5xx server failures.
+      if (res.status >= 500) {
+        captureUpstreamError(new Error(`Upstream ${res.status} for ${path}`), {
+          path,
+          upstreamStatus: res.status,
+          phase: "backendGet",
+        });
+      }
+      return { ok: false, status: res.status, data: null };
+    }
     return { ok: true, status: res.status, data: (await res.json()) as T };
-  } catch {
+  } catch (error) {
+    // Network/transport failure — collapsed to 502 below; capture it first.
+    captureUpstreamError(error, { path, phase: "backendGet" });
     return { ok: false, status: 502, data: null };
   }
 }
@@ -177,7 +190,23 @@ export async function authedBackendFetch(
     // be served to a logged-in user, and one user's private data could be served to another.
     // Force no-store on every authed call so the request always reaches the backend as the
     // current user. (`headers` and `cache` win over any caller-supplied init.)
-    return fetch(backendUrl(path), { ...init, cache: "no-store", headers });
+    let res: Response;
+    try {
+      res = await fetch(backendUrl(path), { ...init, cache: "no-store", headers });
+    } catch (error) {
+      // Transport failure — surfaces to the route handler; capture before rethrowing so the
+      // BFF failure is never silent. (The response contract is unchanged.)
+      captureUpstreamError(error, { path, phase: "authedBackendFetch" });
+      throw error;
+    }
+    if (res.status >= 500) {
+      captureUpstreamError(new Error(`Upstream ${res.status} for ${path}`), {
+        path,
+        upstreamStatus: res.status,
+        phase: "authedBackendFetch",
+      });
+    }
+    return res;
   };
 
   let access = await readAccessToken();

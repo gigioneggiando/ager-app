@@ -7,6 +7,9 @@ packages:
 # sharp powers next/image; esbuild/@swc back the test+build toolchain.
 allowBuilds:
   "@parcel/watcher": false
+  # Sourcemap-upload CLI for Sentry's build plugin. We init Sentry manually via
+  # instrumentation (no withSentryConfig), so the binary is never used — skip its build.
+  "@sentry/cli": false
   "@swc/core": true
   esbuild: true
   sharp: true

@@ -6,7 +6,8 @@ import * as Sentry from "@sentry/nextjs";
 /**
  * Last-resort boundary for failures in the root layout itself. It replaces the whole
  * document, so it renders its own <html>/<body> and cannot rely on the i18n provider or
- * global CSS — text is Italian (the default locale) with inline brand styling.
+ * global CSS — text is Italian (the default locale) with inline brand styling. Errors are
+ * reported to Sentry (no-op without a DSN; beforeSend scrubs PII).
  */
 export default function GlobalError({
   error,
@@ -15,7 +16,6 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  // Report to Sentry (no-op without a DSN). beforeSend scrubs any PII before transmit.
   useEffect(() => {
     Sentry.captureException(error);
   }, [error]);

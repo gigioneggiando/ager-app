@@ -2,12 +2,14 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 import { buildContentSecurityPolicy } from "./src/lib/security/csp";
+import { resolveSentryIngestOrigin } from "./src/lib/observability/sentry-shared";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const isDev = process.env.NODE_ENV !== "production";
 
-const csp = buildContentSecurityPolicy(isDev);
+// Empty unless a DSN/override is configured, so the CSP is unchanged without Sentry.
+const csp = buildContentSecurityPolicy(isDev, resolveSentryIngestOrigin());
 
 const securityHeaders = [
   { key: "Content-Security-Policy", value: csp },
