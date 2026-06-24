@@ -122,7 +122,9 @@
       "exportRateLimited": "You already requested an export in the last 24 hours. Try again later.",
       "exportFailed": "Export failed. Please try again.",
       "deleteFailed": "Deletion failed. Please try again."
-    }
+    },
+    "muted": "Hidden topics",
+    "mutedHint": "Manage the topics you don't want to see"
   },
   "Takedown": {
     "title": "Takedown request",
@@ -368,7 +370,11 @@
     "savedListName": "Saved",
     "savedToDefault": "Saved to Saved",
     "hidden": "Hidden",
-    "undo": "Undo"
+    "undo": "Undo",
+    "notInterested": "Not interested",
+    "hideTopicHeading": "Hide a topic",
+    "hideTopic": "Hide “{topic}”",
+    "topicHidden": "Topic “{topic}” hidden"
   },
   "Onboarding": {
     "title": "Choose your interests",
@@ -747,5 +753,16 @@
       "restoreFailed": "Couldn't restore the account. Try again.",
       "network": "Network error. Check your connection and try again."
     }
+  },
+  "Muted": {
+    "title": "Hidden topics",
+    "subtitle": "Topics you've chosen to keep out of your feed. You can restore them anytime.",
+    "topicsHeading": "Topics",
+    "unmute": "Restore",
+    "unmuted": "“{topic}” is visible again",
+    "unmuteError": "Couldn't restore the topic. Try again.",
+    "loadError": "Couldn't load your hidden topics.",
+    "emptyTitle": "No hidden topics",
+    "emptyDescription": "When you hide a topic from the feed with “Not interested”, it shows up here."
   }
 }

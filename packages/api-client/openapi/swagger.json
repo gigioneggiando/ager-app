@@ -2009,6 +2009,342 @@
         ]
       }
     },
+    "/api/me/muted-interests": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "List the topics the caller has muted (\"non mi interessa questo argomento\").",
+        "operationId": "GetMutedInterests",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MutedInterestDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Mute a topic (hard exclusion from the feed). Idempotent.",
+        "operationId": "AddMutedInterest",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddMutedInterestRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/me/muted-interests/{interestId}": {
+      "delete": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Un-mute a topic. Idempotent.",
+        "operationId": "RemoveMutedInterest",
+        "parameters": [
+          {
+            "name": "interestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/me/muted-sources/{sourceId}": {
+      "post": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Mute a source (UserSourcePreference.IsMuted). Idempotent.",
+        "operationId": "MuteSource",
+        "parameters": [
+          {
+            "name": "sourceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Un-mute a source. Idempotent.",
+        "operationId": "UnmuteSource",
+        "parameters": [
+          {
+            "name": "sourceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/me/blacklisted-clusters/{clusterId}": {
+      "post": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Hide a story cluster from the feed (24h-style hard exclusion). Idempotent.",
+        "operationId": "BlacklistCluster",
+        "parameters": [
+          {
+            "name": "clusterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Un-hide a story cluster. Idempotent.",
+        "operationId": "UnblacklistCluster",
+        "parameters": [
+          {
+            "name": "clusterId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/me/suggested-interests": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Implicit-interest candidates past the notify threshold (the \"vuoi allargare il feed?\" nudge).",
+        "operationId": "GetSuggestedInterests",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SuggestedInterestDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/me/suggested-interests/{interestId}/confirm": {
+      "post": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Promote a suggested interest to an explicit interest (weight 3.0, confidence 1.0).",
+        "operationId": "ConfirmSuggestedInterest",
+        "parameters": [
+          {
+            "name": "interestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
+    "/api/me/suggested-interests/{interestId}/dismiss": {
+      "post": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Dismiss a suggested interest (records the rejection and purges its recent signals).",
+        "operationId": "DismissSuggestedInterest",
+        "parameters": [
+          {
+            "name": "interestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
     "/api/me/reading-lists": {
       "get": {
         "tags": [
@@ -2559,6 +2895,16 @@
   },
   "components": {
     "schemas": {
+      "AddMutedInterestRequest": {
+        "type": "object",
+        "properties": {
+          "interestId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "AddReadingListItemRequest": {
         "type": "object",
         "properties": {
@@ -3478,6 +3824,24 @@
         },
         "additionalProperties": false
       },
+      "MutedInterestDto": {
+        "type": "object",
+        "properties": {
+          "interestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "MyInterestDto": {
         "type": "object",
         "properties": {
@@ -4128,6 +4492,36 @@
           "url": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SuggestedInterestDto": {
+        "type": "object",
+        "properties": {
+          "interestId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "slug": {
+            "type": "string",
+            "nullable": true
+          },
+          "signalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cumulativeWeight": {
+            "type": "number",
+            "format": "double"
+          },
+          "firstSeenAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastSeenAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false
