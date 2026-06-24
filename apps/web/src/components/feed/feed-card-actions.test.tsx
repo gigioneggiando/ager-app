@@ -190,3 +190,65 @@ describe("FeedCardActions — topic mute (Non mi interessa)", () => {
     ).not.toBeInTheDocument();
   });
 });
+
+const sourceMutes = () =>
+  calls.filter((c) => c.url.includes("/api/me/muted-sources"));
+
+describe("FeedCardActions — source mute (Nascondi fonte)", () => {
+  it("offers Nascondi fonte and mutes the source after the undo window", async () => {
+    renderWithProviders(
+      <FeedCardActions
+        articleId={42}
+        url="https://e.com/x"
+        title="X"
+        sourceId={5}
+        sourceName="Il Post"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Non mi interessa/i }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /Nascondi «Il Post»/i }));
+
+    // Deferred: nothing posted yet, undo toast showing.
+    expect(sourceMutes()).toHaveLength(0);
+    expect(screen.getByText(/Fonte «Il Post» nascosta/i)).toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+    expect(
+      sourceMutes().find((c) => c.url.endsWith("/api/me/muted-sources/5")),
+    ).toBeTruthy();
+  });
+
+  it("cancels the source mute when Annulla is clicked", async () => {
+    renderWithProviders(
+      <FeedCardActions
+        articleId={42}
+        url="https://e.com/x"
+        title="X"
+        sourceId={5}
+        sourceName="Il Post"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Non mi interessa/i }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /Nascondi «Il Post»/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Annulla/i }));
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+    expect(sourceMutes()).toHaveLength(0);
+  });
+
+  it("does not render the menu when neither a topic nor a source is mutable", () => {
+    renderWithProviders(
+      <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
+    );
+
+    expect(
+      screen.queryByRole("button", { name: /Non mi interessa/i }),
+    ).not.toBeInTheDocument();
+  });
+});

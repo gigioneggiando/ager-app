@@ -374,7 +374,11 @@
     "notInterested": "Non mi interessa",
     "hideTopicHeading": "Nascondi un argomento",
     "hideTopic": "Nascondi «{topic}»",
-    "topicHidden": "Argomento «{topic}» nascosto"
+    "topicHidden": "Argomento «{topic}» nascosto",
+    "hideSourceHeading": "Nascondi una fonte",
+    "hideSource": "Nascondi «{source}»",
+    "sourceHidden": "Fonte «{source}» nascosta",
+    "thisSource": "questa fonte"
   },
   "Onboarding": {
     "title": "Scegli i tuoi interessi",
@@ -755,14 +759,20 @@
     }
   },
   "Muted": {
-    "title": "Argomenti nascosti",
-    "subtitle": "Gli argomenti che hai scelto di non vedere nel feed. Puoi ripristinarli quando vuoi.",
+    "title": "Argomenti e fonti nascosti",
+    "subtitle": "Gli argomenti e le fonti che hai scelto di non vedere nel feed. Puoi ripristinarli quando vuoi.",
     "topicsHeading": "Argomenti",
     "unmute": "Ripristina",
     "unmuted": "«{topic}» di nuovo visibile",
     "unmuteError": "Impossibile ripristinare l'argomento. Riprova.",
     "loadError": "Impossibile caricare gli argomenti nascosti.",
     "emptyTitle": "Nessun argomento nascosto",
-    "emptyDescription": "Quando nascondi un argomento dal feed con «Non mi interessa», lo trovi qui."
+    "emptyDescription": "Quando nascondi un argomento dal feed con «Non mi interessa», lo trovi qui.",
+    "sourcesHeading": "Fonti",
+    "sourceUnmuted": "«{source}» di nuovo visibile",
+    "sourceUnmuteError": "Impossibile ripristinare la fonte. Riprova.",
+    "sourcesLoadError": "Impossibile caricare le fonti nascoste.",
+    "sourcesEmptyTitle": "Nessuna fonte nascosta",
+    "sourcesEmptyDescription": "Quando nascondi una fonte dal feed con «Nascondi fonte», la trovi qui."
   }
 }

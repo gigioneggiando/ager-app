@@ -17,7 +17,7 @@ import type { FeedPage } from "@ager/api-client";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/components/auth/auth-provider";
 import { useInterests } from "@/features/interests/use-interests";
-import { muteInterest } from "@/features/mutes/use-muted";
+import { muteInterest, muteSource } from "@/features/mutes/use-muted";
 import { postInteraction } from "@/features/interactions/use-interaction";
 import { useToast } from "@/components/ui/toast";
 import { AddToListDialog } from "@/components/reading-lists/add-to-list-dialog";
@@ -83,6 +83,21 @@ function removeTopicFromFeed(
   };
 }
 
+/** Drop every feed item published by the muted source (source-mute is a feed-wide hide). */
+function removeSourceFromFeed(
+  data: InfiniteData<FeedPage> | undefined,
+  sourceId: number,
+): InfiniteData<FeedPage> | undefined {
+  if (!data) return data;
+  return {
+    ...data,
+    pages: data.pages.map((page) => ({
+      ...page,
+      items: (page.items ?? []).filter((i) => i.sourceId !== sourceId),
+    })),
+  };
+}
+
 function norm(s: string | null | undefined): string {
   return (s ?? "").trim().toLowerCase();
 }
@@ -92,12 +107,18 @@ export function FeedCardActions({
   url,
   title,
   topics = [],
+  sourceId,
+  sourceName,
 }: {
   articleId: number;
   url: string;
   title: string;
   /** The article's topic labels — used to offer "Nascondi argomento". */
   topics?: string[];
+  /** The publishing source id — used to offer "Nascondi fonte". */
+  sourceId?: number | null;
+  /** The publishing source name — shown in the "Nascondi fonte" label. */
+  sourceName?: string | null;
 }) {
   const t = useTranslations("Actions");
   const router = useRouter();
@@ -173,6 +194,36 @@ export function FeedCardActions({
         void muteInterest(interestId).then(() => {
           void queryClient.invalidateQueries({ queryKey: ["feed"] });
           void queryClient.invalidateQueries({ queryKey: ["muted-interests"] });
+        });
+      },
+    });
+  }
+
+  // Mute a source: optimistically drop every feed card from it, 3s deferred commit, Undo
+  // restores the snapshot. Feed-wide hide, keyed by the article's sourceId.
+  function handleMuteSource(id: number, name: string) {
+    setMenuOpen(false);
+    if (!requireAuth()) return;
+    const snapshots = queryClient.getQueriesData<InfiniteData<FeedPage>>({
+      queryKey: ["feed"],
+    });
+    queryClient.setQueriesData<InfiniteData<FeedPage>>(
+      { queryKey: ["feed"] },
+      (d) => removeSourceFromFeed(d, id),
+    );
+    toast.show({
+      message: t("sourceHidden", { source: name }),
+      actionLabel: t("undo"),
+      durationMs: UNDO_MS,
+      onAction: () => {
+        for (const [key, data] of snapshots) {
+          queryClient.setQueryData(key, data);
+        }
+      },
+      onCommit: () => {
+        void muteSource(id).then(() => {
+          void queryClient.invalidateQueries({ queryKey: ["feed"] });
+          void queryClient.invalidateQueries({ queryKey: ["muted-sources"] });
         });
       },
     });
@@ -272,9 +323,10 @@ export function FeedCardActions({
         <EyeOff className="size-4" aria-hidden="true" />
       </ActionButton>
 
-      {/* "Non mi interessa" → pick which of the article's topics to hide feed-wide. Shown only
-          when at least one topic resolves to a mutable interest. Distinct from DISCARD above. */}
-      {mutableTopics.length > 0 ? (
+      {/* "Non mi interessa" → hide the article's topics and/or its source feed-wide. Shown when
+          at least one topic resolves to a mutable interest OR the article has a source id.
+          Distinct from the per-article DISCARD above. */}
+      {mutableTopics.length > 0 || sourceId != null ? (
         <div className="relative" ref={menuRef}>
           <ActionButton
             onClick={() => setMenuOpen((v) => !v)}
@@ -290,21 +342,49 @@ export function FeedCardActions({
               aria-label={t("notInterested")}
               className="absolute right-0 z-20 mt-1 min-w-52 overflow-hidden rounded-md border border-border bg-card py-1 shadow-md"
             >
-              <p className="px-3 py-1.5 text-xs font-medium text-muted-foreground">
-                {t("hideTopicHeading")}
-              </p>
-              {mutableTopics.map((tp) => (
-                <button
-                  key={tp.interestId}
-                  type="button"
-                  role="menuitem"
-                  onClick={() => handleMuteTopic(tp.label, tp.interestId)}
-                  className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-secondary focus-visible:bg-secondary focus-visible:outline-none"
-                >
-                  <EyeOff className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
-                  <span className="truncate">{t("hideTopic", { topic: tp.label })}</span>
-                </button>
-              ))}
+              {mutableTopics.length > 0 ? (
+                <>
+                  <p className="px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                    {t("hideTopicHeading")}
+                  </p>
+                  {mutableTopics.map((tp) => (
+                    <button
+                      key={tp.interestId}
+                      type="button"
+                      role="menuitem"
+                      onClick={() => handleMuteTopic(tp.label, tp.interestId)}
+                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-secondary focus-visible:bg-secondary focus-visible:outline-none"
+                    >
+                      <EyeOff className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+                      <span className="truncate">{t("hideTopic", { topic: tp.label })}</span>
+                    </button>
+                  ))}
+                </>
+              ) : null}
+
+              {sourceId != null ? (
+                <>
+                  {mutableTopics.length > 0 ? (
+                    <div className="my-1 border-t border-border" role="separator" />
+                  ) : null}
+                  <p className="px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                    {t("hideSourceHeading")}
+                  </p>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() =>
+                      handleMuteSource(sourceId, sourceName?.trim() || t("thisSource"))
+                    }
+                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-secondary focus-visible:bg-secondary focus-visible:outline-none"
+                  >
+                    <Ban className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+                    <span className="truncate">
+                      {t("hideSource", { source: sourceName?.trim() || t("thisSource") })}
+                    </span>
+                  </button>
+                </>
+              ) : null}
             </div>
           ) : null}
         </div>

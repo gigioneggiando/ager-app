@@ -2107,6 +2107,38 @@
         ]
       }
     },
+    "/api/me/muted-sources": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "List the sources the caller has muted (id + name) for the mute manager.",
+        "operationId": "GetMutedSources",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MutedSourceDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": [ ]
+          }
+        ]
+      }
+    },
     "/api/me/muted-sources/{sourceId}": {
       "post": {
         "tags": [
@@ -2963,6 +2995,10 @@
             "type": "string",
             "format": "date-time"
           },
+          "sourceId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "sourceName": {
             "type": "string",
             "nullable": true
@@ -3342,6 +3378,10 @@
           "publishedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "sourceId": {
+            "type": "integer",
+            "format": "int32"
           },
           "sourceName": {
             "type": "string",
@@ -3838,6 +3878,20 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MutedSourceDto": {
+        "type": "object",
+        "properties": {
+          "sourceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
