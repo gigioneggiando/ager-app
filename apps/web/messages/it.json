@@ -774,5 +774,19 @@
     "sourcesLoadError": "Impossibile caricare le fonti nascoste.",
     "sourcesEmptyTitle": "Nessuna fonte nascosta",
     "sourcesEmptyDescription": "Quando nascondi una fonte dal feed con «Nascondi fonte», la trovi qui."
+  },
+  "Suggested": {
+    "title": "Vuoi allargare il feed?",
+    "subtitle": "Di recente sembri interessato a questi argomenti. Confermali per vederne di più — decidi tu.",
+    "listTitle": "Argomenti suggeriti",
+    "listSubtitle": "Suggerimenti basati su ciò che leggi. Aggiungili ai tuoi interessi quando vuoi.",
+    "confirm": "Conferma",
+    "ignore": "Ignora",
+    "confirmAria": "Conferma «{topic}»",
+    "ignoreAria": "Ignora «{topic}»",
+    "skip": "Non ora",
+    "confirmed": "«{topic}» aggiunto ai tuoi interessi",
+    "ignored": "«{topic}» ignorato",
+    "actionError": "Operazione non riuscita. Riprova."
   }
 }

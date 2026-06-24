@@ -13,6 +13,7 @@ import {
 } from "@/features/feed/modes";
 import { FeedModeSelector } from "@/components/feed/feed-mode-selector";
 import { FeedList } from "@/components/feed/feed-list";
+import { SuggestedInterestsNudge } from "@/components/interests/suggested-interests-nudge";
 
 /**
  * Client feed surface: the ranking-mode selector (persisted in localStorage) + the feed.
@@ -41,6 +42,9 @@ export function FeedView() {
           <span>{t("modeAnonNote")}</span>
         </p>
       ) : null}
+
+      {/* Proactive "vuoi allargare il feed?" nudge — self-hides for anon / no candidates. */}
+      <SuggestedInterestsNudge />
 
       <FeedList mode={mode} />
     </div>
