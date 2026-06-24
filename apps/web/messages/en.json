@@ -374,7 +374,11 @@
     "notInterested": "Not interested",
     "hideTopicHeading": "Hide a topic",
     "hideTopic": "Hide “{topic}”",
-    "topicHidden": "Topic “{topic}” hidden"
+    "topicHidden": "Topic “{topic}” hidden",
+    "hideSourceHeading": "Hide a source",
+    "hideSource": "Hide “{source}”",
+    "sourceHidden": "Source “{source}” hidden",
+    "thisSource": "this source"
   },
   "Onboarding": {
     "title": "Choose your interests",
@@ -755,14 +759,20 @@
     }
   },
   "Muted": {
-    "title": "Hidden topics",
-    "subtitle": "Topics you've chosen to keep out of your feed. You can restore them anytime.",
+    "title": "Hidden topics and sources",
+    "subtitle": "Topics and sources you've chosen to keep out of your feed. You can restore them anytime.",
     "topicsHeading": "Topics",
     "unmute": "Restore",
     "unmuted": "“{topic}” is visible again",
     "unmuteError": "Couldn't restore the topic. Try again.",
     "loadError": "Couldn't load your hidden topics.",
     "emptyTitle": "No hidden topics",
-    "emptyDescription": "When you hide a topic from the feed with “Not interested”, it shows up here."
+    "emptyDescription": "When you hide a topic from the feed with “Not interested”, it shows up here.",
+    "sourcesHeading": "Sources",
+    "sourceUnmuted": "“{source}” is visible again",
+    "sourceUnmuteError": "Couldn't restore the source. Try again.",
+    "sourcesLoadError": "Couldn't load your hidden sources.",
+    "sourcesEmptyTitle": "No hidden sources",
+    "sourcesEmptyDescription": "When you hide a source from the feed with “Hide source”, it shows up here."
   }
 }

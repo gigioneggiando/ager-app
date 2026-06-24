@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { MutedInterest } from "@ager/api-client";
+import type { MutedInterest, MutedSource } from "@ager/api-client";
 
 async function fetchMutedInterests(): Promise<MutedInterest[]> {
   const res = await fetch("/api/me/muted-interests", {
@@ -45,6 +45,53 @@ export function useUnmuteInterest() {
     mutationFn: unmuteInterest,
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["muted-interests"] });
+      void queryClient.invalidateQueries({ queryKey: ["feed"] });
+    },
+  });
+}
+
+// ───────────────────────────── source mute ─────────────────────────────
+
+async function fetchMutedSources(): Promise<MutedSource[]> {
+  const res = await fetch("/api/me/muted-sources", {
+    headers: { accept: "application/json" },
+  });
+  if (!res.ok) throw new Error("muted_sources_unavailable");
+  return (await res.json()) as MutedSource[];
+}
+
+/** The sources the caller has muted (server truth for the /me/muted manager). */
+export function useMutedSources() {
+  return useQuery({
+    queryKey: ["muted-sources"],
+    queryFn: fetchMutedSources,
+    staleTime: 30 * 1000,
+  });
+}
+
+/** Mute a source by id (path-keyed, no body). Idempotent server-side. */
+export async function muteSource(sourceId: number): Promise<void> {
+  const res = await fetch(`/api/me/muted-sources/${sourceId}`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error("mute_source_failed");
+}
+
+/** Un-mute a source by id. Idempotent server-side. */
+export async function unmuteSource(sourceId: number): Promise<void> {
+  const res = await fetch(`/api/me/muted-sources/${sourceId}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("unmute_source_failed");
+}
+
+/** Un-mute mutation for the manager — refreshes the muted sources + the (now wider) feed. */
+export function useUnmuteSource() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: unmuteSource,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["muted-sources"] });
       void queryClient.invalidateQueries({ queryKey: ["feed"] });
     },
   });

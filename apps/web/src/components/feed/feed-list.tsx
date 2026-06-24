@@ -133,6 +133,8 @@ export function FeedList({ mode = DEFAULT_FEED_MODE }: { mode?: FeedMode }) {
                     url={item.url || item.canonicalUrl || "#"}
                     title={item.title ?? ""}
                     topics={item.topics ?? []}
+                    sourceId={item.sourceId}
+                    sourceName={item.sourceName}
                   />
                 ) : undefined
               }

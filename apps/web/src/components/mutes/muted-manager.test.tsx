@@ -16,10 +16,13 @@ function json(obj: unknown, status = 200) {
   });
 }
 
+let sourcesResponse: () => Response;
+
 beforeEach(() => {
   calls = [];
-  // Stateful: a removed topic stays gone across the post-delete refetch.
+  // Stateful: a removed topic / source stays gone across the post-delete refetch.
   const removed = new Set<number>();
+  const removedSources = new Set<number>();
   mutedResponse = () =>
     json(
       [
@@ -27,10 +30,23 @@ beforeEach(() => {
         { interestId: 9, slug: "cronaca", createdAt: "2026-01-02T10:00:00Z" },
       ].filter((m) => !removed.has(m.interestId)),
     );
+  sourcesResponse = () =>
+    json(
+      [
+        { sourceId: 3, name: "Il Post" },
+        { sourceId: 4, name: "ANSA" },
+      ].filter((s) => !removedSources.has(s.sourceId)),
+    );
   global.fetch = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
     const url = String(input);
     const method = (init?.method ?? "GET").toUpperCase();
     calls.push({ url, method });
+    const delSource = url.match(/\/api\/me\/muted-sources\/(\d+)$/);
+    if (delSource && method === "DELETE") {
+      removedSources.add(Number(delSource[1]));
+      return new Response(null, { status: 204 });
+    }
+    if (url.includes("/api/me/muted-sources")) return sourcesResponse();
     const del = url.match(/\/api\/me\/muted-interests\/(\d+)$/);
     if (del && method === "DELETE") {
       removed.add(Number(del[1]));
@@ -79,8 +95,34 @@ describe("MutedManager", () => {
 
   it("shows an empty state when nothing is muted", async () => {
     mutedResponse = () => json([]);
+    sourcesResponse = () => json([]);
     renderWithProviders(<MutedManager />, { session: null });
 
     expect(await screen.findByText("Nessun argomento nascosto")).toBeInTheDocument();
+    expect(screen.getByText("Nessuna fonte nascosta")).toBeInTheDocument();
+  });
+
+  it("lists muted sources by name and un-mutes one", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<MutedManager />, { session: null });
+
+    expect(await screen.findByText("Il Post")).toBeInTheDocument();
+    expect(screen.getByText("ANSA")).toBeInTheDocument();
+
+    const postRow = screen.getByText("Il Post").closest("li")!;
+    await user.click(
+      within(postRow).getByRole("button", { name: /Ripristina/i }),
+    );
+
+    await waitFor(() =>
+      expect(screen.queryByText("Il Post")).not.toBeInTheDocument(),
+    );
+    expect(
+      calls.find(
+        (c) => c.method === "DELETE" && c.url.endsWith("/api/me/muted-sources/3"),
+      ),
+    ).toBeTruthy();
+    // The other source stays.
+    expect(screen.getByText("ANSA")).toBeInTheDocument();
   });
 });
