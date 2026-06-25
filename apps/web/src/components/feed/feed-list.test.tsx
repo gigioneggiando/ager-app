@@ -131,4 +131,44 @@ describe("FeedList", () => {
       container.querySelectorAll(".animate-pulse").length,
     ).toBeGreaterThan(0);
   });
+
+  it("records OPENED_EXTERNAL once when a signed-in user opens a card's publisher link", async () => {
+    const user = userEvent.setup();
+    mockFetch.mockResolvedValue(page1);
+
+    const realFetch = global.fetch;
+    const calls: { url: string; body: unknown }[] = [];
+    global.fetch = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      const url = String(input);
+      calls.push({ url, body: init?.body ? JSON.parse(String(init.body)) : null });
+      // The actions row resolves the interests taxonomy on mount; keep it quiet.
+      if (url.includes("/api/interests")) {
+        return new Response("[]", {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        });
+      }
+      return new Response(null, { status: 204 });
+    }) as unknown as typeof fetch;
+
+    try {
+      renderWithProviders(<FeedList />);
+      await user.click(await screen.findByRole("link", { name: /Prima notizia/i }));
+
+      await waitFor(() =>
+        expect(
+          calls.filter(
+            (c) =>
+              c.url.includes("/api/interactions") &&
+              (c.body as { type?: string })?.type === "OPENED_EXTERNAL",
+          ),
+        ).toHaveLength(1),
+      );
+      expect(
+        calls.find((c) => c.url.includes("/api/interactions"))?.body,
+      ).toMatchObject({ articleId: 1, type: "OPENED_EXTERNAL" });
+    } finally {
+      global.fetch = realFetch;
+    }
+  });
 });

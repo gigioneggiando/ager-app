@@ -21,7 +21,7 @@ vi.mock("@/i18n/navigation", () => ({
 }));
 
 const realFetch = global.fetch;
-let calls: { url: string; method: string }[] = [];
+let calls: { url: string; method: string; body: unknown }[] = [];
 
 function json(obj: unknown, status = 200) {
   return new Response(JSON.stringify(obj), {
@@ -37,8 +37,11 @@ beforeEach(() => {
   global.fetch = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
     const url = String(input);
     const method = (init?.method ?? "GET").toUpperCase();
-    calls.push({ url, method });
+    calls.push({ url, method, body: init?.body ? JSON.parse(String(init.body)) : null });
 
+    if (url.includes("/api/interactions") && method === "POST") {
+      return new Response(null, { status: 204 });
+    }
     if (url.endsWith("/api/me/reading-lists") && method === "GET") {
       return json({
         items: [
@@ -142,5 +145,21 @@ describe("ReadingListDetail", () => {
     expect(
       calls.find((c) => c.method === "DELETE" && c.url.includes("/items/10")),
     ).toBeTruthy();
+  });
+
+  it("records OPENED_EXTERNAL once when the user opens an item's publisher link", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ReadingListDetail listId={3} />);
+
+    await user.click(await screen.findByText("Articolo Uno"));
+
+    await waitFor(() =>
+      expect(
+        calls.filter((c) => c.url.includes("/api/interactions") && c.method === "POST"),
+      ).toHaveLength(1),
+    );
+    expect(
+      calls.find((c) => c.url.includes("/api/interactions"))?.body,
+    ).toMatchObject({ articleId: 10, type: "OPENED_EXTERNAL" });
   });
 });

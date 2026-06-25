@@ -13,6 +13,7 @@ import {
   useReadingLists,
   useRemoveItem,
 } from "@/features/reading-lists/use-reading-lists";
+import { useOpenExternal } from "@/features/interactions/use-interaction";
 import { useToast } from "@/components/ui/toast";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,6 +47,8 @@ export function ReadingListDetail({ listId }: { listId: number }) {
     isFetchingNextPage,
   } = useReadingListItems(listId);
   const remove = useRemoveItem(listId);
+  // Click-through to the publisher is a positive signal even from a saved list.
+  const openExternal = useOpenExternal();
   const items = flattenItems(data);
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -119,6 +122,7 @@ export function ReadingListDetail({ listId }: { listId: number }) {
                       rel="noopener noreferrer"
                       aria-hidden="true"
                       tabIndex={-1}
+                      onClick={() => openExternal(item.articleId)}
                       className="relative size-20 shrink-0 overflow-hidden rounded-image bg-muted"
                     >
                       {item.imageUrl ? (
@@ -142,6 +146,7 @@ export function ReadingListDetail({ listId }: { listId: number }) {
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => openExternal(item.articleId)}
                         className="font-serif font-bold leading-snug text-primary transition-colors hover:text-link"
                       >
                         {item.title}

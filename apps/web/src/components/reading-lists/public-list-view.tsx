@@ -10,6 +10,7 @@ import {
   usePublicReadingList,
   usePublicReadingListItems,
 } from "@/features/reading-lists/use-public-reading-list";
+import { useOpenExternal } from "@/features/interactions/use-interaction";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -33,6 +34,9 @@ export function PublicListView({
     isFetchingNextPage,
     isPending: itemsPending,
   } = usePublicReadingListItems(list?.id ?? undefined);
+  // A signed-in visitor opening an item still produces the OPENED_EXTERNAL signal; for
+  // anonymous visitors (the common case on a shared list) it is a no-op.
+  const openExternal = useOpenExternal();
   const items = flattenItems(data);
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -104,6 +108,7 @@ export function PublicListView({
                       rel="noopener noreferrer"
                       aria-hidden="true"
                       tabIndex={-1}
+                      onClick={() => openExternal(item.articleId)}
                       className="relative size-20 shrink-0 overflow-hidden rounded-image bg-muted"
                     >
                       {item.imageUrl ? (
@@ -126,6 +131,7 @@ export function PublicListView({
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => openExternal(item.articleId)}
                         className="font-serif font-bold leading-snug text-primary transition-colors hover:text-link"
                       >
                         {item.title}

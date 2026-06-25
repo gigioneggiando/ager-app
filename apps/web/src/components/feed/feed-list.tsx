@@ -6,8 +6,7 @@ import { AlertTriangle, Check, Inbox } from "lucide-react";
 
 import { useFeed, dedupeFeedItems, feedMeta } from "@/features/feed/use-feed";
 import { DEFAULT_FEED_MODE, type FeedMode } from "@/features/feed/modes";
-import { useSession } from "@/components/auth/auth-provider";
-import { useInteraction } from "@/features/interactions/use-interaction";
+import { useOpenExternal } from "@/features/interactions/use-interaction";
 import { FeedCard, FeedCardSkeleton } from "@/components/feed/feed-card";
 import { FeedCardActions } from "@/components/feed/feed-card-actions";
 import { EmptyState } from "@/components/states/empty-state";
@@ -53,14 +52,8 @@ export function FeedList({ mode = DEFAULT_FEED_MODE }: { mode?: FeedMode }) {
   const items = dedupeFeedItems(data?.pages);
   const { feedMode, recommenderVersion } = feedMeta(data?.pages);
 
-  const { isAuthenticated } = useSession();
-  const interaction = useInteraction();
   // Record OPENED_EXTERNAL when a signed-in user opens the publisher (keepalive fetch).
-  const openExternal = (articleId: number | undefined) => {
-    if (isAuthenticated && articleId != null) {
-      interaction.mutate({ articleId, type: "OPENED_EXTERNAL" });
-    }
-  };
+  const openExternal = useOpenExternal();
 
   // Infinite scroll: load the next page when the sentinel approaches the viewport.
   const sentinelRef = useRef<HTMLDivElement | null>(null);

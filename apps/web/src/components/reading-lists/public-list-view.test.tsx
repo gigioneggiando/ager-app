@@ -1,4 +1,5 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { renderWithProviders } from "@/test/test-utils";
@@ -20,6 +21,7 @@ vi.mock("@/i18n/navigation", () => ({
 }));
 
 const realFetch = global.fetch;
+let calls: { url: string; method: string; body: unknown }[] = [];
 
 function json(obj: unknown, status = 200) {
   return new Response(JSON.stringify(obj), {
@@ -33,10 +35,19 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+const interactions = () =>
+  calls.filter((c) => c.url.includes("/api/interactions") && c.method === "POST");
+
 describe("PublicListView", () => {
   beforeEach(() => {
-    global.fetch = vi.fn(async (input: string | URL | Request) => {
+    calls = [];
+    global.fetch = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
       const url = String(input);
+      const method = (init?.method ?? "GET").toUpperCase();
+      calls.push({ url, method, body: init?.body ? JSON.parse(String(init.body)) : null });
+      if (url.includes("/api/interactions") && method === "POST") {
+        return new Response(null, { status: 204 });
+      }
       if (url.includes("/public/users/")) {
         return json({ id: 42, name: "Letture sul clima", description: "Una selezione" });
       }
@@ -72,5 +83,31 @@ describe("PublicListView", () => {
     renderWithProviders(<PublicListView owner="user-7" slug="missing" />);
 
     expect(await screen.findByText("Lista non trovata")).toBeInTheDocument();
+  });
+
+  it("records OPENED_EXTERNAL once when a signed-in visitor opens an item", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<PublicListView owner="user-7" slug="clima" />);
+
+    await user.click(await screen.findByText("Articolo Pubblico"));
+
+    await waitFor(() => expect(interactions()).toHaveLength(1));
+    expect(interactions()[0]?.body).toMatchObject({
+      articleId: 5,
+      type: "OPENED_EXTERNAL",
+    });
+  });
+
+  it("does not record an interaction for an anonymous visitor", async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<PublicListView owner="user-7" slug="clima" />, {
+      session: null,
+    });
+
+    await user.click(await screen.findByText("Articolo Pubblico"));
+
+    // Give any erroneous mutation a chance to fire before asserting none did.
+    await waitFor(() => expect(screen.getByText("Articolo Pubblico")).toBeInTheDocument());
+    expect(interactions()).toHaveLength(0);
   });
 });
