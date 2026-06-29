@@ -8,6 +8,7 @@ import type { FeedItem } from "@ager/api-client";
 
 import { cn } from "@/lib/utils";
 import { formatAbsoluteDate, formatRelativeTime } from "@/lib/format";
+import { safeUrl } from "@/lib/safe-url";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -47,7 +48,8 @@ export function FeedCard({
 
   // Every FeedItemDto field is optional in the contract — stay defensive.
   const title = item.title?.trim() || t("card.untitled");
-  const href = item.url || item.canonicalUrl || "#";
+  const href = safeUrl(item.url || item.canonicalUrl) ?? "#";
+  const imageSrc = safeUrl(item.imageUrl);
   const topics = item.topics ?? [];
   const minutes = item.estimatedReadingMinutes;
   const relative = item.publishedAt
@@ -75,9 +77,9 @@ export function FeedCard({
         onClick={onOpen}
         className="relative m-3 mb-0 block aspect-[16/9] overflow-hidden rounded-image bg-muted"
       >
-        {item.imageUrl ? (
+        {imageSrc ? (
           <Image
-            src={item.imageUrl}
+            src={imageSrc}
             alt={title}
             fill
             unoptimized

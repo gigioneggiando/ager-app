@@ -24,14 +24,18 @@ export function usePublicReadingList(ownerUserId: string, slug: string) {
   });
 }
 
-/** Public reading-list items (infinite scroll by cursor). Enabled once the list id is known. */
-export function usePublicReadingListItems(listId: number | undefined) {
+/**
+ * Public/Unlisted reading-list items (infinite scroll by cursor), addressed by owner + slug.
+ * Unlisted lists 404 on the numeric-id route (backend PR #86), so the share view must use
+ * this unguessable owner+slug route for every shared-link view.
+ */
+export function usePublicReadingListItems(ownerUserId: string, slug: string) {
   return useInfiniteQuery({
-    queryKey: ["public-reading-list-items", listId],
-    enabled: listId != null,
+    queryKey: ["public-reading-list-items", ownerUserId, slug],
+    enabled: Boolean(ownerUserId && slug),
     queryFn: ({ pageParam }) =>
       getJson<ReadingListItemsPage>(
-        `/api/reading-lists/public/${listId}/items${
+        `/api/reading-lists/public/users/${encodeURIComponent(ownerUserId)}/${encodeURIComponent(slug)}/items${
           pageParam ? `?cursor=${encodeURIComponent(pageParam)}` : ""
         }`,
       ),

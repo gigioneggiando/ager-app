@@ -7,6 +7,7 @@ import type { SourceAdmin } from "@ager/api-client";
 
 import { Link } from "@/i18n/navigation";
 import { formatAbsoluteDate } from "@/lib/format";
+import { safeUrl } from "@/lib/safe-url";
 import {
   LICENSING_STATUSES,
   NEGOTIATION_STATUSES,
@@ -114,7 +115,7 @@ export function SourceDetail({ id }: { id: number }) {
         <CardContent className="flex flex-col gap-2 text-sm">
           <Row label={t("sources.urlLabel")}>
             <a
-              href={data.url ?? "#"}
+              href={safeUrl(data.url) ?? "#"}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-link hover:underline"

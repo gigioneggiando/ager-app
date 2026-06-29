@@ -6,6 +6,7 @@ import { Clock, Lock } from "lucide-react";
 
 import { getArticle } from "@/features/articles/api";
 import { formatAbsoluteDate } from "@/lib/format";
+import { safeUrl } from "@/lib/safe-url";
 import { Container } from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
 import { AgerSymbol } from "@/components/brand/ager-symbol";
@@ -54,7 +55,8 @@ export default async function ArticlePage({ params }: { params: Params }) {
   if (!article) notFound();
 
   const title = article.title?.trim() || t("untitled");
-  const href = article.url || article.canonicalUrl || "#";
+  const href = safeUrl(article.url || article.canonicalUrl) ?? "#";
+  const imageSrc = safeUrl(article.imageUrl);
   const topics = article.topics ?? [];
   const published = article.publishedAt
     ? formatAbsoluteDate(article.publishedAt, locale)
@@ -130,9 +132,9 @@ export default async function ArticlePage({ params }: { params: Params }) {
         ) : null}
 
         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-image bg-muted">
-          {article.imageUrl ? (
+          {imageSrc ? (
             <Image
-              src={article.imageUrl}
+              src={imageSrc}
               alt={title}
               fill
               unoptimized

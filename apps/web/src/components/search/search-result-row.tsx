@@ -6,6 +6,7 @@ import type { ArticleSearchResult } from "@ager/api-client";
 
 import { Link } from "@/i18n/navigation";
 import { formatAbsoluteDate } from "@/lib/format";
+import { safeUrl } from "@/lib/safe-url";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AgerSymbol } from "@/components/brand/ager-symbol";
@@ -20,6 +21,7 @@ export function SearchResultRow({ item }: { item: ArticleSearchResult }) {
   const locale = useLocale();
   const title = item.title?.trim() || t("untitled");
   const date = item.publishedAt ? formatAbsoluteDate(item.publishedAt, locale) : "";
+  const imageSrc = safeUrl(item.imageUrl);
 
   if (item.articleId == null) return null;
 
@@ -31,9 +33,9 @@ export function SearchResultRow({ item }: { item: ArticleSearchResult }) {
         tabIndex={-1}
         className="relative size-20 shrink-0 overflow-hidden rounded-image bg-muted"
       >
-        {item.imageUrl ? (
+        {imageSrc ? (
           <Image
-            src={item.imageUrl}
+            src={imageSrc}
             alt=""
             fill
             unoptimized
