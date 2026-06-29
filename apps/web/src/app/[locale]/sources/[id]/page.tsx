@@ -6,6 +6,7 @@ import { ArrowUpRight, Rss } from "lucide-react";
 
 import { getSource } from "@/features/sources/api";
 import { formatAbsoluteDate } from "@/lib/format";
+import { safeUrl } from "@/lib/safe-url";
 import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
@@ -46,6 +47,9 @@ export default async function SourceDetailPage({
   if (!source) notFound();
 
   const name = source.name ?? t("fallbackTitle");
+  const homepageUrl = safeUrl(source.url);
+  const termsUrl = safeUrl(source.tosUrl);
+  const rssUrl = safeUrl(source.rssUrl);
 
   return (
     <Container size="narrow" className="py-8 sm:py-12">
@@ -102,25 +106,25 @@ export default async function SourceDetailPage({
       </dl>
 
       <div className="mt-6 flex flex-wrap gap-3">
-        {source.url ? (
+        {homepageUrl ? (
           <Button asChild variant="outline" size="sm">
-            <a href={source.url} target="_blank" rel="noopener noreferrer">
+            <a href={homepageUrl} target="_blank" rel="noopener noreferrer">
               {t("visitHomepage")}
               <ArrowUpRight aria-hidden="true" />
             </a>
           </Button>
         ) : null}
-        {source.tosUrl ? (
+        {termsUrl ? (
           <Button asChild variant="ghost" size="sm">
-            <a href={source.tosUrl} target="_blank" rel="noopener noreferrer">
+            <a href={termsUrl} target="_blank" rel="noopener noreferrer">
               {t("viewTerms")}
               <ArrowUpRight aria-hidden="true" />
             </a>
           </Button>
         ) : null}
-        {source.rssUrl ? (
+        {rssUrl ? (
           <Button asChild variant="ghost" size="sm">
-            <a href={source.rssUrl} target="_blank" rel="noopener noreferrer">
+            <a href={rssUrl} target="_blank" rel="noopener noreferrer">
               <Rss aria-hidden="true" />
               {t("rss")}
             </a>

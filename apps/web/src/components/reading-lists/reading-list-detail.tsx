@@ -7,6 +7,7 @@ import { ArrowLeft, Share2, Trash2 } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
 import { formatAbsoluteDate } from "@/lib/format";
+import { safeUrl } from "@/lib/safe-url";
 import {
   flattenItems,
   useReadingListItems,
@@ -109,7 +110,8 @@ export function ReadingListDetail({ listId }: { listId: number }) {
         <>
           <ul className="flex flex-col gap-3">
             {items.map((item) => {
-              const href = item.url || item.canonicalUrl || "#";
+              const href = safeUrl(item.url || item.canonicalUrl) ?? "#";
+              const imageSrc = safeUrl(item.imageUrl);
               const minutes = item.wordCount
                 ? Math.max(1, Math.ceil(item.wordCount / 200))
                 : null;
@@ -125,9 +127,9 @@ export function ReadingListDetail({ listId }: { listId: number }) {
                       onClick={() => openExternal(item.articleId)}
                       className="relative size-20 shrink-0 overflow-hidden rounded-image bg-muted"
                     >
-                      {item.imageUrl ? (
+                      {imageSrc ? (
                         <Image
-                          src={item.imageUrl}
+                          src={imageSrc}
                           alt=""
                           fill
                           unoptimized

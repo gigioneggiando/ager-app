@@ -48,10 +48,9 @@ describe("PublicListView", () => {
       if (url.includes("/api/interactions") && method === "POST") {
         return new Response(null, { status: 204 });
       }
-      if (url.includes("/public/users/")) {
-        return json({ id: 42, name: "Letture sul clima", description: "Una selezione" });
-      }
-      if (url.includes("/public/42/items")) {
+      // Items are addressed by the owner+slug route (AUTHZ-001). The legacy numeric-id
+      // route 404s for Unlisted lists, so the share view must never call it.
+      if (url.includes("/public/users/user-7/clima/items")) {
         return json({
           items: [
             {
@@ -65,6 +64,9 @@ describe("PublicListView", () => {
           nextCursor: null,
         });
       }
+      if (url.includes("/public/users/")) {
+        return json({ id: 42, name: "Letture sul clima", description: "Una selezione" });
+      }
       return new Response(null, { status: 404 });
     }) as unknown as typeof fetch;
   });
@@ -75,6 +77,19 @@ describe("PublicListView", () => {
     expect(await screen.findByText("Letture sul clima")).toBeInTheDocument();
     expect(screen.getByText("Una selezione")).toBeInTheDocument();
     expect(await screen.findByText("Articolo Pubblico")).toBeInTheDocument();
+  });
+
+  it("loads items via the owner+slug route, never the numeric-id route (AUTHZ-001)", async () => {
+    renderWithProviders(<PublicListView owner="user-7" slug="clima" />);
+
+    // The Unlisted list renders its items without a 404 on the share view.
+    expect(await screen.findByText("Articolo Pubblico")).toBeInTheDocument();
+
+    const itemCalls = calls.filter((c) => c.url.includes("/items"));
+    expect(itemCalls.length).toBeGreaterThan(0);
+    expect(itemCalls.every((c) => c.url.includes("/public/users/user-7/clima/items"))).toBe(true);
+    // No call to the legacy numeric-id items route (e.g. /public/42/items).
+    expect(calls.some((c) => /\/public\/\d+\/items/.test(c.url))).toBe(false);
   });
 
   it("shows a not-found state when the list is missing", async () => {

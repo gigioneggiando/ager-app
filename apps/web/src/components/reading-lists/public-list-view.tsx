@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 
 import { formatAbsoluteDate } from "@/lib/format";
+import { safeUrl } from "@/lib/safe-url";
 import {
   flattenItems,
   usePublicReadingList,
@@ -33,7 +34,7 @@ export function PublicListView({
     hasNextPage,
     isFetchingNextPage,
     isPending: itemsPending,
-  } = usePublicReadingListItems(list?.id ?? undefined);
+  } = usePublicReadingListItems(owner, slug);
   // A signed-in visitor opening an item still produces the OPENED_EXTERNAL signal; for
   // anonymous visitors (the common case on a shared list) it is a no-op.
   const openExternal = useOpenExternal();
@@ -95,7 +96,8 @@ export function PublicListView({
         <>
           <ul className="flex flex-col gap-3">
             {items.map((item) => {
-              const href = item.url || item.canonicalUrl || "#";
+              const href = safeUrl(item.url || item.canonicalUrl) ?? "#";
+              const imageSrc = safeUrl(item.imageUrl);
               const minutes = item.wordCount
                 ? Math.max(1, Math.ceil(item.wordCount / 200))
                 : null;
@@ -111,9 +113,9 @@ export function PublicListView({
                       onClick={() => openExternal(item.articleId)}
                       className="relative size-20 shrink-0 overflow-hidden rounded-image bg-muted"
                     >
-                      {item.imageUrl ? (
+                      {imageSrc ? (
                         <Image
-                          src={item.imageUrl}
+                          src={imageSrc}
                           alt=""
                           fill
                           unoptimized
