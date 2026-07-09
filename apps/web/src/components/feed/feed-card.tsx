@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowUpRight, Clock } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { FeedItem } from "@ager/api-client";
 
 import { cn } from "@/lib/utils";
@@ -51,7 +51,6 @@ export function FeedCard({
   const href = safeUrl(item.url || item.canonicalUrl) ?? "#";
   const imageSrc = safeUrl(item.imageUrl);
   const topics = item.topics ?? [];
-  const minutes = item.estimatedReadingMinutes;
   const relative = item.publishedAt
     ? formatRelativeTime(item.publishedAt, locale)
     : "";
@@ -144,15 +143,8 @@ export function FeedCard({
               </time>
             </>
           ) : null}
-          {typeof minutes === "number" ? (
-            <>
-              <span aria-hidden="true">·</span>
-              <span className="inline-flex items-center gap-1">
-                <Clock className="size-3" aria-hidden="true" />
-                {t("card.readingTime", { minutes })}
-              </span>
-            </>
-          ) : null}
+          {/* No reading time: Ager is link-first and does not store the article body,
+              so any per-article estimate would be unreliable. */}
         </div>
 
         <WhyShown
@@ -163,7 +155,7 @@ export function FeedCard({
         />
 
         {actions ? (
-          <div className="flex items-center gap-1 border-t border-border pt-3">
+          <div className="flex flex-wrap items-center gap-x-1 gap-y-2 border-t border-border pt-3">
             {actions}
           </div>
         ) : null}

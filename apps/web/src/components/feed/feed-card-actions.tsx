@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { createPortal } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useQueryClient, type InfiniteData } from "@tanstack/react-query";
@@ -22,7 +29,10 @@ import { postInteraction } from "@/features/interactions/use-interaction";
 import { useToast } from "@/components/ui/toast";
 import { AddToListDialog } from "@/components/reading-lists/add-to-list-dialog";
 
-const UNDO_MS = 3000;
+// Undo window for deferred SAVE / DISCARD / mute commits. Comfortable enough to read the
+// toast and reach "Annulla" without rushing; the toast is viewport-fixed so scrolling
+// neither dismisses it nor cancels the pending commit.
+const UNDO_MS = 5000;
 
 /**
  * Optional §11.2 DISCARD reasons (skippable). The `code` is the wire value sent as
@@ -143,7 +153,23 @@ export function FeedCardActions({
   const [saved, setSaved] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // The "Non mi interessa" menu is portaled to <body> so it escapes the card's
+  // `overflow-hidden` (which otherwise clips it) and never renders under the next card.
+  // It is fixed-positioned against the trigger's viewport rect.
+  const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(null);
+  const triggerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+
+  // Anchor the portaled menu below the trigger, right-aligned to it.
+  const placeMenu = useCallback(() => {
+    const el = triggerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    setMenuPos({
+      top: rect.bottom + 4,
+      right: Math.max(8, window.innerWidth - rect.right),
+    });
+  }, []);
 
   // Resolve the article's topic labels to interest ids (the mute API is keyed by interestId).
   // Match against both interest slug and name; keep only topics we can actually mute.
@@ -156,24 +182,31 @@ export function FeedCardActions({
     })
     .filter((x): x is { label: string; interestId: number } => x !== null);
 
-  // Close the topic menu on outside click or Escape.
+  // Close the topic menu only on a genuine outside click (neither the trigger nor the
+  // portaled menu) or Escape — never on the selecting click itself. Keep it glued to the
+  // trigger while open by re-placing it on scroll/resize.
   useEffect(() => {
     if (!menuOpen) return;
     function onPointer(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOpen(false);
-      }
+      const target = e.target as Node;
+      if (triggerRef.current?.contains(target)) return;
+      if (menuRef.current?.contains(target)) return;
+      setMenuOpen(false);
     }
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") setMenuOpen(false);
     }
     document.addEventListener("mousedown", onPointer);
     document.addEventListener("keydown", onKey);
+    window.addEventListener("scroll", placeMenu, true);
+    window.addEventListener("resize", placeMenu);
     return () => {
       document.removeEventListener("mousedown", onPointer);
       document.removeEventListener("keydown", onKey);
+      window.removeEventListener("scroll", placeMenu, true);
+      window.removeEventListener("resize", placeMenu);
     };
-  }, [menuOpen]);
+  }, [menuOpen, placeMenu]);
 
   function requireAuth(): boolean {
     if (isAuthenticated) return true;
@@ -181,7 +214,7 @@ export function FeedCardActions({
     return false;
   }
 
-  // Mute a topic: optimistically drop every feed card carrying it, 3s deferred commit, Undo
+  // Mute a topic: optimistically drop every feed card carrying it, 5s deferred commit, Undo
   // restores the snapshot. Distinct from per-article DISCARD — this is a feed-wide topic hide.
   function handleMuteTopic(label: string, interestId: number) {
     setMenuOpen(false);
@@ -211,7 +244,7 @@ export function FeedCardActions({
     });
   }
 
-  // Mute a source: optimistically drop every feed card from it, 3s deferred commit, Undo
+  // Mute a source: optimistically drop every feed card from it, 5s deferred commit, Undo
   // restores the snapshot. Feed-wide hide, keyed by the article's sourceId.
   function handleMuteSource(id: number, name: string) {
     setMenuOpen(false);
@@ -241,7 +274,7 @@ export function FeedCardActions({
     });
   }
 
-  // One-tap save → default "Salvati" list (backend auto-files on SAVE). 3s deferred commit.
+  // One-tap save → default "Salvati" list (backend auto-files on SAVE). 5s deferred commit.
   function handleSave() {
     if (!requireAuth()) return;
     setSaved(true);
@@ -258,7 +291,7 @@ export function FeedCardActions({
     });
   }
 
-  // Hide → ONE TAP: remove from the feed immediately; 3s deferred DISCARD; Undo restores the
+  // Hide → ONE TAP: remove from the feed immediately; 5s deferred DISCARD; Undo restores the
   // snapshot. The undo toast carries OPTIONAL §11.2 reason chips (skippable): tapping one rides
   // its code along on the deferred DISCARD as `reason`; no tap → plain DISCARD, no reason. The
   // feed cache is keyed by mode (["feed", mode]); match every feed query by prefix.
@@ -343,22 +376,32 @@ export function FeedCardActions({
           at least one topic resolves to a mutable interest OR the article has a source id.
           Distinct from the per-article DISCARD above. */}
       {mutableTopics.length > 0 || sourceId != null ? (
-        <div className="relative" ref={menuRef}>
+        <div className="inline-flex" ref={triggerRef}>
           <ActionButton
-            onClick={() => setMenuOpen((v) => !v)}
+            onClick={() => {
+              if (menuOpen) {
+                setMenuOpen(false);
+              } else {
+                placeMenu();
+                setMenuOpen(true);
+              }
+            }}
             label={t("notInterested")}
             aria-haspopup="menu"
             aria-expanded={menuOpen}
           >
             <Ban className="size-4" aria-hidden="true" />
           </ActionButton>
-          {menuOpen ? (
-            <div
-              role="menu"
-              aria-label={t("notInterested")}
-              className="absolute right-0 z-20 mt-1 min-w-52 overflow-hidden rounded-md border border-border bg-card py-1 shadow-md"
-            >
-              {mutableTopics.length > 0 ? (
+          {menuOpen && menuPos
+            ? createPortal(
+                <div
+                  ref={menuRef}
+                  role="menu"
+                  aria-label={t("notInterested")}
+                  style={{ top: menuPos.top, right: menuPos.right }}
+                  className="fixed z-50 min-w-52 max-w-[calc(100vw-1rem)] overflow-hidden rounded-md border border-border bg-card py-1 shadow-md"
+                >
+                  {mutableTopics.length > 0 ? (
                 <>
                   <p className="px-3 py-1.5 text-xs font-medium text-muted-foreground">
                     {t("hideTopicHeading")}
@@ -401,8 +444,10 @@ export function FeedCardActions({
                   </button>
                 </>
               ) : null}
-            </div>
-          ) : null}
+                </div>,
+                document.body,
+              )
+            : null}
         </div>
       ) : null}
 

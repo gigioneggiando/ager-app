@@ -9,8 +9,10 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { createPortal } from "react-dom";
 
 import { cn } from "@/lib/utils";
+import { useIsClient } from "@/lib/use-is-client";
 
 /** An optional chip rendered inside an undo toast (e.g. a DISCARD reason). */
 export interface ToastChip {
@@ -60,6 +62,8 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ActiveToast[]>([]);
   const [selected, setSelected] = useState<Record<number, string>>({});
+  // Portal target only exists in the browser; gate the host on the client (SSR-safe).
+  const isClient = useIsClient();
   const nextId = useRef(0);
   const timers = useRef(new Map<number, ReturnType<typeof setTimeout>>());
   // The committed selection per toast id, read by the (closure-captured) commit timer.
@@ -123,11 +127,15 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ show }}>
       {children}
-      <div
-        className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex flex-col items-center gap-2 p-4"
-        role="region"
-        aria-label="Notifiche"
-      >
+      {/* Portal to <body> so the fixed toast anchors to the viewport and survives scroll
+          even if an ancestor establishes a containing block (transform/filter/etc.). */}
+      {isClient
+        ? createPortal(
+            <div
+              className="pointer-events-none fixed inset-x-0 bottom-0 z-50 flex flex-col items-center gap-2 p-4"
+              role="region"
+              aria-label="Notifiche"
+            >
         {toasts.map((t) => (
           <div
             key={t.id}
@@ -176,7 +184,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             ) : null}
           </div>
         ))}
-      </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </ToastContext.Provider>
   );
 }

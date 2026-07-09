@@ -42,15 +42,39 @@ describe("FeedCardActions", () => {
     expect(interactions()).toHaveLength(0);
     expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
 
-    // Let the 3s undo window elapse: the DISCARD commits, with no reason.
+    // Let the 5s undo window elapse: the DISCARD commits, with no reason.
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(5000);
     });
     expect(interactions()[0]?.body).toMatchObject({
       articleId: 42,
       type: "DISCARD",
     });
     expect(interactions()[0]?.body).not.toHaveProperty("reason");
+  });
+
+  it("keeps the undo toast and the pending DISCARD alive across a scroll", async () => {
+    renderWithProviders(
+      <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
+    expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
+
+    // Scrolling the feed must not dismiss the (viewport-fixed) toast...
+    fireEvent.scroll(window);
+    fireEvent.scroll(document);
+    expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
+    expect(interactions()).toHaveLength(0);
+
+    // ...nor cancel the deferred commit — it still fires when the window elapses.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(5000);
+    });
+    expect(interactions()[0]?.body).toMatchObject({
+      articleId: 42,
+      type: "DISCARD",
+    });
   });
 
   it("attaches the §11.2 reason when a chip in the undo toast is tapped", async () => {
@@ -75,7 +99,7 @@ describe("FeedCardActions", () => {
     // Tapping a chip keeps the window open; the reason rides the deferred DISCARD.
     expect(interactions()).toHaveLength(0);
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(5000);
     });
     expect(interactions()[0]?.body).toMatchObject({
       articleId: 42,
@@ -94,7 +118,7 @@ describe("FeedCardActions", () => {
 
     // Even after the window elapses, no interaction is posted.
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(5000);
     });
     expect(interactions()).toHaveLength(0);
   });
@@ -112,7 +136,7 @@ describe("FeedCardActions", () => {
     // The toast is dismissed and nothing commits.
     expect(screen.queryByText(/Nascosto/i)).not.toBeInTheDocument();
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(5000);
     });
     expect(interactions()).toHaveLength(0);
   });
@@ -129,7 +153,7 @@ describe("FeedCardActions", () => {
       expect.stringContaining("/it/login?next="),
     );
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(5000);
     });
     expect(interactions()).toHaveLength(0);
   });
@@ -196,10 +220,32 @@ describe("FeedCardActions — topic mute (Non mi interessa)", () => {
     expect(screen.getByText(/Argomento «Clima» nascosto/i)).toBeInTheDocument();
 
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(5000);
     });
     const post = mutes().find((c) => c.body);
     expect(post?.body).toMatchObject({ interestId: 7 });
+  });
+
+  it("portals the menu onto <body> so the card cannot clip it, and its item is clickable", async () => {
+    renderWithProviders(
+      <FeedCardActions
+        articleId={42}
+        url="https://e.com/x"
+        title="X"
+        topics={["Clima"]}
+      />,
+    );
+    await flushInterests();
+
+    fireEvent.click(screen.getByRole("button", { name: /Non mi interessa/i }));
+
+    // The menu escapes the (overflow-hidden) card by rendering directly under <body>.
+    const menu = screen.getByRole("menu");
+    expect(menu.parentElement).toBe(document.body);
+
+    // The item genuinely registers a click (the outside-click handler must not swallow it).
+    fireEvent.click(screen.getByRole("menuitem", { name: /Nascondi «Clima»/i }));
+    expect(screen.getByText(/Argomento «Clima» nascosto/i)).toBeInTheDocument();
   });
 
   it("cancels the mute when Annulla is clicked", async () => {
@@ -218,7 +264,7 @@ describe("FeedCardActions — topic mute (Non mi interessa)", () => {
     fireEvent.click(screen.getByRole("button", { name: /Annulla/i }));
 
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(5000);
     });
     expect(mutes().filter((c) => c.body)).toHaveLength(0);
   });
@@ -263,7 +309,7 @@ describe("FeedCardActions — source mute (Nascondi fonte)", () => {
     expect(screen.getByText(/Fonte «Il Post» nascosta/i)).toBeInTheDocument();
 
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(5000);
     });
     expect(
       sourceMutes().find((c) => c.url.endsWith("/api/me/muted-sources/5")),
@@ -286,7 +332,7 @@ describe("FeedCardActions — source mute (Nascondi fonte)", () => {
     fireEvent.click(screen.getByRole("button", { name: /Annulla/i }));
 
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(5000);
     });
     expect(sourceMutes()).toHaveLength(0);
   });

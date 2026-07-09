@@ -41,7 +41,7 @@ describe("FeedCard", () => {
     );
   });
 
-  it("renders source, type, topics, excerpt, reading time and the why affordance", () => {
+  it("renders source, type, topics, excerpt and the why affordance", () => {
     renderWithProviders(<FeedCard item={baseItem} />);
     expect(screen.getByText("ANSA")).toBeInTheDocument();
     expect(screen.getByText(/agenzia/)).toBeInTheDocument();
@@ -50,10 +50,14 @@ describe("FeedCard", () => {
     expect(
       screen.getByText("Cosa cambia per i comuni e perché conta."),
     ).toBeInTheDocument();
-    expect(screen.getByText("6 min di lettura")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /Perché lo vedo/i }),
     ).toBeInTheDocument();
+  });
+
+  it("does not show a reading-time estimate (link-first: no stored body)", () => {
+    renderWithProviders(<FeedCard item={baseItem} />);
+    expect(screen.queryByText(/min di lettura/i)).not.toBeInTheDocument();
   });
 
   it("is link-first: no article body beyond the excerpt (collapsed)", () => {
