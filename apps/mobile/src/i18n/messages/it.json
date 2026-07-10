@@ -11,6 +11,7 @@
   },
   "SignIn": {
     "title": "Accedi",
+    "close": "Chiudi",
     "emailStep": {
       "subtitle": "Inserisci la tua email: ti invieremo un codice di accesso.",
       "emailLabel": "Email",
@@ -42,6 +43,23 @@
   "Account": {
     "signedInAs": "Accesso come",
     "signOut": "Esci"
+  },
+  "AuthPrompt": {
+    "title": "Accedi per continuare",
+    "description": "Accedi per usare questa funzione.",
+    "accountDescription": "Accedi per vedere il tuo account.",
+    "savedDescription": "Accedi per vedere le tue liste di lettura.",
+    "signIn": "Accedi"
+  },
+  "Search": {
+    "placeholder": "Cerca articoli",
+    "browseByTag": "Sfoglia per argomento",
+    "taggedWith": "Argomento: %{tag}",
+    "clear": "Cancella",
+    "emptyTitle": "Nessun risultato",
+    "emptyDescription": "Prova con altre parole o un altro argomento.",
+    "errorTitle": "Ricerca non riuscita",
+    "errorDescription": "Qualcosa è andato storto. Riprova."
   },
   "Actions": {
     "save": "Salva",

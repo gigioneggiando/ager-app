@@ -3,18 +3,23 @@ import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { AuthRequired } from "@/components/states/auth-required";
 import { useSignOut } from "@/features/auth/use-sign-out";
 import { t } from "@/i18n/i18n";
 import { useTheme } from "@/theme";
 
 /**
- * Minimal account screen for M2 — shows who's signed in and a sign-out action. The full
- * account + stats experience is M5.
+ * Minimal account screen — who's signed in + sign-out. Session-gated: anonymous browsers
+ * get the sign-in prompt. The full account + stats experience is M5.
  */
 export default function AccountScreen() {
   const theme = useTheme();
-  const { user } = useSession();
+  const { status, user } = useSession();
   const signOut = useSignOut();
+
+  if (status !== "authenticated") {
+    return <AuthRequired description={t("AuthPrompt.accountDescription")} />;
+  }
 
   return (
     <SafeAreaView

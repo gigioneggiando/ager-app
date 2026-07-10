@@ -103,6 +103,18 @@ with §11.2 reasons + "mute topic/source" escalation; optimistic removal from th
 picking a reason posts `DISCARD`, a mute posts to `muted-interests`/`muted-sources`), and
 Share (RN `Share` + `SHARE`).
 
+## Browsing & search (M4a)
+
+Feed + Search browse **anonymously** (the backend serves a cold-start feed); Saved + Account
+require a session and show a sign-in prompt when anonymous. Personal actions (Save / Hide /
+Mute) route anonymous users to the sign-in modal via `requireAuth` (with return); open-at-
+source + Share stay available.
+
+**Search** (Search tab): free-text (`GET /api/articles/search`) or by tag
+(`GET /api/articles/tags/{tag}/search`), browse-by-tag chips (`GET /api/articles/tags`),
+infinite pagination, and empty/error states. Results reuse the feed card; since a search
+result carries no URL, tapping it fetches the article detail and opens at source.
+
 ## Manual verification (device) — pending
 
 No simulator on the Windows dev box, so these need a device / simulator run:
@@ -113,6 +125,9 @@ No simulator on the Windows dev box, so these need a device / simulator run:
   tapping a card opens the publisher and records `OPENED_EXTERNAL`.
 - **Actions (M3b):** Save toggles the icon and records `SAVE`; Hide removes the card and the
   reason/mute sheet commits `DISCARD`/mute; Share opens the OS sheet and records `SHARE`.
+- **Browsing (M4a):** Feed + Search work signed out; a personal action routes to sign-in and
+  returns; Saved/Account show the sign-in prompt; search (text + tag) returns results and a
+  result opens the publisher.
 
 ## Known placeholders
 

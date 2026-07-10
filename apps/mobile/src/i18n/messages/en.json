@@ -11,6 +11,7 @@
   },
   "SignIn": {
     "title": "Sign in",
+    "close": "Close",
     "emailStep": {
       "subtitle": "Enter your email and we'll send you a sign-in code.",
       "emailLabel": "Email",
@@ -42,6 +43,23 @@
   "Account": {
     "signedInAs": "Signed in as",
     "signOut": "Sign out"
+  },
+  "AuthPrompt": {
+    "title": "Sign in to continue",
+    "description": "Sign in to use this feature.",
+    "accountDescription": "Sign in to see your account.",
+    "savedDescription": "Sign in to see your reading lists.",
+    "signIn": "Sign in"
+  },
+  "Search": {
+    "placeholder": "Search articles",
+    "browseByTag": "Browse by topic",
+    "taggedWith": "Topic: %{tag}",
+    "clear": "Clear",
+    "emptyTitle": "No results",
+    "emptyDescription": "Try different words or another topic.",
+    "errorTitle": "Search failed",
+    "errorDescription": "Something went wrong. Try again."
   },
   "Actions": {
     "save": "Save",

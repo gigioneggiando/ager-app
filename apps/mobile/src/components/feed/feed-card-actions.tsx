@@ -1,10 +1,12 @@
 import type { FeedPage, Interest } from "@ager/api-client";
+import { useSession } from "@ager/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { type InfiniteData, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Platform, Pressable, Share, StyleSheet, Text } from "react-native";
 
 import { HideReasonSheet } from "@/components/feed/hide-reason-sheet";
+import { useRequireAuth } from "@/features/auth/use-require-auth";
 import { FEED_QUERY_KEY } from "@/features/feed/use-feed";
 import { removeFromFeed } from "@/features/feed/feed-cache";
 import {
@@ -16,6 +18,7 @@ import {
 import { resolveMutableTopics } from "@/features/interests/use-interests";
 import { postInteraction } from "@/features/interactions/post-interaction";
 import { muteInterest, muteSource } from "@/features/mutes/use-mutes";
+import { apiClient } from "@/lib/api/client";
 import { t } from "@/i18n/i18n";
 import { safeUrl } from "@/lib/safe-url";
 import { useTheme } from "@/theme";
@@ -63,9 +66,11 @@ function ActionButton({
 }
 
 /**
- * Feed card actions (M3b): Save (SAVE → default list), Hide (DISCARD + §11.2 reasons / mute
- * escalation, optimistic removal), Share (RN Share + SHARE). The feed tab is auth-gated, so
- * a session is always present. Never logs PII.
+ * Feed card actions: Save (SAVE → default list), Hide (DISCARD + §11.2 reasons / mute
+ * escalation, optimistic removal), Share (RN Share + SHARE). Feed + Search browse
+ * anonymously (M4a), so the personal actions (Save / Hide / Mute) route anonymous users to
+ * sign-in via `requireAuth`; Share stays available and only records SHARE when signed in.
+ * Never logs PII.
  */
 export function FeedCardActions({
   articleId,
@@ -85,6 +90,9 @@ export function FeedCardActions({
   interests: Interest[] | undefined;
 }) {
   const queryClient = useQueryClient();
+  const requireAuth = useRequireAuth();
+  const { status } = useSession();
+  const isAuthenticated = status === "authenticated";
   const [saved, setSaved] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
 
@@ -99,9 +107,15 @@ export function FeedCardActions({
   );
 
   function handleSave() {
+    if (!requireAuth()) return; // anonymous → route to sign-in
     if (saved) return;
     setSaved(true); // optimistic; SAVE auto-files to the default "Salvati" list
     void postInteraction(articleId, "SAVE");
+  }
+
+  function openHideSheet() {
+    if (!requireAuth()) return; // anonymous → route to sign-in
+    setSheetOpen(true);
   }
 
   function commit(action: HideCommit) {
@@ -139,7 +153,14 @@ export function FeedCardActions({
   }
 
   async function handleShare() {
-    const target = safeUrl(url);
+    let target = safeUrl(url);
+    if (!target) {
+      // Search results carry no URL — resolve it from the article detail.
+      const { data } = await apiClient.GET("/api/articles/{id}", {
+        params: { path: { id: articleId } },
+      });
+      target = safeUrl(data?.url ?? data?.canonicalUrl ?? undefined);
+    }
     if (!target) return;
     try {
       const result = await Share.share(
@@ -147,7 +168,7 @@ export function FeedCardActions({
           ? { url: target, message: title }
           : { message: `${title} ${target}` },
       );
-      if (result.action === Share.sharedAction) {
+      if (result.action === Share.sharedAction && isAuthenticated) {
         void postInteraction(articleId, "SHARE");
       }
     } catch {
@@ -166,7 +187,7 @@ export function FeedCardActions({
       <ActionButton
         icon="eye-off-outline"
         label={t("Actions.discard")}
-        onPress={() => setSheetOpen(true)}
+        onPress={openHideSheet}
       />
       <ActionButton
         icon="share-outline"
