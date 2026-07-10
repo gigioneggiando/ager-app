@@ -4,12 +4,16 @@ import nextConfigPromiseOrObject from "../../next.config";
 describe("next.config.ts redirects", () => {
   it("defines the expected redirects", async () => {
     // next-intl might wrap config in a function or a promise, or it could be a direct object or function.
-    const resolvedConfig =
+    const resolvedConfig = (
       typeof nextConfigPromiseOrObject === "function"
-        ? await (nextConfigPromiseOrObject as any)("phase", {
-            defaultConfig: {},
-          })
-        : await nextConfigPromiseOrObject;
+        ? await (
+            nextConfigPromiseOrObject as unknown as (
+              phase: string,
+              ctx: { defaultConfig: Record<string, unknown> },
+            ) => unknown
+          )("phase", { defaultConfig: {} })
+        : await nextConfigPromiseOrObject
+    ) as { redirects: () => Promise<unknown[]> };
 
     expect(resolvedConfig.redirects).toBeDefined();
     const redirects = await resolvedConfig.redirects();
