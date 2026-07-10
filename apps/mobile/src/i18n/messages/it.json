@@ -1,0 +1,12 @@
+{
+  "Tabs": {
+    "feed": "Feed",
+    "search": "Cerca",
+    "saved": "Salvati",
+    "account": "Account"
+  },
+  "Common": {
+    "comingSoon": "Prossimamente",
+    "placeholderBody": "Questa sezione arriverà in un prossimo aggiornamento."
+  }
+}
