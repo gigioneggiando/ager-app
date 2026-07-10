@@ -18,13 +18,13 @@
       "submit": "Send code"
     },
     "otpStep": {
-      "subtitle": "We sent a code to {email}.",
+      "subtitle": "We sent a code to %{email}.",
       "codeLabel": "Sign-in code",
       "codePlaceholder": "123456",
       "submit": "Sign in",
       "changeEmail": "Use a different email",
       "resend": "Send a new code",
-      "resendCooldown": "Resend in {seconds}s"
+      "resendCooldown": "Resend in %{seconds}s"
     },
     "errors": {
       "rateLimit": "Too many attempts. Try again in a few minutes.",
@@ -42,5 +42,84 @@
   "Account": {
     "signedInAs": "Signed in as",
     "signOut": "Sign out"
+  },
+  "Feed": {
+    "heading": "Your feed",
+    "subheading": "An ordered selection of what matters, with the source always visible. Tap a headline to read on the publisher.",
+    "modeLabel": "Sort by",
+    "modeAnonNote": "Modes personalize the feed once you sign in. While signed out you see a neutral cold-start selection.",
+    "modes": {
+      "balanced": {
+        "label": "Balanced",
+        "help": "A calibrated mix of recency, relevance and variety."
+      },
+      "most_recent": {
+        "label": "Most recent",
+        "help": "Prioritizes the latest published news."
+      },
+      "more_pluralism": {
+        "label": "More pluralism",
+        "help": "Broadens the range of sources and viewpoints."
+      },
+      "most_personalized": {
+        "label": "Most personalized",
+        "help": "Leans more on your interests and actions."
+      },
+      "less_personalized": {
+        "label": "Less personalized",
+        "help": "Reduces the weight of your profile for a wider view."
+      },
+      "chronological": {
+        "label": "Chronological",
+        "help": "In time order, with no algorithmic re-ranking."
+      }
+    },
+    "card": {
+      "untitled": "Untitled",
+      "openExternal": "Open on publisher",
+      "time": {
+        "now": "now",
+        "minutes": "%{value} min ago",
+        "hours": "%{value} h ago",
+        "days": "%{value} d ago",
+        "weeks": "%{value} w ago"
+      }
+    },
+    "why": {
+      "trigger": "Why am I seeing this?",
+      "intro": "This item is ranked using several signals. Here's how much each one weighs.",
+      "score": "Overall score",
+      "feedMode": "Feed mode",
+      "version": "Recommender version",
+      "dimensions": {
+        "recency": { "label": "Recency", "help": "How recent the story is." },
+        "topicMatch": {
+          "label": "Topic match",
+          "help": "How well the topic fits your interests."
+        },
+        "sourceDiversity": {
+          "label": "Source diversity",
+          "help": "Favors a range of sources, avoiding concentration."
+        },
+        "topicVariety": {
+          "label": "Topic variety",
+          "help": "Keeps the feed varied, not a single subject."
+        },
+        "clusterProminence": {
+          "label": "Story prominence",
+          "help": "How much the story stands out across sources."
+        }
+      }
+    },
+    "list": {
+      "loading": "Loading the feed",
+      "errorTitle": "We couldn't load the feed",
+      "errorDescription": "Something went wrong. Please try again shortly.",
+      "retry": "Retry",
+      "emptyTitle": "Nothing here",
+      "emptyDescription": "There's nothing to show right now. Check back later.",
+      "caughtUpTitle": "You're all caught up",
+      "caughtUpDescription": "You've seen everything we've selected for now. Check back later for more."
+    }
   }
 }

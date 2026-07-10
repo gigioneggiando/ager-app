@@ -18,13 +18,13 @@
       "submit": "Invia il codice"
     },
     "otpStep": {
-      "subtitle": "Abbiamo inviato un codice a {email}.",
+      "subtitle": "Abbiamo inviato un codice a %{email}.",
       "codeLabel": "Codice di accesso",
       "codePlaceholder": "123456",
       "submit": "Accedi",
       "changeEmail": "Usa un'altra email",
       "resend": "Invia di nuovo il codice",
-      "resendCooldown": "Invia di nuovo tra {seconds}s"
+      "resendCooldown": "Invia di nuovo tra %{seconds}s"
     },
     "errors": {
       "rateLimit": "Troppi tentativi. Riprova tra qualche minuto.",
@@ -42,5 +42,87 @@
   "Account": {
     "signedInAs": "Accesso come",
     "signOut": "Esci"
+  },
+  "Feed": {
+    "heading": "Il tuo feed",
+    "subheading": "Una selezione ordinata di ciò che conta, con la fonte sempre visibile. Tocca un titolo per leggere sull'editore.",
+    "modeLabel": "Ordina per",
+    "modeAnonNote": "Le modalità personalizzano il feed una volta effettuato l'accesso. Da non registrato vedi una selezione iniziale neutra.",
+    "modes": {
+      "balanced": {
+        "label": "Equilibrato",
+        "help": "Un mix calibrato di attualità, affinità e varietà."
+      },
+      "most_recent": {
+        "label": "Più recenti",
+        "help": "Dà priorità alle notizie pubblicate da poco."
+      },
+      "more_pluralism": {
+        "label": "Più pluralismo",
+        "help": "Amplia la gamma di fonti e punti di vista."
+      },
+      "most_personalized": {
+        "label": "Più personalizzato",
+        "help": "Si appoggia di più ai tuoi interessi e alle tue azioni."
+      },
+      "less_personalized": {
+        "label": "Meno personalizzato",
+        "help": "Riduce il peso del tuo profilo per una visione più ampia."
+      },
+      "chronological": {
+        "label": "Cronologico",
+        "help": "In ordine di tempo, senza riordino algoritmico."
+      }
+    },
+    "card": {
+      "untitled": "Senza titolo",
+      "openExternal": "Apri sull'editore",
+      "time": {
+        "now": "ora",
+        "minutes": "%{value} min fa",
+        "hours": "%{value} h fa",
+        "days": "%{value} g fa",
+        "weeks": "%{value} sett fa"
+      }
+    },
+    "why": {
+      "trigger": "Perché lo vedo?",
+      "intro": "Questo contenuto è ordinato in base a più segnali. Ecco il peso di ciascuno.",
+      "score": "Punteggio complessivo",
+      "feedMode": "Modalità feed",
+      "version": "Versione del recommender",
+      "dimensions": {
+        "recency": {
+          "label": "Attualità",
+          "help": "Quanto è recente la notizia."
+        },
+        "topicMatch": {
+          "label": "Affinità tematica",
+          "help": "Quanto il tema è in linea con i tuoi interessi."
+        },
+        "sourceDiversity": {
+          "label": "Diversità delle fonti",
+          "help": "Favorisce fonti diverse, evitando la concentrazione."
+        },
+        "topicVariety": {
+          "label": "Varietà dei temi",
+          "help": "Mantiene il feed vario, senza un solo argomento."
+        },
+        "clusterProminence": {
+          "label": "Rilevanza della notizia",
+          "help": "Quanto la notizia emerge tra fonti diverse."
+        }
+      }
+    },
+    "list": {
+      "loading": "Caricamento del feed",
+      "errorTitle": "Non siamo riusciti a caricare il feed",
+      "errorDescription": "Qualcosa è andato storto. Riprova tra poco.",
+      "retry": "Riprova",
+      "emptyTitle": "Nessun contenuto",
+      "emptyDescription": "Per ora non c'è nulla da mostrare. Torna più tardi.",
+      "caughtUpTitle": "Sei in pari",
+      "caughtUpDescription": "Hai visto tutto ciò che abbiamo selezionato per ora. Torna più tardi per nuovi contenuti."
+    }
   }
 }

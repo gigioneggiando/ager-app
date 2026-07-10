@@ -77,19 +77,39 @@ in a later PR.
 ```
 src/
   app/                     # Expo Router routes
-    _layout.tsx            # providers: gesture-handler, safe-area, Query, Theme; font gate
-    (tabs)/                # tab shell — Feed · Search · Saved · Account (placeholders)
-  components/              # shared UI (ScreenPlaceholder)
+    _layout.tsx            # providers + session gate (auth / onboarding / tabs)
+    (auth)/                # sign-in stack (email → OTP)
+    (tabs)/                # Feed (real) · Search · Saved · Account
+  components/              # shared UI (feed card, why-shown, states, …)
+  features/
+    feed/                  # modes, feed-cache helpers, useFeed, open-at-source
+    interactions/          # postInteraction, useOpenArticle (OPENED_EXTERNAL)
+    auth/                  # onboarding gate, sign-out
   theme/                   # @ager/shared tokens → dp adapter, colors, fonts, useTheme()
-  lib/
-    api/                   # @ager/api-client wrapper (base URL + bearer middleware)
-    query/                 # TanStack Query client
+  lib/                     # api client, query client, safe-url, relative-time
   i18n/                    # expo-localization + i18n-js; default locale `it`, plus `en`
 ```
 
-## Known placeholders (M1)
+## Feed (M3a)
+
+Link-first feed on the Feed tab: cursor-paginated `useInfiniteQuery` over `GET /api/feed`
+(6 ranking modes), pull-to-refresh, infinite scroll, and loading/empty/error/caught-up
+states. The card never renders an article body — tapping a headline opens the publisher via
+`expo-web-browser` (a `safeUrl` http(s) guard applies) and fires `OPENED_EXTERNAL`, the
+primary link-first signal. Card actions (Save / Hide+reasons / Share / Mute) land in M3b.
+
+## Manual verification (device) — pending
+
+No simulator on the Windows dev box, so these need a device / simulator run:
+
+- **Auth (M2):** OTP round-trip on the real API; token persists across restart; expired
+  access auto-refreshes; sign-out clears secure storage.
+- **Feed (M3a):** feed loads and scrolls (infinite); pull-to-refresh; mode switch re-ranks;
+  tapping a card opens the publisher and (signed in) records `OPENED_EXTERNAL`.
+
+## Known placeholders
 
 - **App icon & splash** are the Expo template defaults — replace with Ager brand assets.
-- **Dark palette** is not signed off yet: `src/theme/colors.ts` wires light and leaves a
-  clean `dark` seam (`useTheme()` degrades any dark request to light until then).
-- **Screens** are `ScreenPlaceholder`s; no feature logic.
+- **Dark palette**: `main`'s `@ager/shared` now ships a signed-off dark palette; the mobile
+  `src/theme/colors.ts` `dark` seam is ready to wire (a later PR).
+- **Search / Saved / Account** tabs are still placeholders (later milestones).
