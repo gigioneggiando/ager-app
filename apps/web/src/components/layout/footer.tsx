@@ -3,7 +3,6 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/brand/logo";
 import { Container } from "@/components/layout/container";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 export function Footer() {
   const t = useTranslations("Footer");
@@ -59,7 +58,6 @@ export function Footer() {
             </p>
             <p className="italic">{t("claim")}</p>
           </div>
-          <ThemeToggle />
         </div>
       </Container>
     </footer>
