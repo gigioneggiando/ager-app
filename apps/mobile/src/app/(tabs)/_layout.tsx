@@ -1,11 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 
+import { useUnreadCount } from "@/features/notifications/use-notifications";
 import { t } from "@/i18n/i18n";
 import { useTheme } from "@/theme";
 
 export default function TabsLayout() {
   const theme = useTheme();
+  const unreadCount = useUnreadCount();
 
   return (
     <Tabs
@@ -50,6 +52,7 @@ export default function TabsLayout() {
         name="account"
         options={{
           title: t("Tabs.account"),
+          tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" color={color} size={size} />
           ),

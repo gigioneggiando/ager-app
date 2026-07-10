@@ -70,6 +70,17 @@
     "savedDescription": "Accedi per vedere le tue liste di lettura.",
     "signIn": "Accedi"
   },
+  "Notifications": {
+    "title": "Notifiche",
+    "markAllRead": "Segna tutte",
+    "unread": "Non letta",
+    "fallbackContent": "Hai una nuova notifica.",
+    "authDescription": "Accedi per vedere le tue notifiche.",
+    "emptyTitle": "Nessuna notifica",
+    "emptyDescription": "Sei aggiornato. Le nuove notifiche appariranno qui.",
+    "errorTitle": "Non siamo riusciti a caricare le notifiche",
+    "errorDescription": "Qualcosa è andato storto. Trascina per aggiornare."
+  },
   "Search": {
     "placeholder": "Cerca articoli",
     "browseByTag": "Sfoglia per argomento",

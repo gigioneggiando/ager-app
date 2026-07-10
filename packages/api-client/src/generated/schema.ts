@@ -1151,6 +1151,75 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/me/devices": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Register (upsert) the caller's Expo push token for this device. */
+    post: operations["RegisterDevice"];
+    /** Un-register a push token (scoped to the caller). Idempotent. */
+    delete: operations["UnregisterDevice"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/me/notifications": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** List the caller's notifications (newest first, cursor-paged) with an unread count. */
+    get: operations["GetMyNotifications"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/me/notifications/{id}/read": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** Mark one of the caller's notifications read. 404 if it isn't the caller's. */
+    patch: operations["MarkNotificationRead"];
+    trace?: never;
+  };
+  "/api/me/notifications/read-all": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** Mark all of the caller's notifications read. Idempotent. */
+    post: operations["MarkAllNotificationsRead"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/me/suggested-interests": {
     parameters: {
       query?: never;
@@ -1324,6 +1393,22 @@ export interface paths {
       cookie?: never;
     };
     get: operations["GetPublicReadingListItems"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/reading-lists/public/users/{ownerUserId}/{slug}/items": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["GetPublicReadingListItemsBySlug"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1714,6 +1799,27 @@ export interface components {
       weight?: number;
       source?: string | null;
     };
+    NotificationDto: {
+      /** Format: int32 */
+      id?: number;
+      type?: string | null;
+      entityType?: string | null;
+      /** Format: int32 */
+      entityId?: number | null;
+      content?: string | null;
+      metadataJson?: string | null;
+      isRead?: boolean;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      readAt?: string | null;
+    };
+    NotificationsPageDto: {
+      items?: components["schemas"]["NotificationDto"][] | null;
+      /** Format: int32 */
+      unreadCount?: number;
+      nextCursor?: string | null;
+    };
     PasswordStrengthRequest: {
       /** Format: int32 */
       length?: number;
@@ -1795,6 +1901,12 @@ export interface components {
     };
     RefreshTokenRequest: {
       refreshToken?: string | null;
+    };
+    RegisterDeviceRequest: {
+      token?: string | null;
+      /** @enum {string} */
+      platform?: "Ios" | "Android";
+      appVersion?: string | null;
     };
     RegisterRequest: {
       username?: string | null;
@@ -1964,6 +2076,9 @@ export interface components {
       requesterRole?: string | null;
       reason?: string | null;
       honeypot?: string | null;
+    };
+    UnregisterDeviceRequest: {
+      token?: string | null;
     };
     UpdateMyProfileRequest: {
       username?: string | null;
@@ -3551,6 +3666,167 @@ export interface operations {
       };
     };
   };
+  RegisterDevice: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RegisterDeviceRequest"];
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UnregisterDevice: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UnregisterDeviceRequest"];
+      };
+    };
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unprocessable Content */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetMyNotifications: {
+    parameters: {
+      query?: {
+        limit?: number;
+        cursor?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["NotificationsPageDto"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  MarkNotificationRead: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  MarkAllNotificationsRead: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   GetSuggestedInterests: {
     parameters: {
       query?: never;
@@ -3993,6 +4269,39 @@ export interface operations {
       header?: never;
       path: {
         readingListId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ReadingListItemsPageDto"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  GetPublicReadingListItemsBySlug: {
+    parameters: {
+      query?: {
+        limit?: number;
+        cursor?: string;
+      };
+      header?: never;
+      path: {
+        ownerUserId: string;
+        slug: string;
       };
       cookie?: never;
     };

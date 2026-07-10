@@ -61,3 +61,10 @@ export type RequestRestoreOtpRequest =
  * projection this API returns elsewhere (the feed). Render defensively (all optional).
  */
 export type Article = components["schemas"]["FeedItemDto"];
+
+// Mobile push (device tokens + notifications inbox).
+export type Notification = components["schemas"]["NotificationDto"];
+export type NotificationsPage = components["schemas"]["NotificationsPageDto"];
+export type RegisterDeviceRequest = components["schemas"]["RegisterDeviceRequest"];
+export type UnregisterDeviceRequest =
+  components["schemas"]["UnregisterDeviceRequest"];

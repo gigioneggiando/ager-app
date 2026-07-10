@@ -146,6 +146,31 @@ new user (no interests) is routed to `/onboarding` (the same picker, with skip) 
 existing user goes straight to the feed. The **suggested-interests nudge** (F2,
 `/api/me/suggested-interests`) shows on the feed with optimistic confirm / dismiss.
 
+## Push notifications (M6)
+
+App-side push, auth-gated end to end (anonymous users never register a token or see an inbox).
+
+- **Device registration** (`features/push/use-push-registration.ts`): once authenticated, the
+  app requests notification permission, mints an Expo push token
+  (`getExpoPushTokenAsync`), and upserts it with `POST /api/me/devices`
+  (`{ token, platform, appVersion }`). It re-registers when the OS rotates the token and
+  `DELETE /api/me/devices` at sign-out. Best-effort by design: permission-denied, no EAS
+  project, or a simulator simply skips registration. **The token is never logged.**
+- **Inbox** (`/notifications`, from Account): `GET /api/me/notifications`
+  (cursor-paginated + `unreadCount`) as an infinite list with read state; tap marks read
+  (`PATCH …/{id}/read`) and "Mark all" (`POST …/read-all`), both **optimistic**; an unread
+  badge shows on the Account tab and the Account row. Tapping a suggested-interest
+  notification deep-links to the interests editor.
+- **Reception** (`features/push/use-push-listeners.ts`): a foreground arrival refreshes the
+  inbox/badge; a tap (background or cold start, via `getLastNotificationResponseAsync`)
+  deep-links from the payload `data` (`{ type, interestId }`) through Expo Router. The pure
+  routing + cache logic is unit-tested (`features/notifications/*.test.ts`).
+
+**Real delivery needs app-side credentials — out of scope for this PR.** End-to-end pushes
+require an EAS project (`projectId`) plus **FCM** (Android) and an **APNs key** (iOS)
+configured on the Expo project. In Expo Go / a simulator you can exercise permission,
+registration, the inbox screen and deep-linking, but **not** actual push delivery.
+
 ## Manual verification (device) — pending
 
 No simulator on the Windows dev box, so these need a device / simulator run:
@@ -167,12 +192,19 @@ No simulator on the Windows dev box, so these need a device / simulator run:
 - **Interests/onboarding (M5b):** a new user is routed to onboarding → picks interests →
   feed; the editor pre-selects current interests and saves; the suggestions nudge
   confirms/dismisses.
+- **Push (M6):** grant permission after sign-in and confirm the device registers (real EAS
+  build); the inbox lists notifications with an unread badge; tap marks read and "Mark all"
+  clears the badge; a suggested-interest tap opens the interests editor; a push received in
+  foreground refreshes the inbox, and a tap from background/killed deep-links to the target.
+  (Delivery itself needs the EAS/FCM/APNs setup above.)
 
 ## Known placeholders
 
 - **App icon & splash** are the Expo template defaults — replace with Ager brand assets.
 - **Theme / language prefs** apply live but aren't persisted across launches yet (shared
   prefs store is a later PR).
-- **Notifications** setting is a placeholder (no server-side preference yet).
+- **Notifications**: the inbox + push registration/reception ship in M6, but the Settings
+  **notifications toggle** is still a placeholder (no server-side preference yet), and real
+  push delivery needs the app-side EAS/FCM/APNs credentials (see “Push notifications”).
 - **Interests editor / onboarding** land in M5b (M2's onboarding placeholder becomes the real
   editor).

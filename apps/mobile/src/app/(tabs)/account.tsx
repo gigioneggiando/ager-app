@@ -19,6 +19,7 @@ import {
   useExportData,
 } from "@/features/account/use-account";
 import { useSignOut } from "@/features/auth/use-sign-out";
+import { useUnreadCount } from "@/features/notifications/use-notifications";
 import { t } from "@/i18n/i18n";
 import { useTheme } from "@/theme";
 
@@ -89,6 +90,7 @@ export default function AccountScreen() {
   const signOut = useSignOut();
   const exportData = useExportData();
   const deleteAccount = useDeleteAccount();
+  const unreadCount = useUnreadCount();
 
   if (status !== "authenticated") {
     return <AuthRequired description={t("AuthPrompt.accountDescription")} />;
@@ -175,6 +177,31 @@ export default function AccountScreen() {
         ) : null}
 
         <Row
+          icon="notifications-outline"
+          label={t("Notifications.title")}
+          onPress={() => router.push("/notifications")}
+          trailing={
+            unreadCount > 0 ? (
+              <View
+                style={[
+                  styles.badge,
+                  { backgroundColor: theme.colors.primary },
+                ]}
+              >
+                <Text
+                  style={{
+                    color: theme.colors.primaryForeground,
+                    fontFamily: theme.fonts.sansSemibold,
+                    fontSize: theme.fontSize.caption,
+                  }}
+                >
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </Text>
+              </View>
+            ) : undefined
+          }
+        />
+        <Row
           icon="stats-chart-outline"
           label={t("Stats.title")}
           onPress={() => router.push("/stats")}
@@ -226,5 +253,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 14,
     paddingVertical: 14,
+  },
+  badge: {
+    minWidth: 22,
+    height: 22,
+    borderRadius: 11,
+    paddingHorizontal: 6,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
