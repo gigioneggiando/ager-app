@@ -8,9 +8,10 @@ import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { LocaleProvider } from "@/i18n/locale-context";
 import { sessionController } from "@/lib/auth/session";
 import { createQueryClient } from "@/lib/query/client";
-import { ThemeProvider, useAppFonts } from "@/theme";
+import { ThemeProvider, useAppFonts, useTheme } from "@/theme";
 
 // Initialize the runtime locale (side effect) before any screen renders.
 import "@/i18n/i18n";
@@ -26,9 +27,11 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider>
-            <SessionProvider controller={sessionController}>
-              <RootNavigator />
-            </SessionProvider>
+            <LocaleProvider>
+              <SessionProvider controller={sessionController}>
+                <RootNavigator />
+              </SessionProvider>
+            </LocaleProvider>
           </ThemeProvider>
         </QueryClientProvider>
       </SafeAreaProvider>
@@ -46,6 +49,7 @@ export default function RootLayout() {
 function RootNavigator() {
   const [fontsLoaded, fontError] = useAppFonts();
   const { status } = useSession();
+  const theme = useTheme();
   const ready = (fontsLoaded || fontError) && status !== "loading";
 
   useEffect(() => {
@@ -56,7 +60,7 @@ function RootNavigator() {
 
   return (
     <>
-      <StatusBar style="dark" />
+      <StatusBar style={theme.scheme === "dark" ? "light" : "dark"} />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="onboarding" />
