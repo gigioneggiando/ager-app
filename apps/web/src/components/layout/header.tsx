@@ -10,6 +10,7 @@ import { Logo } from "@/components/brand/logo";
 import { Container } from "@/components/layout/container";
 import { LocaleSwitch } from "@/components/layout/locale-switch";
 import { UserMenu } from "@/components/layout/user-menu";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 type NavItem = { key: string; href: string; soon?: boolean };
 
@@ -24,6 +25,7 @@ const NAV_ITEMS: NavItem[] = [
 
 export function Header() {
   const t = useTranslations("Nav");
+  const tTheme = useTranslations("Theme");
   const [open, setOpen] = useState(false);
 
   return (
@@ -67,6 +69,9 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <UserMenu />
+          {/* Theme control lives in the always-visible header (the footer is unreachable with
+              endless scroll). Desktop/tablet: inline pill; mobile: a row in the menu below. */}
+          <ThemeToggle className="hidden md:inline-flex" />
           <LocaleSwitch />
           <button
             type="button"
@@ -113,6 +118,12 @@ export function Header() {
                 </Link>
               ),
             )}
+            <div className="mt-1 flex items-center justify-between border-t border-border px-1 pt-3">
+              <span className="text-sm font-medium text-foreground/80">
+                {tTheme("label")}
+              </span>
+              <ThemeToggle />
+            </div>
           </Container>
         </nav>
       ) : null}

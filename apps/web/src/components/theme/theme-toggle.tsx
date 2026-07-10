@@ -19,7 +19,7 @@ const OPTIONS = [
  * the pressed/selected state so SSR and first paint match (next-themes only knows the real
  * theme on the client) — before mount every segment renders unselected, no hydration flash.
  */
-export function ThemeToggle() {
+export function ThemeToggle({ className }: { className?: string }) {
   const t = useTranslations("Theme");
   const { theme, setTheme } = useTheme();
   const isClient = useIsClient();
@@ -29,7 +29,10 @@ export function ThemeToggle() {
     <div
       role="radiogroup"
       aria-label={t("label")}
-      className="inline-flex items-center gap-0.5 rounded-full border border-border bg-card p-0.5"
+      className={cn(
+        "inline-flex items-center gap-0.5 rounded-full border border-border bg-card p-0.5",
+        className,
+      )}
     >
       {OPTIONS.map(({ value, labelKey, Icon }) => {
         const selected = active === value;
