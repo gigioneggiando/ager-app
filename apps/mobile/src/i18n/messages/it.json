@@ -66,6 +66,7 @@
     "saved": "Salvato",
     "discard": "Nascondi",
     "share": "Condividi",
+    "addToList": "Aggiungi a una lista",
     "hideOnly": "Nascondi e basta",
     "hideTopic": "Nascondi «%{topic}»",
     "hideSource": "Nascondi «%{source}»",
@@ -157,5 +158,31 @@
       "caughtUpTitle": "Sei in pari",
       "caughtUpDescription": "Hai visto tutto ciò che abbiamo selezionato per ora. Torna più tardi per nuovi contenuti."
     }
+  },
+  "Lists": {
+    "newList": "Nuova lista",
+    "namePlaceholder": "Nome della lista",
+    "create": "Crea",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "deleteTitle": "Eliminare la lista?",
+    "deleteMessage": "«%{name}» verrà eliminata.",
+    "itemCount": "%{count} elementi",
+    "removeItem": "Rimuovi",
+    "addToList": "Aggiungi a una lista",
+    "emptyTitle": "Nessuna lista",
+    "emptyDescription": "Crea una lista per salvare gli articoli.",
+    "emptyItemsTitle": "Lista vuota",
+    "emptyItemsDescription": "Salva articoli in questa lista dal feed.",
+    "errorTitle": "Non siamo riusciti a caricare le liste"
+  },
+  "Mutes": {
+    "title": "Argomenti e fonti mutati",
+    "topics": "Argomenti",
+    "sources": "Fonti",
+    "unmute": "Riattiva",
+    "emptyTitle": "Niente di mutato",
+    "emptyDescription": "Gli argomenti e le fonti che nascondi appariranno qui.",
+    "errorTitle": "Non siamo riusciti a caricare i mute"
   }
 }

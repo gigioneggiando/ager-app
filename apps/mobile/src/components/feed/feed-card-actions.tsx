@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { Platform, Pressable, Share, StyleSheet, Text } from "react-native";
 
 import { HideReasonSheet } from "@/components/feed/hide-reason-sheet";
+import { ListPickerSheet } from "@/components/reading-lists/list-picker-sheet";
 import { useRequireAuth } from "@/features/auth/use-require-auth";
 import { FEED_QUERY_KEY } from "@/features/feed/use-feed";
 import { removeFromFeed } from "@/features/feed/feed-cache";
@@ -95,6 +96,7 @@ export function FeedCardActions({
   const isAuthenticated = status === "authenticated";
   const [saved, setSaved] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   const options = useMemo<HideOption[]>(
     () =>
@@ -116,6 +118,11 @@ export function FeedCardActions({
   function openHideSheet() {
     if (!requireAuth()) return; // anonymous → route to sign-in
     setSheetOpen(true);
+  }
+
+  function openListPicker() {
+    if (!requireAuth()) return; // anonymous → route to sign-in
+    setPickerOpen(true);
   }
 
   function commit(action: HideCommit) {
@@ -185,6 +192,11 @@ export function FeedCardActions({
         onPress={handleSave}
       />
       <ActionButton
+        icon="list-outline"
+        label={t("Actions.addToList")}
+        onPress={openListPicker}
+      />
+      <ActionButton
         icon="eye-off-outline"
         label={t("Actions.discard")}
         onPress={openHideSheet}
@@ -202,6 +214,13 @@ export function FeedCardActions({
         onJustHide={handleJustHide}
         onClose={() => setSheetOpen(false)}
       />
+      {pickerOpen ? (
+        <ListPickerSheet
+          visible={pickerOpen}
+          articleId={articleId}
+          onClose={() => setPickerOpen(false)}
+        />
+      ) : null}
     </>
   );
 }

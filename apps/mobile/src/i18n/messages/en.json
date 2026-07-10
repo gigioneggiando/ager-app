@@ -66,6 +66,7 @@
     "saved": "Saved",
     "discard": "Hide",
     "share": "Share",
+    "addToList": "Add to a list",
     "hideOnly": "Just hide",
     "hideTopic": "Hide “%{topic}”",
     "hideSource": "Hide “%{source}”",
@@ -125,7 +126,10 @@
       "feedMode": "Feed mode",
       "version": "Recommender version",
       "dimensions": {
-        "recency": { "label": "Recency", "help": "How recent the story is." },
+        "recency": {
+          "label": "Recency",
+          "help": "How recent the story is."
+        },
         "topicMatch": {
           "label": "Topic match",
           "help": "How well the topic fits your interests."
@@ -154,5 +158,31 @@
       "caughtUpTitle": "You're all caught up",
       "caughtUpDescription": "You've seen everything we've selected for now. Check back later for more."
     }
+  },
+  "Lists": {
+    "newList": "New list",
+    "namePlaceholder": "List name",
+    "create": "Create",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleteTitle": "Delete list?",
+    "deleteMessage": "“%{name}” will be deleted.",
+    "itemCount": "%{count} items",
+    "removeItem": "Remove",
+    "addToList": "Add to a list",
+    "emptyTitle": "No lists",
+    "emptyDescription": "Create a list to save articles.",
+    "emptyItemsTitle": "Empty list",
+    "emptyItemsDescription": "Save articles to this list from the feed.",
+    "errorTitle": "We couldn't load your lists"
+  },
+  "Mutes": {
+    "title": "Muted topics & sources",
+    "topics": "Topics",
+    "sources": "Sources",
+    "unmute": "Unmute",
+    "emptyTitle": "Nothing muted",
+    "emptyDescription": "Topics and sources you hide will appear here.",
+    "errorTitle": "We couldn't load your mutes"
   }
 }

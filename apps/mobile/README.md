@@ -115,6 +115,17 @@ source + Share stay available.
 infinite pagination, and empty/error states. Results reuse the feed card; since a search
 result carries no URL, tapping it fetches the article detail and opens at source.
 
+## Reading lists & mutes (M4b)
+
+**Reading lists** (Saved tab, `/api/me/reading-lists`): your lists (default pinned first) →
+list detail (items as feed cards, remove is optimistic) → create / delete a list, and an
+"add to a list" picker on the feed card (`SAVE` still auto-files to the default list; the
+picker chooses a specific one). **Rename isn't offered — the API has no rename op.**
+
+**Mute manager** (Account → Muted topics & sources, `/api/me/muted-interests` +
+`/api/me/muted-sources`): lists the muted topics + sources with optimistic un-mute (which
+also widens the feed).
+
 ## Manual verification (device) — pending
 
 No simulator on the Windows dev box, so these need a device / simulator run:
@@ -128,10 +139,12 @@ No simulator on the Windows dev box, so these need a device / simulator run:
 - **Browsing (M4a):** Feed + Search work signed out; a personal action routes to sign-in and
   returns; Saved/Account show the sign-in prompt; search (text + tag) returns results and a
   result opens the publisher.
+- **Lists & mutes (M4b):** create/delete a list; open a list and remove an item; "add to a
+  list" picker saves to the chosen list; un-mute a topic/source from the mute manager.
 
 ## Known placeholders
 
 - **App icon & splash** are the Expo template defaults — replace with Ager brand assets.
 - **Dark palette**: `main`'s `@ager/shared` now ships a signed-off dark palette; the mobile
   `src/theme/colors.ts` `dark` seam is ready to wire (a later PR).
-- **Search / Saved / Account** tabs are still placeholders (later milestones).
+- **Account** shows email + entry points only; full account + stats is M5.
