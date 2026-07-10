@@ -8,5 +8,39 @@
   "Common": {
     "comingSoon": "Coming soon",
     "placeholderBody": "This section will arrive in an upcoming update."
+  },
+  "SignIn": {
+    "title": "Sign in",
+    "emailStep": {
+      "subtitle": "Enter your email and we'll send you a sign-in code.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "name@example.com",
+      "submit": "Send code"
+    },
+    "otpStep": {
+      "subtitle": "We sent a code to {email}.",
+      "codeLabel": "Sign-in code",
+      "codePlaceholder": "123456",
+      "submit": "Sign in",
+      "changeEmail": "Use a different email",
+      "resend": "Send a new code",
+      "resendCooldown": "Resend in {seconds}s"
+    },
+    "errors": {
+      "rateLimit": "Too many attempts. Try again in a few minutes.",
+      "requestFailed": "We couldn't send the code. Try again.",
+      "invalidCode": "Wrong or expired code. Check it and try again.",
+      "network": "Network error. Check your connection and try again.",
+      "unknown": "Something went wrong. Try again."
+    }
+  },
+  "Onboarding": {
+    "title": "Personalize your feed",
+    "body": "Soon you'll be able to choose the topics you care about. This section will arrive in an upcoming update.",
+    "signOut": "Sign out"
+  },
+  "Account": {
+    "signedInAs": "Signed in as",
+    "signOut": "Sign out"
   }
 }

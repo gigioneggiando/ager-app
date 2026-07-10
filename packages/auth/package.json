@@ -1,0 +1,27 @@
+{
+  "name": "@ager/auth",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ager/api-client": "workspace:*",
+    "openapi-fetch": "^0.13.8"
+  },
+  "peerDependencies": {
+    "expo-secure-store": "*",
+    "react": ">=19"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@types/react": "~19.2.2",
+    "expo-secure-store": "~57.0.0",
+    "react": "19.2.3",
+    "typescript": "^5.7.3"
+  }
+}

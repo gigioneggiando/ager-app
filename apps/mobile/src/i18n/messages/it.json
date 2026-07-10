@@ -8,5 +8,39 @@
   "Common": {
     "comingSoon": "Prossimamente",
     "placeholderBody": "Questa sezione arriverà in un prossimo aggiornamento."
+  },
+  "SignIn": {
+    "title": "Accedi",
+    "emailStep": {
+      "subtitle": "Inserisci la tua email: ti invieremo un codice di accesso.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "nome@esempio.it",
+      "submit": "Invia il codice"
+    },
+    "otpStep": {
+      "subtitle": "Abbiamo inviato un codice a {email}.",
+      "codeLabel": "Codice di accesso",
+      "codePlaceholder": "123456",
+      "submit": "Accedi",
+      "changeEmail": "Usa un'altra email",
+      "resend": "Invia di nuovo il codice",
+      "resendCooldown": "Invia di nuovo tra {seconds}s"
+    },
+    "errors": {
+      "rateLimit": "Troppi tentativi. Riprova tra qualche minuto.",
+      "requestFailed": "Non siamo riusciti a inviare il codice. Riprova.",
+      "invalidCode": "Codice errato o scaduto. Controlla e riprova.",
+      "network": "Errore di rete. Controlla la connessione e riprova.",
+      "unknown": "Qualcosa è andato storto. Riprova."
+    }
+  },
+  "Onboarding": {
+    "title": "Personalizza il tuo feed",
+    "body": "Presto potrai scegliere gli argomenti che ti interessano. Questa sezione arriverà in un prossimo aggiornamento.",
+    "signOut": "Esci"
+  },
+  "Account": {
+    "signedInAs": "Accesso come",
+    "signOut": "Esci"
   }
 }
