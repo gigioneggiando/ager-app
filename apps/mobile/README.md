@@ -90,13 +90,41 @@ src/
   i18n/                    # expo-localization + i18n-js; default locale `it`, plus `en`
 ```
 
-## Feed (M3a)
+## Feed (M3)
 
 Link-first feed on the Feed tab: cursor-paginated `useInfiniteQuery` over `GET /api/feed`
 (6 ranking modes), pull-to-refresh, infinite scroll, and loading/empty/error/caught-up
 states. The card never renders an article body — tapping a headline opens the publisher via
 `expo-web-browser` (a `safeUrl` http(s) guard applies) and fires `OPENED_EXTERNAL`, the
-primary link-first signal. Card actions (Save / Hide+reasons / Share / Mute) land in M3b.
+primary link-first signal.
+
+**Card actions (M3b):** Save (`SAVE` → default list, optimistic), Hide (opens a bottom sheet
+with §11.2 reasons + "mute topic/source" escalation; optimistic removal from the feed cache;
+picking a reason posts `DISCARD`, a mute posts to `muted-interests`/`muted-sources`), and
+Share (RN `Share` + `SHARE`).
+
+## Browsing & search (M4a)
+
+Feed + Search browse **anonymously** (the backend serves a cold-start feed); Saved + Account
+require a session and show a sign-in prompt when anonymous. Personal actions (Save / Hide /
+Mute) route anonymous users to the sign-in modal via `requireAuth` (with return); open-at-
+source + Share stay available.
+
+**Search** (Search tab): free-text (`GET /api/articles/search`) or by tag
+(`GET /api/articles/tags/{tag}/search`), browse-by-tag chips (`GET /api/articles/tags`),
+infinite pagination, and empty/error states. Results reuse the feed card; since a search
+result carries no URL, tapping it fetches the article detail and opens at source.
+
+## Reading lists & mutes (M4b)
+
+**Reading lists** (Saved tab, `/api/me/reading-lists`): your lists (default pinned first) →
+list detail (items as feed cards, remove is optimistic) → create / delete a list, and an
+"add to a list" picker on the feed card (`SAVE` still auto-files to the default list; the
+picker chooses a specific one). **Rename isn't offered — the API has no rename op.**
+
+**Mute manager** (Account → Muted topics & sources, `/api/me/muted-interests` +
+`/api/me/muted-sources`): lists the muted topics + sources with optimistic un-mute (which
+also widens the feed).
 
 ## Manual verification (device) — pending
 
@@ -105,11 +133,18 @@ No simulator on the Windows dev box, so these need a device / simulator run:
 - **Auth (M2):** OTP round-trip on the real API; token persists across restart; expired
   access auto-refreshes; sign-out clears secure storage.
 - **Feed (M3a):** feed loads and scrolls (infinite); pull-to-refresh; mode switch re-ranks;
-  tapping a card opens the publisher and (signed in) records `OPENED_EXTERNAL`.
+  tapping a card opens the publisher and records `OPENED_EXTERNAL`.
+- **Actions (M3b):** Save toggles the icon and records `SAVE`; Hide removes the card and the
+  reason/mute sheet commits `DISCARD`/mute; Share opens the OS sheet and records `SHARE`.
+- **Browsing (M4a):** Feed + Search work signed out; a personal action routes to sign-in and
+  returns; Saved/Account show the sign-in prompt; search (text + tag) returns results and a
+  result opens the publisher.
+- **Lists & mutes (M4b):** create/delete a list; open a list and remove an item; "add to a
+  list" picker saves to the chosen list; un-mute a topic/source from the mute manager.
 
 ## Known placeholders
 
 - **App icon & splash** are the Expo template defaults — replace with Ager brand assets.
 - **Dark palette**: `main`'s `@ager/shared` now ships a signed-off dark palette; the mobile
   `src/theme/colors.ts` `dark` seam is ready to wire (a later PR).
-- **Search / Saved / Account** tabs are still placeholders (later milestones).
+- **Account** shows email + entry points only; full account + stats is M5.

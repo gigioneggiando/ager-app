@@ -1,4 +1,6 @@
 import { AuthError, type AuthErrorKind, useSession } from "@ager/auth";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -40,6 +42,7 @@ function toKind(error: unknown): AuthErrorKind {
 
 export default function SignInScreen() {
   const theme = useTheme();
+  const router = useRouter();
   const { requestOtp, verifyOtp } = useSession();
 
   const [step, setStep] = useState<Step>("email");
@@ -93,8 +96,13 @@ export default function SignInScreen() {
     setBusy(true);
     setErrorKind(null);
     try {
-      // On success the session flips to authenticated and the root gate takes over routing.
       await verifyOtp(email.trim(), code.trim());
+      // Signed in — dismiss the modal and return the user to where they were browsing.
+      if (router.canGoBack()) {
+        router.back();
+      } else {
+        router.replace("/");
+      }
     } catch (error) {
       setErrorKind(toKind(error));
       setBusy(false);
@@ -124,6 +132,16 @@ export default function SignInScreen() {
       style={[styles.safe, { backgroundColor: theme.colors.background }]}
       edges={["top", "bottom"]}
     >
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={t("SignIn.close")}
+        onPress={() =>
+          router.canGoBack() ? router.back() : router.replace("/")
+        }
+        style={styles.close}
+      >
+        <Ionicons name="close" size={26} color={theme.colors.mutedForeground} />
+      </Pressable>
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -310,6 +328,7 @@ export default function SignInScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1 },
   flex: { flex: 1 },
+  close: { position: "absolute", top: 8, right: 12, zIndex: 1, padding: 8 },
   content: { flex: 1, justifyContent: "center" },
   label: { fontSize: 14 },
   input: {

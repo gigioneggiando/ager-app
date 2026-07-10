@@ -39,6 +39,11 @@ export function WhyShown({
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 
+  // Nothing to explain (e.g. search results carry no ranking signals) → render nothing.
+  if (score == null && !breakdown && !feedMode && !recommenderVersion) {
+    return null;
+  }
+
   return (
     <View>
       <Pressable

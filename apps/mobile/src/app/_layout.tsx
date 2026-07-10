@@ -8,8 +8,6 @@ import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { LoadingScreen } from "@/components/loading-screen";
-import { useOnboardingGate } from "@/features/auth/use-onboarding-gate";
 import { sessionController } from "@/lib/auth/session";
 import { createQueryClient } from "@/lib/query/client";
 import { ThemeProvider, useAppFonts } from "@/theme";
@@ -39,40 +37,30 @@ export default function RootLayout() {
 }
 
 /**
- * Session gate. Holds the native splash until fonts + the restored session are ready, then
- * routes: anonymous → the auth stack; authenticated with no interests → onboarding;
- * otherwise → the feed tabs. The onboarding gate runs only when authenticated, and the
- * authenticated route groups sit behind the session guard.
+ * De-gated shell (M4a): Feed + Search browse anonymously (the backend serves a cold-start
+ * feed), so the tabs are always reachable. Saved / Account require a session (they render an
+ * auth prompt when anonymous), and personal actions route to the sign-in modal via
+ * `requireAuth`. The splash is still held until the session is restored so auth-dependent
+ * screens don't flash.
  */
 function RootNavigator() {
   const [fontsLoaded, fontError] = useAppFonts();
   const { status } = useSession();
-  const authenticated = status === "authenticated";
-  const gate = useOnboardingGate(authenticated);
-
-  const shellReady = (fontsLoaded || fontError) && status !== "loading";
-  const gateReady = !authenticated || gate.resolved;
+  const ready = (fontsLoaded || fontError) && status !== "loading";
 
   useEffect(() => {
-    if (shellReady) SplashScreen.hideAsync();
-  }, [shellReady]);
+    if (ready) SplashScreen.hideAsync();
+  }, [ready]);
 
-  if (!shellReady) return null; // native splash while fonts + session load
-  if (!gateReady) return <LoadingScreen />; // themed loader while the onboarding gate resolves
+  if (!ready) return null; // native splash while fonts + session load
 
   return (
     <>
       <StatusBar style="dark" />
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Protected guard={authenticated && !gate.needsOnboarding}>
-          <Stack.Screen name="(tabs)" />
-        </Stack.Protected>
-        <Stack.Protected guard={authenticated && gate.needsOnboarding}>
-          <Stack.Screen name="onboarding" />
-        </Stack.Protected>
-        <Stack.Protected guard={status === "anonymous"}>
-          <Stack.Screen name="(auth)" />
-        </Stack.Protected>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="onboarding" />
+        <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
       </Stack>
     </>
   );
