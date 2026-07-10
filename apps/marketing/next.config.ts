@@ -64,6 +64,30 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  async redirects() {
+    return [
+      {
+        source: "/form",
+        destination: "https://forms.gle/pvRv8mokGeP8CePc9",
+        permanent: false,
+      },
+      {
+        source: "/form/",
+        destination: "https://forms.gle/pvRv8mokGeP8CePc9",
+        permanent: false,
+      },
+      {
+        source: "/:locale(it|en)/form",
+        destination: "https://forms.gle/pvRv8mokGeP8CePc9",
+        permanent: false,
+      },
+      {
+        source: "/:locale(it|en)/form/",
+        destination: "https://forms.gle/pvRv8mokGeP8CePc9",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);
