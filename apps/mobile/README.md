@@ -126,6 +126,15 @@ picker chooses a specific one). **Rename isn't offered — the API has no rename
 `/api/me/muted-sources`): lists the muted topics + sources with optimistic un-mute (which
 also widens the feed).
 
+## Interests & onboarding (M5b)
+
+**Interests editor** (`/interests`, from the feed) — the taxonomy grouped by macro topic
+(`GET /api/interests`), pre-selected from `GET /api/me/interests`, saved via
+`POST /api/me/interests` (needs ≥1). **Onboarding** reconnects the M2 gate: after sign-in a
+new user (no interests) is routed to `/onboarding` (the same picker, with skip) → feed; an
+existing user goes straight to the feed. The **suggested-interests nudge** (F2,
+`/api/me/suggested-interests`) shows on the feed with optimistic confirm / dismiss.
+
 ## Manual verification (device) — pending
 
 No simulator on the Windows dev box, so these need a device / simulator run:
@@ -141,6 +150,9 @@ No simulator on the Windows dev box, so these need a device / simulator run:
   result opens the publisher.
 - **Lists & mutes (M4b):** create/delete a list; open a list and remove an item; "add to a
   list" picker saves to the chosen list; un-mute a topic/source from the mute manager.
+- **Interests/onboarding (M5b):** a new user is routed to onboarding → picks interests →
+  feed; the editor pre-selects current interests and saves; the suggestions nudge
+  confirms/dismisses.
 
 ## Known placeholders
 

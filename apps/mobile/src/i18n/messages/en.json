@@ -36,9 +36,17 @@
     }
   },
   "Onboarding": {
-    "title": "Personalize your feed",
-    "body": "Soon you'll be able to choose the topics you care about. This section will arrive in an upcoming update.",
-    "signOut": "Sign out"
+    "title": "Choose your interests",
+    "subtitle": "Pick the topics you care about to personalize your feed.",
+    "editTitle": "Edit interests",
+    "editSubtitle": "Add or remove topics. Changes update your feed.",
+    "save": "Save",
+    "skip": "Skip",
+    "selectedCount": "%{count} selected",
+    "suggestMin": "pick at least %{min}",
+    "savedHint": "Interests saved.",
+    "loadError": "We couldn't load interests.",
+    "saveError": "Save failed. Try again."
   },
   "Account": {
     "signedInAs": "Signed in as",
@@ -184,5 +192,11 @@
     "emptyTitle": "Nothing muted",
     "emptyDescription": "Topics and sources you hide will appear here.",
     "errorTitle": "We couldn't load your mutes"
+  },
+  "Suggested": {
+    "title": "Widen your feed?",
+    "subtitle": "We noticed interest in these topics.",
+    "add": "Add",
+    "dismiss": "Dismiss"
   }
 }

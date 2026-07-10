@@ -14,7 +14,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { needsOnboarding } from "@/features/interests/interest-sections";
 import { t } from "@/i18n/i18n";
+import { apiClient } from "@/lib/api/client";
 import { useTheme } from "@/theme";
 
 const RESEND_COOLDOWN_SECONDS = 30;
@@ -97,8 +99,18 @@ export default function SignInScreen() {
     setErrorKind(null);
     try {
       await verifyOtp(email.trim(), code.trim());
-      // Signed in — dismiss the modal and return the user to where they were browsing.
-      if (router.canGoBack()) {
+      // Onboarding gate (M5b): a new user with no interests goes to onboarding; everyone
+      // else returns to where they were browsing. Fails open (skip) on a fetch error.
+      let onboard = false;
+      try {
+        const { data } = await apiClient.GET("/api/me/interests");
+        onboard = needsOnboarding(data);
+      } catch {
+        onboard = false;
+      }
+      if (onboard) {
+        router.replace("/onboarding");
+      } else if (router.canGoBack()) {
         router.back();
       } else {
         router.replace("/");

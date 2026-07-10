@@ -1,11 +1,12 @@
-import type { Interest } from "@ager/api-client";
-import { useQuery } from "@tanstack/react-query";
+import type { Interest, MyInterest } from "@ager/api-client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { apiClient } from "@/lib/api/client";
 
 export const INTERESTS_QUERY_KEY = ["interests"] as const;
+export const MY_INTERESTS_QUERY_KEY = ["my-interests"] as const;
 
-/** The public interest taxonomy — used to resolve a card's topic labels to interest ids. */
+/** The public interest taxonomy — the editor's catalog + topic→id resolution for mutes. */
 export function useInterests() {
   return useQuery({
     queryKey: INTERESTS_QUERY_KEY,
@@ -14,6 +15,37 @@ export function useInterests() {
       const { data, error } = await apiClient.GET("/api/interests");
       if (error || !data) throw new Error("interests_unavailable");
       return data;
+    },
+  });
+}
+
+/** The user's CURRENT interests (server truth — onboarding state + editor pre-selection). */
+export function useMyInterests() {
+  return useQuery({
+    queryKey: MY_INTERESTS_QUERY_KEY,
+    staleTime: 30 * 1000,
+    queryFn: async (): Promise<MyInterest[]> => {
+      const { data, error } = await apiClient.GET("/api/me/interests");
+      if (error || !data) throw new Error("my_interests_unavailable");
+      return data;
+    },
+  });
+}
+
+/** Save the chosen interest ids (the backend rejects an empty set → the picker enforces ≥1). */
+export function useSaveInterests() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (interestIds: number[]) => {
+      const { error } = await apiClient.POST("/api/me/interests", {
+        body: { interestIds },
+      });
+      if (error) throw new Error("save_failed");
+    },
+    onSuccess: () => {
+      // The personalized feed + the current-interests view depend on this.
+      void queryClient.invalidateQueries({ queryKey: MY_INTERESTS_QUERY_KEY });
+      void queryClient.invalidateQueries({ queryKey: ["feed"] });
     },
   });
 }

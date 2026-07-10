@@ -1,5 +1,6 @@
 import type { FeedItem } from "@ager/api-client";
 import { useSession } from "@ager/auth";
+import { useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -15,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FeedCard } from "@/components/feed/feed-card";
 import { FeedCardActions } from "@/components/feed/feed-card-actions";
 import { FeedModeSelector } from "@/components/feed/feed-mode-selector";
+import { SuggestedInterests } from "@/components/interests/suggested-interests";
 import { MessageState } from "@/components/states/message-state";
 import { dedupeFeedItems, feedMeta } from "@/features/feed/feed-cache";
 import { DEFAULT_FEED_MODE, type FeedMode } from "@/features/feed/modes";
@@ -26,6 +28,7 @@ import { useTheme } from "@/theme";
 
 export default function FeedScreen() {
   const theme = useTheme();
+  const router = useRouter();
   const { status } = useSession();
   const [mode, setMode] = useState<FeedMode>(DEFAULT_FEED_MODE);
   const openArticle = useOpenArticle();
@@ -93,7 +96,26 @@ export default function FeedScreen() {
       >
         {t(`Feed.modes.${mode}.help`)}
       </Text>
-      {status !== "authenticated" ? (
+      {status === "authenticated" ? (
+        <>
+          <SuggestedInterests />
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push("/interests")}
+            style={styles.editInterests}
+          >
+            <Text
+              style={{
+                color: theme.colors.link,
+                fontFamily: theme.fonts.sansMedium,
+                fontSize: theme.fontSize.small,
+              }}
+            >
+              {t("Onboarding.editTitle")}
+            </Text>
+          </Pressable>
+        </>
+      ) : (
         <Text
           style={{
             color: theme.colors.mutedForeground,
@@ -103,7 +125,7 @@ export default function FeedScreen() {
         >
           {t("Feed.modeAnonNote")}
         </Text>
-      ) : null}
+      )}
     </View>
   );
 
@@ -205,4 +227,5 @@ const styles = StyleSheet.create({
   center: { minHeight: 320, alignItems: "center", justifyContent: "center" },
   footer: { paddingVertical: 24, alignItems: "center" },
   retry: { borderWidth: 1, paddingHorizontal: 16, paddingVertical: 10 },
+  editInterests: { alignSelf: "flex-start", paddingVertical: 4 },
 });
