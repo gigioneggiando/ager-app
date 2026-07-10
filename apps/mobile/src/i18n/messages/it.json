@@ -42,7 +42,18 @@
   },
   "Account": {
     "signedInAs": "Accesso come",
-    "signOut": "Esci"
+    "signOut": "Esci",
+    "exportData": "Esporta i tuoi dati",
+    "exportErrorTitle": "Esportazione non riuscita",
+    "exportError": "Non siamo riusciti a esportare i dati. Riprova.",
+    "exportRateLimited": "Puoi esportare i dati una volta al giorno. Riprova più tardi.",
+    "deleteAccount": "Elimina account",
+    "deleteTitle": "Eliminare l'account?",
+    "deleteMessage": "Questa azione è irreversibile. Il tuo account verrà eliminato.",
+    "deleteConfirm": "Elimina",
+    "cancel": "Annulla",
+    "deleteErrorTitle": "Eliminazione non riuscita",
+    "deleteError": "Non siamo riusciti a eliminare l'account. Riprova."
   },
   "AuthPrompt": {
     "title": "Accedi per continuare",
@@ -184,5 +195,38 @@
     "emptyTitle": "Niente di mutato",
     "emptyDescription": "Gli argomenti e le fonti che nascondi appariranno qui.",
     "errorTitle": "Non siamo riusciti a caricare i mute"
+  },
+  "Stats": {
+    "title": "Statistiche",
+    "subtitle": "La varietà della tua lettura, dalle tue azioni.",
+    "window": {
+      "7d": "7 giorni",
+      "14d": "14 giorni",
+      "30d": "30 giorni"
+    },
+    "total": "Interazioni",
+    "sourceDiversity": "Diversità fonti",
+    "sourceDiversityHint": "Quota di fonti distinte.",
+    "topTopicShare": "Argomento principale",
+    "topTopicShareHint": "Peso del tema più letto.",
+    "byType": "Per tipo",
+    "emptyTitle": "Ancora nessun dato",
+    "emptyDescription": "Leggi qualche articolo e le tue statistiche appariranno qui.",
+    "errorTitle": "Non siamo riusciti a caricare le statistiche"
+  },
+  "Settings": {
+    "title": "Impostazioni",
+    "theme": "Tema",
+    "themeOptions": {
+      "light": "Chiaro",
+      "dark": "Scuro",
+      "system": "Sistema"
+    },
+    "language": "Lingua",
+    "languageOptions": {
+      "it": "Italiano",
+      "en": "English"
+    },
+    "notifications": "Notifiche"
   }
 }
