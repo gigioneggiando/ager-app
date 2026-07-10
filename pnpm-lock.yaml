@@ -105,6 +105,9 @@ importers:
       '@ager/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
+      '@ager/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
       '@ager/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -138,6 +141,9 @@ importers:
       expo-router:
         specifier: ~57.0.4
         version: 57.0.4(523555b992da50b5858dc85bf4523202)
+      expo-secure-store:
+        specifier: ~57.0.0
+        version: 57.0.0(expo@57.0.4)
       expo-splash-screen:
         specifier: ~57.0.2
         version: 57.0.2(expo@57.0.4)(typescript@5.9.3)
@@ -321,6 +327,31 @@ importers:
       prettier:
         specifier: ^3.4.2
         version: 3.8.4
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
+
+  packages/auth:
+    dependencies:
+      '@ager/api-client':
+        specifier: workspace:*
+        version: link:../api-client
+      openapi-fetch:
+        specifier: ^0.13.8
+        version: 0.13.8
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.5
+        version: 22.20.0
+      '@types/react':
+        specifier: ~19.2.2
+        version: 19.2.17
+      expo-secure-store:
+        specifier: ~57.0.0
+        version: 57.0.0(expo@57.0.4)
+      react:
+        specifier: 19.2.3
+        version: 19.2.3
       typescript:
         specifier: ^5.7.3
         version: 5.9.3
@@ -4137,6 +4168,11 @@ packages:
         optional: true
       react-server-dom-webpack:
         optional: true
+
+  expo-secure-store@57.0.0:
+    resolution: {integrity: sha512-vkP16rhW7b4bljW5BC4kKXBpNxQ0O1E9SpI5NIfh2biZnszLTpI/gUF4oBsvOY2nvkh7oXS2ERuUoA8cuS8FWQ==}
+    peerDependencies:
+      expo: '*'
 
   expo-server@57.0.0:
     resolution: {integrity: sha512-18byjwFbHVFrGzI4IH1o2MZiiYwvO/y3d+JL3sq50Lg3Id1titwIRMh1fjbHbpM+wP6x14KJY0Ers1UYsjGq8Q==}
@@ -11628,6 +11664,10 @@ snapshots:
       - expo-font
       - react-native-worklets
       - supports-color
+
+  expo-secure-store@57.0.0(expo@57.0.4):
+    dependencies:
+      expo: 57.0.4(@babel/core@7.29.7)(@expo/dom-webview@57.0.0)(@expo/metro-runtime@57.0.3)(expo-router@57.0.4)(react-dom@19.2.4(react@19.2.3))(react-native-worklets@0.10.2(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7))(react-native@0.86.0(@babel/core@7.29.7)(@react-native/jest-preset@0.86.0(@babel/core@7.29.7)(react@19.2.3))(@react-native/metro-config@0.86.0(@babel/core@7.29.7))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3))(react-native@0.86.0(@babel/core@7.29.7)(@react-native/jest-preset@0.86.0(@babel/core@7.29.7)(react@19.2.3))(@react-native/metro-config@0.86.0(@babel/core@7.29.7))(@types/react@19.2.17)(react@19.2.3)(supports-color@10.2.2))(react@19.2.3)(supports-color@10.2.2)(typescript@5.9.3)
 
   expo-server@57.0.0: {}
 
