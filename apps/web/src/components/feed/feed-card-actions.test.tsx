@@ -38,7 +38,7 @@ describe("FeedCardActions", () => {
     );
 
     // ONE TAP hides immediately; nothing posted yet, the undo toast is showing.
-    fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^Nascondi$/i }));
     expect(interactions()).toHaveLength(0);
     expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
 
@@ -58,7 +58,7 @@ describe("FeedCardActions", () => {
       <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^Nascondi$/i }));
     expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
 
     // Scrolling the feed must not dismiss the (viewport-fixed) toast...
@@ -82,9 +82,9 @@ describe("FeedCardActions", () => {
       <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^Nascondi$/i }));
 
-    // The four skippable reason chips appear INSIDE the undo toast (as buttons).
+    // With no mutable topic/source, the four skippable reason chips appear inside the toast.
     for (const chip of [
       "Clickbait",
       "Fonte sgradita",
@@ -113,7 +113,7 @@ describe("FeedCardActions", () => {
       <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^Nascondi$/i }));
     fireEvent.click(screen.getByRole("button", { name: /Annulla/i }));
 
     // Even after the window elapses, no interaction is posted.
@@ -128,7 +128,7 @@ describe("FeedCardActions", () => {
       <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Nascondi/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^Nascondi$/i }));
     expect(screen.getByText(/Nascosto/i)).toBeInTheDocument();
 
     fireEvent.keyDown(document, { key: "Escape" });
@@ -174,7 +174,7 @@ describe("FeedCardActions", () => {
 
 const mutes = () => calls.filter((c) => c.url.includes("/api/me/muted-interests"));
 
-describe("FeedCardActions — topic mute (Non mi interessa)", () => {
+describe("FeedCardActions — topic mute via the Hide toast", () => {
   beforeEach(() => {
     // Resolve the topic taxonomy so a label maps to an interest id; everything else → 204.
     global.fetch = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
@@ -196,7 +196,7 @@ describe("FeedCardActions — topic mute (Non mi interessa)", () => {
     });
   }
 
-  it("offers only resolvable topics and mutes the chosen one after the undo window", async () => {
+  it("offers a hide-topic chip only for resolvable topics and mutes it after the window", async () => {
     renderWithProviders(
       <FeedCardActions
         articleId={42}
@@ -207,17 +207,21 @@ describe("FeedCardActions — topic mute (Non mi interessa)", () => {
     );
     await flushInterests();
 
-    fireEvent.click(screen.getByRole("button", { name: /Non mi interessa/i }));
+    // One tap on Hide opens the undo toast carrying the "cosa non ti interessa?" chips.
+    fireEvent.click(screen.getByRole("button", { name: /^Nascondi$/i }));
 
-    // "Politica" is not in the taxonomy → not offered; "Clima" is.
-    expect(screen.getByRole("menuitem", { name: /Nascondi «Clima»/i })).toBeInTheDocument();
-    expect(screen.queryByRole("menuitem", { name: /Politica/i })).not.toBeInTheDocument();
+    // "Clima" resolves → a "Nascondi «Clima»" chip; "Politica" is not in the taxonomy → absent.
+    expect(
+      screen.getByRole("button", { name: /Nascondi «Clima»/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /Politica/i }),
+    ).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("menuitem", { name: /Nascondi «Clima»/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Nascondi «Clima»/i }));
 
-    // Deferred: nothing posted yet, undo toast showing.
+    // Deferred: nothing posted yet, undo toast still showing.
     expect(mutes()).toHaveLength(0);
-    expect(screen.getByText(/Argomento «Clima» nascosto/i)).toBeInTheDocument();
 
     await act(async () => {
       await vi.advanceTimersByTimeAsync(5000);
@@ -226,7 +230,7 @@ describe("FeedCardActions — topic mute (Non mi interessa)", () => {
     expect(post?.body).toMatchObject({ interestId: 7 });
   });
 
-  it("portals the menu onto <body> so the card cannot clip it, and its item is clickable", async () => {
+  it("cancels the topic mute when Annulla is clicked", async () => {
     renderWithProviders(
       <FeedCardActions
         articleId={42}
@@ -237,30 +241,8 @@ describe("FeedCardActions — topic mute (Non mi interessa)", () => {
     );
     await flushInterests();
 
-    fireEvent.click(screen.getByRole("button", { name: /Non mi interessa/i }));
-
-    // The menu escapes the (overflow-hidden) card by rendering directly under <body>.
-    const menu = screen.getByRole("menu");
-    expect(menu.parentElement).toBe(document.body);
-
-    // The item genuinely registers a click (the outside-click handler must not swallow it).
-    fireEvent.click(screen.getByRole("menuitem", { name: /Nascondi «Clima»/i }));
-    expect(screen.getByText(/Argomento «Clima» nascosto/i)).toBeInTheDocument();
-  });
-
-  it("cancels the mute when Annulla is clicked", async () => {
-    renderWithProviders(
-      <FeedCardActions
-        articleId={42}
-        url="https://e.com/x"
-        title="X"
-        topics={["Clima"]}
-      />,
-    );
-    await flushInterests();
-
-    fireEvent.click(screen.getByRole("button", { name: /Non mi interessa/i }));
-    fireEvent.click(screen.getByRole("menuitem", { name: /Nascondi «Clima»/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^Nascondi$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Nascondi «Clima»/i }));
     fireEvent.click(screen.getByRole("button", { name: /Annulla/i }));
 
     await act(async () => {
@@ -269,7 +251,7 @@ describe("FeedCardActions — topic mute (Non mi interessa)", () => {
     expect(mutes().filter((c) => c.body)).toHaveLength(0);
   });
 
-  it("does not render the action when no topic resolves to an interest", async () => {
+  it("offers no hide-topic chip when no topic resolves, but still shows reasons", async () => {
     renderWithProviders(
       <FeedCardActions
         articleId={42}
@@ -280,17 +262,21 @@ describe("FeedCardActions — topic mute (Non mi interessa)", () => {
     );
     await flushInterests();
 
+    fireEvent.click(screen.getByRole("button", { name: /^Nascondi$/i }));
     expect(
-      screen.queryByRole("button", { name: /Non mi interessa/i }),
+      screen.queryByRole("button", { name: /Nascondi «/i }),
     ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Non interessante" }),
+    ).toBeInTheDocument();
   });
 });
 
 const sourceMutes = () =>
   calls.filter((c) => c.url.includes("/api/me/muted-sources"));
 
-describe("FeedCardActions — source mute (Nascondi fonte)", () => {
-  it("offers Nascondi fonte and mutes the source after the undo window", async () => {
+describe("FeedCardActions — source mute via the Hide toast", () => {
+  it("offers a hide-source chip and mutes the source after the undo window", async () => {
     renderWithProviders(
       <FeedCardActions
         articleId={42}
@@ -301,12 +287,11 @@ describe("FeedCardActions — source mute (Nascondi fonte)", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Non mi interessa/i }));
-    fireEvent.click(screen.getByRole("menuitem", { name: /Nascondi «Il Post»/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^Nascondi$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Nascondi «Il Post»/i }));
 
     // Deferred: nothing posted yet, undo toast showing.
     expect(sourceMutes()).toHaveLength(0);
-    expect(screen.getByText(/Fonte «Il Post» nascosta/i)).toBeInTheDocument();
 
     await act(async () => {
       await vi.advanceTimersByTimeAsync(5000);
@@ -327,8 +312,8 @@ describe("FeedCardActions — source mute (Nascondi fonte)", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Non mi interessa/i }));
-    fireEvent.click(screen.getByRole("menuitem", { name: /Nascondi «Il Post»/i }));
+    fireEvent.click(screen.getByRole("button", { name: /^Nascondi$/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Nascondi «Il Post»/i }));
     fireEvent.click(screen.getByRole("button", { name: /Annulla/i }));
 
     await act(async () => {
@@ -337,13 +322,14 @@ describe("FeedCardActions — source mute (Nascondi fonte)", () => {
     expect(sourceMutes()).toHaveLength(0);
   });
 
-  it("does not render the menu when neither a topic nor a source is mutable", () => {
+  it("does not offer a hide-source chip when no source is provided", () => {
     renderWithProviders(
       <FeedCardActions articleId={42} url="https://e.com/x" title="X" />,
     );
 
+    fireEvent.click(screen.getByRole("button", { name: /^Nascondi$/i }));
     expect(
-      screen.queryByRole("button", { name: /Non mi interessa/i }),
+      screen.queryByRole("button", { name: /Nascondi «/i }),
     ).not.toBeInTheDocument();
   });
 });
