@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/brand/logo";
 import { Container } from "@/components/layout/container";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 export function Footer() {
   const t = useTranslations("Footer");
@@ -51,11 +52,14 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="flex flex-col gap-2 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {year} Ager · {t("rights")}
-          </p>
-          <p className="italic">{t("claim")}</p>
+        <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-1 text-xs text-muted-foreground sm:flex-row sm:items-center sm:gap-3">
+            <p>
+              © {year} Ager · {t("rights")}
+            </p>
+            <p className="italic">{t("claim")}</p>
+          </div>
+          <ThemeToggle />
         </div>
       </Container>
     </footer>

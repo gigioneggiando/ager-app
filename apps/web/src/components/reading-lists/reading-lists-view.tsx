@@ -72,7 +72,7 @@ export function ReadingListsView() {
                 >
                   <span
                     aria-hidden="true"
-                    className="flex size-10 shrink-0 items-center justify-center rounded-full bg-neutral-beige text-primary"
+                    className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-primary"
                   >
                     {l.isDefault ? (
                       <Bookmark className="size-5" />

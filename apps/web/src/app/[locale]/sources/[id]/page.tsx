@@ -63,7 +63,7 @@ export default async function SourceDetailPage({
       <header className="mt-4 flex items-start gap-4">
         <span
           aria-hidden="true"
-          className="flex size-14 shrink-0 items-center justify-center rounded-full bg-neutral-beige font-serif text-2xl font-bold text-primary"
+          className="flex size-14 shrink-0 items-center justify-center rounded-full bg-muted font-serif text-2xl font-bold text-primary"
         >
           {(name[0] ?? "·").toUpperCase()}
         </span>

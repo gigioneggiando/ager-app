@@ -123,7 +123,7 @@ export function PublicListView({
                           className="object-cover"
                         />
                       ) : (
-                        <span className="flex h-full w-full items-center justify-center bg-neutral-beige">
+                        <span className="flex h-full w-full items-center justify-center bg-muted">
                           <AgerSymbol className="size-6 text-primary/15" />
                         </span>
                       )}

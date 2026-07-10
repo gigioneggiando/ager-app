@@ -22,6 +22,12 @@
     "claim": "Riduce il rumore, aumenta la comprensione.",
     "about": "Chi siamo"
   },
+  "Theme": {
+    "label": "Tema",
+    "system": "Sistema",
+    "light": "Chiaro",
+    "dark": "Scuro"
+  },
   "Login": {
     "title": "Accedi",
     "subtitle": "Inserisci la tua email: ti invieremo un codice di accesso.",

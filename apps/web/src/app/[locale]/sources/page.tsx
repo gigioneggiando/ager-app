@@ -55,7 +55,7 @@ export default async function SourcesPage({
                 <Card className="flex h-full items-start gap-3 p-4 transition-colors hover:border-primary/30">
                   <span
                     aria-hidden="true"
-                    className="flex size-10 shrink-0 items-center justify-center rounded-full bg-neutral-beige font-serif text-lg font-bold text-primary"
+                    className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted font-serif text-lg font-bold text-primary"
                   >
                     {monogram(source.name)}
                   </span>

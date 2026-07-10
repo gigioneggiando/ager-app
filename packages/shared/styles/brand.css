@@ -56,3 +56,43 @@
      this — apply it intentionally to big editorial/hero images. */
   --radius-image-lg: 80px;
 }
+
+/*
+ * DARK THEME — semantic-token overrides only (Simone signed off the palette).
+ * Activated by `<html class="dark">` (next-themes, attribute="class"), matching the
+ * `@custom-variant dark (&:is(.dark *))` in apps/web globals. Uses `:root.dark` for
+ * higher specificity than `:root`, so it wins deterministically. The RAW brand palette
+ * above is LIGHT-ONLY and intentionally untouched — dark maps the semantic tokens to
+ * their own hex values. Radii are inherited from :root (colours only here).
+ *
+ * Contrast targets: body text >=7:1, metadata >=4.5:1, UI/borders >=3:1 on --background.
+ * --success / --warning and the resolved *-foreground picks are DERIVED here and pending
+ * Simone's sign-off (see PR notes).
+ */
+:root.dark {
+  --background: #0d1720; /* page */
+  --foreground: #e8ecef; /* body text (~14.5:1) */
+  --card: #152232;
+  --card-foreground: #e8ecef;
+  --popover: #1b2a3a; /* menus, toasts */
+  --popover-foreground: #e8ecef;
+  --primary: #6ea8d8; /* brightened steel-blue — links, headings, primary-btn bg (~7.1:1) */
+  --primary-foreground: #0d1720; /* on primary (~7.1:1) */
+  --secondary: #111c27; /* alt surface */
+  --secondary-foreground: #e8ecef; /* off-white on the dark alt surface (NOT light blue) */
+  --muted: #111c27; /* muted bg = secondary family */
+  --muted-foreground: #9aa7b4; /* metadata (~7:1) */
+  --accent: #43b092; /* trust badge */
+  --accent-foreground: #0d1720; /* on accent (~6.8:1) */
+  --destructive: #e5706b;
+  --destructive-foreground: #0d1720; /* dark reads better than off-white (~6:1 vs ~2.4:1) */
+  --link: #6ea8d8; /* same brightened blue (~7.1:1) */
+
+  /* DERIVED state colours — light values are too dark on #0D1720. Pending Simone sign-off. */
+  --success: #4cc38a; /* brightened from #2E8B57 (~8.4:1 as text on --background) */
+  --warning: #e0a44d; /* brightened from #D97706 (~8.3:1 as text on --background) */
+
+  --border: #546b82; /* ~3.29:1 on --background */
+  --input: #546b82;
+  --ring: #6ea8d8; /* focus ring — visible on dark */
+}
