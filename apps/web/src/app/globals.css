@@ -1,13 +1,13 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-/* AGER brand palette (single source of truth — light only). */
+/* AGER brand palette + signed-off dark override (single source of truth). */
 @import "@ager/shared/brand.css";
 
 /*
- * Dark-mode plumbing is intentionally left disabled. The brand defines no dark palette;
- * do NOT add an unofficial dark theme without owner sign-off. The variant is declared so
- * the wiring exists, but no `.dark` token block is shipped.
- * TODO(owner sign-off): define an official dark palette before enabling dark mode.
+ * Class-based dark mode: `<html class="dark">` (set by next-themes, attribute="class")
+ * activates the `:root.dark` token block in brand.css. This variant lets components opt
+ * into `dark:` utilities when a semantic token isn't enough; most UI flips automatically
+ * because it is built on the semantic tokens.
  */
 @custom-variant dark (&:is(.dark *));
 

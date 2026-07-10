@@ -43,7 +43,7 @@ export default async function DsaContactPage({
           </section>
         ))}
 
-        <section className="flex flex-col gap-2 rounded-lg border border-border bg-neutral-beige p-4">
+        <section className="flex flex-col gap-2 rounded-lg border border-border bg-muted p-4">
           <h2 className="font-serif text-lg font-bold text-primary">{t("contactTitle")}</h2>
           <p className="text-sm text-foreground/90">
             <a href="mailto:dsa@agerculture.com" className="text-link hover:underline">

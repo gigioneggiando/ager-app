@@ -37,7 +37,7 @@ export function FeedView() {
       </div>
 
       {!isAuthenticated ? (
-        <p className="flex items-start gap-2 rounded-md bg-neutral-beige px-3 py-2 text-xs text-muted-foreground">
+        <p className="flex items-start gap-2 rounded-md bg-muted px-3 py-2 text-xs text-muted-foreground">
           <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
           <span>{t("modeAnonNote")}</span>
         </p>

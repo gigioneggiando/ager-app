@@ -41,7 +41,7 @@ export default async function BotPage({
         <section className="flex flex-col gap-2">
           <h2 className="font-serif text-lg font-bold text-primary">{t("uaTitle")}</h2>
           <p className="text-sm leading-relaxed text-foreground/90">{t("uaBody")}</p>
-          <pre className="overflow-x-auto rounded-md border border-border bg-neutral-beige p-3 font-mono text-xs">
+          <pre className="overflow-x-auto rounded-md border border-border bg-muted p-3 font-mono text-xs">
             {UA}
           </pre>
         </section>

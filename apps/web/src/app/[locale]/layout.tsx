@@ -9,6 +9,7 @@ import { routing } from "@/i18n/routing";
 import { siteUrl } from "@/lib/site";
 import { getSession } from "@/lib/server/session";
 import { Providers } from "@/app/providers";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 import { AuthProvider } from "@/components/auth/auth-provider";
 import { ToastProvider } from "@/components/ui/toast";
 import { Header } from "@/components/layout/header";
@@ -58,10 +59,13 @@ export const metadata: Metadata = {
   },
 };
 
-// Brand theme color (ager-blue) for the browser/PWA chrome.
+// Brand theme color for the browser/PWA chrome — ager-blue in light, dark page bg in dark.
 export const viewport: Viewport = {
-  themeColor: "#0F2A44",
-  colorScheme: "light",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#0F2A44" },
+    { media: "(prefers-color-scheme: dark)", color: "#0D1720" },
+  ],
+  colorScheme: "light dark",
 };
 
 export function generateStaticParams() {
@@ -86,20 +90,23 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       className={`${inter.variable} ${merriweather.variable} h-full`}
+      suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        <NextIntlClientProvider>
-          <AuthProvider initialSession={session}>
-            <Providers>
-              <ToastProvider>
-                <Header />
-                <main className="flex flex-1 flex-col">{children}</main>
-                <Footer />
-                <ServiceWorkerRegister />
-              </ToastProvider>
-            </Providers>
-          </AuthProvider>
-        </NextIntlClientProvider>
+        <ThemeProvider>
+          <NextIntlClientProvider>
+            <AuthProvider initialSession={session}>
+              <Providers>
+                <ToastProvider>
+                  <Header />
+                  <main className="flex flex-1 flex-col">{children}</main>
+                  <Footer />
+                  <ServiceWorkerRegister />
+                </ToastProvider>
+              </Providers>
+            </AuthProvider>
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

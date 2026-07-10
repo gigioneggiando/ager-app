@@ -22,6 +22,12 @@
     "claim": "Reduces the noise, increases understanding.",
     "about": "About"
   },
+  "Theme": {
+    "label": "Theme",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark"
+  },
   "Login": {
     "title": "Sign in",
     "subtitle": "Enter your email and we'll send you a sign-in code.",

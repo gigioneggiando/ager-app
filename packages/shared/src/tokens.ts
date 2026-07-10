@@ -36,7 +36,15 @@ export const usageBudget = {
   functional: 0.05,
 } as const;
 
-/** Semantic color tokens (light theme only — mirrors brand.css). */
+/**
+ * Semantic color tokens — mirrors brand.css. `light` is the brand's canonical palette;
+ * `dark` is the signed-off dark override (same keys, hex values only). The web app drives
+ * theming from the CSS `:root.dark` block; this TS mirror is for non-CSS consumers (the
+ * mobile RN adapter consumes `colors.dark` later — not wired here).
+ *
+ * NOTE: `dark.success` / `dark.warning` and the resolved `*Foreground` picks are DERIVED
+ * (brightened to meet contrast on #0D1720) and pending Simone's sign-off.
+ */
 export const colors = {
   light: {
     background: brand.editorialWhite,
@@ -61,6 +69,30 @@ export const colors = {
     border: "#E4DDD0",
     input: "#E4DDD0",
     ring: brand.agerBlue,
+  },
+  dark: {
+    background: "#0D1720",
+    foreground: "#E8ECEF",
+    card: "#152232",
+    cardForeground: "#E8ECEF",
+    popover: "#1B2A3A",
+    popoverForeground: "#E8ECEF",
+    primary: "#6EA8D8",
+    primaryForeground: "#0D1720",
+    secondary: "#111C27",
+    secondaryForeground: "#E8ECEF",
+    muted: "#111C27",
+    mutedForeground: "#9AA7B4",
+    accent: "#43B092",
+    accentForeground: "#0D1720",
+    destructive: "#E5706B",
+    destructiveForeground: "#0D1720",
+    link: "#6EA8D8",
+    success: "#4CC38A",
+    warning: "#E0A44D",
+    border: "#546B82",
+    input: "#546B82",
+    ring: "#6EA8D8",
   },
 } as const;
 

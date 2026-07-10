@@ -143,7 +143,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
               priority
             />
           ) : (
-            <span className="flex h-full w-full items-center justify-center bg-neutral-beige">
+            <span className="flex h-full w-full items-center justify-center bg-muted">
               <AgerSymbol className="size-16 text-primary/15" />
             </span>
           )}
