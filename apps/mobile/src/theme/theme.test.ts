@@ -28,9 +28,10 @@ describe("theme built from @ager/shared tokens", () => {
     expect(lightTheme.colors.primary).toBe("#0F2A44"); // agerBlue
   });
 
-  it("degrades a dark request to light until a dark palette is signed off", () => {
+  it("honours a dark request now that the dark palette is signed off (M5)", () => {
     const theme = buildTheme("dark");
-    expect(theme.scheme).toBe("light");
-    expect(theme.colors).toEqual(lightTheme.colors);
+    expect(theme.scheme).toBe("dark");
+    expect(theme.colors.background).toBe("#0D1720");
+    expect(theme.colors.background).not.toBe(lightTheme.colors.background);
   });
 });

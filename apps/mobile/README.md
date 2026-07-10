@@ -126,6 +126,17 @@ picker chooses a specific one). **Rename isn't offered — the API has no rename
 `/api/me/muted-sources`): lists the muted topics + sources with optimistic un-mute (which
 also widens the feed).
 
+## Account · stats · settings (M5a)
+
+**Account** (auth-gated): email; **export data** (`GET /api/me/export` → written to a file
+and shared via the OS sheet; 429 = once-a-day); **delete account** (explicit confirm →
+`DELETE /api/me` → sign-out → back to the anonymous feed); sign-out; and entries to Stats +
+Settings. **Stats** (`GET /api/me/stats`): reading-variety KPIs (total, source diversity,
+top-topic share, by type) over 7d / 14d / 30d windows, with loading/empty/error.
+**Settings**: theme **light / dark / system** (the `@ager/shared` dark palette is now wired,
+so dark actually renders), language it/en (live), mute-manager link, and a notifications
+placeholder.
+
 ## Interests & onboarding (M5b)
 
 **Interests editor** (`/interests`, from the feed) — the taxonomy grouped by macro topic
@@ -150,6 +161,9 @@ No simulator on the Windows dev box, so these need a device / simulator run:
   result opens the publisher.
 - **Lists & mutes (M4b):** create/delete a list; open a list and remove an item; "add to a
   list" picker saves to the chosen list; un-mute a topic/source from the mute manager.
+- **Account/stats/settings (M5a):** export saves + shares a JSON; delete asks to confirm →
+  signs out → anonymous feed; stats show per-window KPIs; settings switch theme (incl. dark)
+  and language, live.
 - **Interests/onboarding (M5b):** a new user is routed to onboarding → picks interests →
   feed; the editor pre-selects current interests and saves; the suggestions nudge
   confirms/dismisses.
@@ -157,6 +171,8 @@ No simulator on the Windows dev box, so these need a device / simulator run:
 ## Known placeholders
 
 - **App icon & splash** are the Expo template defaults — replace with Ager brand assets.
-- **Dark palette**: `main`'s `@ager/shared` now ships a signed-off dark palette; the mobile
-  `src/theme/colors.ts` `dark` seam is ready to wire (a later PR).
-- **Account** shows email + entry points only; full account + stats is M5.
+- **Theme / language prefs** apply live but aren't persisted across launches yet (shared
+  prefs store is a later PR).
+- **Notifications** setting is a placeholder (no server-side preference yet).
+- **Interests editor / onboarding** land in M5b (M2's onboarding placeholder becomes the real
+  editor).

@@ -50,7 +50,18 @@
   },
   "Account": {
     "signedInAs": "Signed in as",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "exportData": "Export your data",
+    "exportErrorTitle": "Export failed",
+    "exportError": "We couldn't export your data. Try again.",
+    "exportRateLimited": "You can export your data once a day. Try again later.",
+    "deleteAccount": "Delete account",
+    "deleteTitle": "Delete account?",
+    "deleteMessage": "This can't be undone. Your account will be deleted.",
+    "deleteConfirm": "Delete",
+    "cancel": "Cancel",
+    "deleteErrorTitle": "Delete failed",
+    "deleteError": "We couldn't delete your account. Try again."
   },
   "AuthPrompt": {
     "title": "Sign in to continue",
@@ -198,5 +209,38 @@
     "subtitle": "We noticed interest in these topics.",
     "add": "Add",
     "dismiss": "Dismiss"
+  },
+  "Stats": {
+    "title": "Stats",
+    "subtitle": "The variety of your reading, from your actions.",
+    "window": {
+      "7d": "7 days",
+      "14d": "14 days",
+      "30d": "30 days"
+    },
+    "total": "Interactions",
+    "sourceDiversity": "Source diversity",
+    "sourceDiversityHint": "Share of distinct sources.",
+    "topTopicShare": "Top topic",
+    "topTopicShareHint": "Weight of your most-read topic.",
+    "byType": "By type",
+    "emptyTitle": "No data yet",
+    "emptyDescription": "Read a few articles and your stats will show up here.",
+    "errorTitle": "We couldn't load your stats"
+  },
+  "Settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "themeOptions": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "language": "Language",
+    "languageOptions": {
+      "it": "Italiano",
+      "en": "English"
+    },
+    "notifications": "Notifications"
   }
 }

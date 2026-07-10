@@ -1,27 +1,132 @@
 import { useSession } from "@ager/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import type { ComponentProps, ReactNode } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { AuthRequired } from "@/components/states/auth-required";
+import {
+  useDeleteAccount,
+  useExportData,
+} from "@/features/account/use-account";
 import { useSignOut } from "@/features/auth/use-sign-out";
 import { t } from "@/i18n/i18n";
 import { useTheme } from "@/theme";
 
-/**
- * Minimal account screen — who's signed in, the mute manager entry, and sign-out.
- * Session-gated: anonymous browsers get the sign-in prompt. The full account + stats
- * experience is M5.
- */
+type IoniconName = ComponentProps<typeof Ionicons>["name"];
+
+function Row({
+  icon,
+  label,
+  onPress,
+  trailing,
+  destructive,
+}: {
+  icon: IoniconName;
+  label: string;
+  onPress: () => void;
+  trailing?: ReactNode;
+  destructive?: boolean;
+}) {
+  const theme = useTheme();
+  const color = destructive
+    ? theme.colors.destructive
+    : theme.colors.foreground;
+  return (
+    <Pressable
+      accessibilityRole="button"
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.row,
+        {
+          backgroundColor: pressed ? theme.colors.muted : theme.colors.card,
+          borderColor: theme.colors.border,
+          borderRadius: theme.radius.md,
+        },
+      ]}
+    >
+      <Ionicons
+        name={icon}
+        size={20}
+        color={destructive ? theme.colors.destructive : theme.colors.primary}
+      />
+      <Text
+        style={{
+          flex: 1,
+          color,
+          fontFamily: theme.fonts.sansMedium,
+          fontSize: theme.fontSize.body,
+        }}
+      >
+        {label}
+      </Text>
+      {trailing !== undefined ? (
+        trailing
+      ) : (
+        <Ionicons
+          name="chevron-forward"
+          size={18}
+          color={theme.colors.mutedForeground}
+        />
+      )}
+    </Pressable>
+  );
+}
+
 export default function AccountScreen() {
   const theme = useTheme();
   const router = useRouter();
   const { status, user } = useSession();
   const signOut = useSignOut();
+  const exportData = useExportData();
+  const deleteAccount = useDeleteAccount();
 
   if (status !== "authenticated") {
     return <AuthRequired description={t("AuthPrompt.accountDescription")} />;
+  }
+
+  function handleExport() {
+    if (exportData.isPending) return;
+    exportData.mutate(undefined, {
+      onError: (err) =>
+        Alert.alert(
+          t("Account.exportErrorTitle"),
+          err instanceof Error && err.message === "rate_limited"
+            ? t("Account.exportRateLimited")
+            : t("Account.exportError"),
+        ),
+    });
+  }
+
+  function handleDelete() {
+    Alert.alert(t("Account.deleteTitle"), t("Account.deleteMessage"), [
+      { text: t("Account.cancel"), style: "cancel" },
+      {
+        text: t("Account.deleteConfirm"),
+        style: "destructive",
+        onPress: () =>
+          deleteAccount.mutate(undefined, {
+            onSuccess: async () => {
+              await signOut();
+              router.replace("/"); // back to the anonymous feed
+            },
+            onError: () =>
+              Alert.alert(
+                t("Account.deleteErrorTitle"),
+                t("Account.deleteError"),
+              ),
+          }),
+      },
+    ]);
   }
 
   return (
@@ -29,24 +134,25 @@ export default function AccountScreen() {
       style={[styles.safe, { backgroundColor: theme.colors.background }]}
       edges={["top", "bottom"]}
     >
-      <View
-        style={[
-          styles.content,
-          { padding: theme.spacing.xl, gap: theme.spacing.lg },
-        ]}
+      <ScrollView
+        contentContainerStyle={{
+          padding: theme.spacing.md,
+          gap: theme.spacing.sm,
+        }}
       >
         <Text
           style={{
             color: theme.colors.foreground,
             fontFamily: theme.fonts.serifBold,
             fontSize: theme.fontSize.h1,
+            marginBottom: theme.spacing.xs,
           }}
         >
           {t("Tabs.account")}
         </Text>
 
         {user?.email ? (
-          <View style={{ gap: theme.spacing.xs }}>
+          <View style={{ marginBottom: theme.spacing.sm }}>
             <Text
               style={{
                 color: theme.colors.mutedForeground,
@@ -68,89 +174,57 @@ export default function AccountScreen() {
           </View>
         ) : null}
 
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => router.push("/mutes")}
-          style={({ pressed }) => [
-            styles.settingRow,
-            {
-              backgroundColor: pressed ? theme.colors.muted : theme.colors.card,
-              borderColor: theme.colors.border,
-              borderRadius: theme.radius.md,
-            },
-          ]}
-        >
-          <Ionicons
-            name="volume-mute-outline"
-            size={20}
-            color={theme.colors.primary}
-          />
-          <Text
-            style={{
-              flex: 1,
-              color: theme.colors.foreground,
-              fontFamily: theme.fonts.sansMedium,
-              fontSize: theme.fontSize.body,
-            }}
-          >
-            {t("Mutes.title")}
-          </Text>
-          <Ionicons
-            name="chevron-forward"
-            size={18}
-            color={theme.colors.mutedForeground}
-          />
-        </Pressable>
-
-        <Pressable
-          accessibilityRole="button"
+        <Row
+          icon="stats-chart-outline"
+          label={t("Stats.title")}
+          onPress={() => router.push("/stats")}
+        />
+        <Row
+          icon="settings-outline"
+          label={t("Settings.title")}
+          onPress={() => router.push("/settings")}
+        />
+        <Row
+          icon="download-outline"
+          label={t("Account.exportData")}
+          onPress={handleExport}
+          trailing={
+            exportData.isPending ? (
+              <ActivityIndicator color={theme.colors.primary} />
+            ) : null
+          }
+        />
+        <Row
+          icon="trash-outline"
+          label={t("Account.deleteAccount")}
+          onPress={handleDelete}
+          destructive
+          trailing={
+            deleteAccount.isPending ? (
+              <ActivityIndicator color={theme.colors.destructive} />
+            ) : null
+          }
+        />
+        <Row
+          icon="log-out-outline"
+          label={t("Account.signOut")}
           onPress={signOut}
-          style={({ pressed }) => [
-            styles.signOut,
-            {
-              borderColor: theme.colors.border,
-              borderRadius: theme.radius.md,
-              opacity: pressed ? 0.7 : 1,
-            },
-          ]}
-        >
-          <Ionicons
-            name="log-out-outline"
-            size={20}
-            color={theme.colors.destructive}
-          />
-          <Text
-            style={{
-              color: theme.colors.destructive,
-              fontFamily: theme.fonts.sansSemibold,
-              fontSize: theme.fontSize.body,
-            }}
-          >
-            {t("Account.signOut")}
-          </Text>
-        </Pressable>
-      </View>
+          destructive
+          trailing={null}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  content: { flex: 1, justifyContent: "flex-start" },
-  settingRow: {
+  row: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
     borderWidth: 1,
     paddingHorizontal: 14,
-    paddingVertical: 14,
-  },
-  signOut: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    borderWidth: 1,
     paddingVertical: 14,
   },
 });
