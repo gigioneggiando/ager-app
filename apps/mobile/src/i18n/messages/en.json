@@ -43,6 +43,21 @@
     "signedInAs": "Signed in as",
     "signOut": "Sign out"
   },
+  "Actions": {
+    "save": "Save",
+    "saved": "Saved",
+    "discard": "Hide",
+    "share": "Share",
+    "hideOnly": "Just hide",
+    "hideTopic": "Hide “%{topic}”",
+    "hideSource": "Hide “%{source}”",
+    "thisSource": "this source",
+    "discardReasonHeading": "What aren’t you interested in? (optional)",
+    "reasonClickbait": "Clickbait",
+    "reasonUnwantedSource": "Unwanted source",
+    "reasonNotInteresting": "Not interesting",
+    "reasonReadElsewhere": "Read elsewhere"
+  },
   "Feed": {
     "heading": "Your feed",
     "subheading": "An ordered selection of what matters, with the source always visible. Tap a headline to read on the publisher.",

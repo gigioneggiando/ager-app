@@ -13,11 +13,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { FeedCard } from "@/components/feed/feed-card";
+import { FeedCardActions } from "@/components/feed/feed-card-actions";
 import { FeedModeSelector } from "@/components/feed/feed-mode-selector";
 import { MessageState } from "@/components/states/message-state";
 import { dedupeFeedItems, feedMeta } from "@/features/feed/feed-cache";
 import { DEFAULT_FEED_MODE, type FeedMode } from "@/features/feed/modes";
 import { useFeed } from "@/features/feed/use-feed";
+import { useInterests } from "@/features/interests/use-interests";
 import { useOpenArticle } from "@/features/interactions/use-interaction";
 import { t } from "@/i18n/i18n";
 import { useTheme } from "@/theme";
@@ -27,6 +29,7 @@ export default function FeedScreen() {
   const { status } = useSession();
   const [mode, setMode] = useState<FeedMode>(DEFAULT_FEED_MODE);
   const openArticle = useOpenArticle();
+  const { data: interests } = useInterests();
 
   const {
     data,
@@ -51,9 +54,22 @@ export default function FeedScreen() {
         onOpen={() => {
           void openArticle(item);
         }}
+        actions={
+          item.articleId != null ? (
+            <FeedCardActions
+              articleId={item.articleId}
+              url={item.url || item.canonicalUrl || ""}
+              title={item.title ?? ""}
+              topics={item.topics ?? []}
+              sourceId={item.sourceId}
+              sourceName={item.sourceName}
+              interests={interests}
+            />
+          ) : undefined
+        }
       />
     ),
-    [feedMode, recommenderVersion, openArticle],
+    [feedMode, recommenderVersion, openArticle, interests],
   );
 
   const header = (

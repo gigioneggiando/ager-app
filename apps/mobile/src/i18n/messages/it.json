@@ -43,6 +43,21 @@
     "signedInAs": "Accesso come",
     "signOut": "Esci"
   },
+  "Actions": {
+    "save": "Salva",
+    "saved": "Salvato",
+    "discard": "Nascondi",
+    "share": "Condividi",
+    "hideOnly": "Nascondi e basta",
+    "hideTopic": "Nascondi «%{topic}»",
+    "hideSource": "Nascondi «%{source}»",
+    "thisSource": "questa fonte",
+    "discardReasonHeading": "Cosa non ti interessa? (facoltativo)",
+    "reasonClickbait": "Clickbait",
+    "reasonUnwantedSource": "Fonte sgradita",
+    "reasonNotInteresting": "Non interessante",
+    "reasonReadElsewhere": "Già letto altrove"
+  },
   "Feed": {
     "heading": "Il tuo feed",
     "subheading": "Una selezione ordinata di ciò che conta, con la fonte sempre visibile. Tocca un titolo per leggere sull'editore.",

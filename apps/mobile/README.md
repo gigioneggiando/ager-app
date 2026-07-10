@@ -90,13 +90,18 @@ src/
   i18n/                    # expo-localization + i18n-js; default locale `it`, plus `en`
 ```
 
-## Feed (M3a)
+## Feed (M3)
 
 Link-first feed on the Feed tab: cursor-paginated `useInfiniteQuery` over `GET /api/feed`
 (6 ranking modes), pull-to-refresh, infinite scroll, and loading/empty/error/caught-up
 states. The card never renders an article body — tapping a headline opens the publisher via
 `expo-web-browser` (a `safeUrl` http(s) guard applies) and fires `OPENED_EXTERNAL`, the
-primary link-first signal. Card actions (Save / Hide+reasons / Share / Mute) land in M3b.
+primary link-first signal.
+
+**Card actions (M3b):** Save (`SAVE` → default list, optimistic), Hide (opens a bottom sheet
+with §11.2 reasons + "mute topic/source" escalation; optimistic removal from the feed cache;
+picking a reason posts `DISCARD`, a mute posts to `muted-interests`/`muted-sources`), and
+Share (RN `Share` + `SHARE`).
 
 ## Manual verification (device) — pending
 
@@ -105,7 +110,9 @@ No simulator on the Windows dev box, so these need a device / simulator run:
 - **Auth (M2):** OTP round-trip on the real API; token persists across restart; expired
   access auto-refreshes; sign-out clears secure storage.
 - **Feed (M3a):** feed loads and scrolls (infinite); pull-to-refresh; mode switch re-ranks;
-  tapping a card opens the publisher and (signed in) records `OPENED_EXTERNAL`.
+  tapping a card opens the publisher and records `OPENED_EXTERNAL`.
+- **Actions (M3b):** Save toggles the icon and records `SAVE`; Hide removes the card and the
+  reason/mute sheet commits `DISCARD`/mute; Share opens the OS sheet and records `SHARE`.
 
 ## Known placeholders
 
