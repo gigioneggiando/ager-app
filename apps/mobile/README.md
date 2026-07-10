@@ -137,6 +137,15 @@ top-topic share, by type) over 7d / 14d / 30d windows, with loading/empty/error.
 so dark actually renders), language it/en (live), mute-manager link, and a notifications
 placeholder.
 
+## Interests & onboarding (M5b)
+
+**Interests editor** (`/interests`, from the feed) — the taxonomy grouped by macro topic
+(`GET /api/interests`), pre-selected from `GET /api/me/interests`, saved via
+`POST /api/me/interests` (needs ≥1). **Onboarding** reconnects the M2 gate: after sign-in a
+new user (no interests) is routed to `/onboarding` (the same picker, with skip) → feed; an
+existing user goes straight to the feed. The **suggested-interests nudge** (F2,
+`/api/me/suggested-interests`) shows on the feed with optimistic confirm / dismiss.
+
 ## Manual verification (device) — pending
 
 No simulator on the Windows dev box, so these need a device / simulator run:
@@ -155,6 +164,9 @@ No simulator on the Windows dev box, so these need a device / simulator run:
 - **Account/stats/settings (M5a):** export saves + shares a JSON; delete asks to confirm →
   signs out → anonymous feed; stats show per-window KPIs; settings switch theme (incl. dark)
   and language, live.
+- **Interests/onboarding (M5b):** a new user is routed to onboarding → picks interests →
+  feed; the editor pre-selects current interests and saves; the suggestions nudge
+  confirms/dismisses.
 
 ## Known placeholders
 

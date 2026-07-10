@@ -36,9 +36,17 @@
     }
   },
   "Onboarding": {
-    "title": "Personalizza il tuo feed",
-    "body": "Presto potrai scegliere gli argomenti che ti interessano. Questa sezione arriverà in un prossimo aggiornamento.",
-    "signOut": "Esci"
+    "title": "Scegli i tuoi interessi",
+    "subtitle": "Seleziona gli argomenti che ti interessano per personalizzare il feed.",
+    "editTitle": "Modifica interessi",
+    "editSubtitle": "Aggiungi o rimuovi argomenti. Le modifiche aggiornano il tuo feed.",
+    "save": "Salva",
+    "skip": "Salta",
+    "selectedCount": "%{count} selezionati",
+    "suggestMin": "scegline almeno %{min}",
+    "savedHint": "Interessi salvati.",
+    "loadError": "Non siamo riusciti a caricare gli interessi.",
+    "saveError": "Salvataggio non riuscito. Riprova."
   },
   "Account": {
     "signedInAs": "Accesso come",
@@ -195,6 +203,12 @@
     "emptyTitle": "Niente di mutato",
     "emptyDescription": "Gli argomenti e le fonti che nascondi appariranno qui.",
     "errorTitle": "Non siamo riusciti a caricare i mute"
+  },
+  "Suggested": {
+    "title": "Vuoi allargare il tuo feed?",
+    "subtitle": "Abbiamo notato interesse per questi argomenti.",
+    "add": "Aggiungi",
+    "dismiss": "Ignora"
   },
   "Stats": {
     "title": "Statistiche",
