@@ -1,24 +1,10 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
-import { createPortal } from "react-dom";
+import { useState, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useQueryClient, type InfiniteData } from "@tanstack/react-query";
-import {
-  Ban,
-  Bookmark,
-  BookmarkCheck,
-  ChevronDown,
-  EyeOff,
-  Share2,
-} from "lucide-react";
+import { Bookmark, BookmarkCheck, ChevronDown, EyeOff, Share2 } from "lucide-react";
 import type { FeedPage } from "@ager/api-client";
 
 import { cn } from "@/lib/utils";
@@ -26,18 +12,18 @@ import { useSession } from "@/components/auth/auth-provider";
 import { useInterests } from "@/features/interests/use-interests";
 import { muteInterest, muteSource } from "@/features/mutes/use-muted";
 import { postInteraction } from "@/features/interactions/use-interaction";
-import { useToast } from "@/components/ui/toast";
+import { useToast, type ToastChip } from "@/components/ui/toast";
 import { AddToListDialog } from "@/components/reading-lists/add-to-list-dialog";
 
-// Undo window for deferred SAVE / DISCARD / mute commits. Comfortable enough to read the
-// toast and reach "Annulla" without rushing; the toast is viewport-fixed so scrolling
-// neither dismisses it nor cancels the pending commit.
+// Undo window for the deferred SAVE / DISCARD / mute commits. Comfortable enough to read the
+// toast and reach "Annulla" without rushing; the toast is viewport-fixed so scrolling neither
+// dismisses it nor cancels the pending commit.
 const UNDO_MS = 5000;
 
 /**
- * Optional §11.2 DISCARD reasons (skippable). The `code` is the wire value sent as
- * `reason`; the backend normalises + routes the penalty: clickbait / unwanted_source →
- * source, read_elsewhere → cluster, not_interesting (and "no reason") → topic.
+ * Optional §11.2 DISCARD reasons (skippable), shown as chips in the Hide undo toast. `code` is
+ * the wire value sent as `reason`; the backend normalises + routes the penalty: clickbait /
+ * unwanted_source → source, read_elsewhere → cluster, not_interesting (and "no reason") → topic.
  */
 const DISCARD_REASONS = [
   { code: "clickbait", labelKey: "reasonClickbait" },
@@ -46,16 +32,23 @@ const DISCARD_REASONS = [
   { code: "read_elsewhere", labelKey: "reasonReadElsewhere" },
 ] as const;
 
+// Chip-value prefixes that escalate a one-off Hide into a feed-wide mute (decoded in onCommit).
+const MUTE_TOPIC = "topic:";
+const MUTE_SOURCE = "source:";
+
 function ActionButton({
   onClick,
   label,
   active,
+  iconOnly,
   children,
   ...rest
 }: {
   onClick: () => void;
   label: string;
   active?: boolean;
+  /** Render the icon alone (no visible text) — the label still names the button for AT. */
+  iconOnly?: boolean;
   children: ReactNode;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
@@ -71,7 +64,7 @@ function ActionButton({
       {...rest}
     >
       {children}
-      <span className="hidden sm:inline">{label}</span>
+      {iconOnly ? null : <span className="hidden sm:inline">{label}</span>}
     </button>
   );
 }
@@ -86,36 +79,6 @@ function removeFromFeed(
     pages: data.pages.map((page) => ({
       ...page,
       items: (page.items ?? []).filter((i) => i.articleId !== articleId),
-    })),
-  };
-}
-
-/** Drop every feed item carrying the muted topic label (topic-mute is a feed-wide hide). */
-function removeTopicFromFeed(
-  data: InfiniteData<FeedPage> | undefined,
-  topic: string,
-): InfiniteData<FeedPage> | undefined {
-  if (!data) return data;
-  return {
-    ...data,
-    pages: data.pages.map((page) => ({
-      ...page,
-      items: (page.items ?? []).filter((i) => !(i.topics ?? []).includes(topic)),
-    })),
-  };
-}
-
-/** Drop every feed item published by the muted source (source-mute is a feed-wide hide). */
-function removeSourceFromFeed(
-  data: InfiniteData<FeedPage> | undefined,
-  sourceId: number,
-): InfiniteData<FeedPage> | undefined {
-  if (!data) return data;
-  return {
-    ...data,
-    pages: data.pages.map((page) => ({
-      ...page,
-      items: (page.items ?? []).filter((i) => i.sourceId !== sourceId),
     })),
   };
 }
@@ -135,11 +98,11 @@ export function FeedCardActions({
   articleId: number;
   url: string;
   title: string;
-  /** The article's topic labels — used to offer "Nascondi argomento". */
+  /** The article's topic labels — used to offer "Nascondi «argomento»". */
   topics?: string[];
-  /** The publishing source id — used to offer "Nascondi fonte". */
+  /** The publishing source id — used to offer "Nascondi «fonte»". */
   sourceId?: number | null;
-  /** The publishing source name — shown in the "Nascondi fonte" label. */
+  /** The publishing source name — shown in the "Nascondi «fonte»" chip. */
   sourceName?: string | null;
 }) {
   const t = useTranslations("Actions");
@@ -152,24 +115,6 @@ export function FeedCardActions({
   const { data: interests } = useInterests();
   const [saved, setSaved] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  // The "Non mi interessa" menu is portaled to <body> so it escapes the card's
-  // `overflow-hidden` (which otherwise clips it) and never renders under the next card.
-  // It is fixed-positioned against the trigger's viewport rect.
-  const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(null);
-  const triggerRef = useRef<HTMLDivElement | null>(null);
-  const menuRef = useRef<HTMLDivElement | null>(null);
-
-  // Anchor the portaled menu below the trigger, right-aligned to it.
-  const placeMenu = useCallback(() => {
-    const el = triggerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    setMenuPos({
-      top: rect.bottom + 4,
-      right: Math.max(8, window.innerWidth - rect.right),
-    });
-  }, []);
 
   // Resolve the article's topic labels to interest ids (the mute API is keyed by interestId).
   // Match against both interest slug and name; keep only topics we can actually mute.
@@ -182,96 +127,10 @@ export function FeedCardActions({
     })
     .filter((x): x is { label: string; interestId: number } => x !== null);
 
-  // Close the topic menu only on a genuine outside click (neither the trigger nor the
-  // portaled menu) or Escape — never on the selecting click itself. Keep it glued to the
-  // trigger while open by re-placing it on scroll/resize.
-  useEffect(() => {
-    if (!menuOpen) return;
-    function onPointer(e: MouseEvent) {
-      const target = e.target as Node;
-      if (triggerRef.current?.contains(target)) return;
-      if (menuRef.current?.contains(target)) return;
-      setMenuOpen(false);
-    }
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setMenuOpen(false);
-    }
-    document.addEventListener("mousedown", onPointer);
-    document.addEventListener("keydown", onKey);
-    window.addEventListener("scroll", placeMenu, true);
-    window.addEventListener("resize", placeMenu);
-    return () => {
-      document.removeEventListener("mousedown", onPointer);
-      document.removeEventListener("keydown", onKey);
-      window.removeEventListener("scroll", placeMenu, true);
-      window.removeEventListener("resize", placeMenu);
-    };
-  }, [menuOpen, placeMenu]);
-
   function requireAuth(): boolean {
     if (isAuthenticated) return true;
     router.push(`/${locale}/login?next=${encodeURIComponent(pathname)}`);
     return false;
-  }
-
-  // Mute a topic: optimistically drop every feed card carrying it, 5s deferred commit, Undo
-  // restores the snapshot. Distinct from per-article DISCARD — this is a feed-wide topic hide.
-  function handleMuteTopic(label: string, interestId: number) {
-    setMenuOpen(false);
-    if (!requireAuth()) return;
-    const snapshots = queryClient.getQueriesData<InfiniteData<FeedPage>>({
-      queryKey: ["feed"],
-    });
-    queryClient.setQueriesData<InfiniteData<FeedPage>>(
-      { queryKey: ["feed"] },
-      (d) => removeTopicFromFeed(d, label),
-    );
-    toast.show({
-      message: t("topicHidden", { topic: label }),
-      actionLabel: t("undo"),
-      durationMs: UNDO_MS,
-      onAction: () => {
-        for (const [key, data] of snapshots) {
-          queryClient.setQueryData(key, data);
-        }
-      },
-      onCommit: () => {
-        void muteInterest(interestId).then(() => {
-          void queryClient.invalidateQueries({ queryKey: ["feed"] });
-          void queryClient.invalidateQueries({ queryKey: ["muted-interests"] });
-        });
-      },
-    });
-  }
-
-  // Mute a source: optimistically drop every feed card from it, 5s deferred commit, Undo
-  // restores the snapshot. Feed-wide hide, keyed by the article's sourceId.
-  function handleMuteSource(id: number, name: string) {
-    setMenuOpen(false);
-    if (!requireAuth()) return;
-    const snapshots = queryClient.getQueriesData<InfiniteData<FeedPage>>({
-      queryKey: ["feed"],
-    });
-    queryClient.setQueriesData<InfiniteData<FeedPage>>(
-      { queryKey: ["feed"] },
-      (d) => removeSourceFromFeed(d, id),
-    );
-    toast.show({
-      message: t("sourceHidden", { source: name }),
-      actionLabel: t("undo"),
-      durationMs: UNDO_MS,
-      onAction: () => {
-        for (const [key, data] of snapshots) {
-          queryClient.setQueryData(key, data);
-        }
-      },
-      onCommit: () => {
-        void muteSource(id).then(() => {
-          void queryClient.invalidateQueries({ queryKey: ["feed"] });
-          void queryClient.invalidateQueries({ queryKey: ["muted-sources"] });
-        });
-      },
-    });
   }
 
   // One-tap save → default "Salvati" list (backend auto-files on SAVE). 5s deferred commit.
@@ -291,10 +150,11 @@ export function FeedCardActions({
     });
   }
 
-  // Hide → ONE TAP: remove from the feed immediately; 5s deferred DISCARD; Undo restores the
-  // snapshot. The undo toast carries OPTIONAL §11.2 reason chips (skippable): tapping one rides
-  // its code along on the deferred DISCARD as `reason`; no tap → plain DISCARD, no reason. The
-  // feed cache is keyed by mode (["feed", mode]); match every feed query by prefix.
+  // Hide is ONE action that also covers "not interested": one tap removes THIS article from the
+  // feed immediately (5s deferred DISCARD, Undo restores the snapshot). The undo toast asks
+  // "cosa non ti interessa?" with skippable chips — a plain reason chip tags the DISCARD; a
+  // "Nascondi «argomento/fonte»" chip escalates to a feed-wide mute instead. The feed cache is
+  // keyed by mode (["feed", mode]); match every feed query by prefix.
   function handleDiscard() {
     if (!requireAuth()) return;
     const snapshots = queryClient.getQueriesData<InfiniteData<FeedPage>>({
@@ -304,21 +164,62 @@ export function FeedCardActions({
       { queryKey: ["feed"] },
       (d) => removeFromFeed(d, articleId),
     );
+
+    const hasTopicMute = mutableTopics.length > 0;
+    const hasSourceMute = sourceId != null;
+    const chips: ToastChip[] = [
+      // Direct "what aren't you interested in" answers first: escalate to a feed-wide mute.
+      ...mutableTopics.map((tp) => ({
+        label: t("hideTopic", { topic: tp.label }),
+        value: `${MUTE_TOPIC}${tp.interestId}`,
+      })),
+      ...(hasSourceMute
+        ? [
+            {
+              label: t("hideSource", {
+                source: sourceName?.trim() || t("thisSource"),
+              }),
+              value: `${MUTE_SOURCE}${sourceId}`,
+            },
+          ]
+        : []),
+      // Generic reasons, minus any a topic/source mute already expresses (no redundant pair).
+      ...DISCARD_REASONS.filter(
+        (r) =>
+          !(hasSourceMute && r.code === "unwanted_source") &&
+          !(hasTopicMute && r.code === "not_interesting"),
+      ).map((r) => ({ label: t(r.labelKey), value: r.code })),
+    ];
+
     toast.show({
       message: t("hidden"),
       actionLabel: t("undo"),
       durationMs: UNDO_MS,
-      chips: DISCARD_REASONS.map((r) => ({ label: t(r.labelKey), value: r.code })),
+      chips,
       chipsLabel: t("discardReasonHeading"),
       onAction: () => {
         for (const [key, data] of snapshots) {
           queryClient.setQueryData(key, data);
         }
       },
-      onCommit: (reason) => {
-        void postInteraction(articleId, "DISCARD", reason).then(() =>
-          queryClient.invalidateQueries({ queryKey: ["feed"] }),
-        );
+      onCommit: (value) => {
+        if (value?.startsWith(MUTE_TOPIC)) {
+          const interestId = Number(value.slice(MUTE_TOPIC.length));
+          void muteInterest(interestId).then(() => {
+            void queryClient.invalidateQueries({ queryKey: ["feed"] });
+            void queryClient.invalidateQueries({ queryKey: ["muted-interests"] });
+          });
+        } else if (value?.startsWith(MUTE_SOURCE)) {
+          const id = Number(value.slice(MUTE_SOURCE.length));
+          void muteSource(id).then(() => {
+            void queryClient.invalidateQueries({ queryKey: ["feed"] });
+            void queryClient.invalidateQueries({ queryKey: ["muted-sources"] });
+          });
+        } else {
+          void postInteraction(articleId, "DISCARD", value).then(() =>
+            queryClient.invalidateQueries({ queryKey: ["feed"] }),
+          );
+        }
       },
     });
   }
@@ -343,14 +244,14 @@ export function FeedCardActions({
 
   return (
     <>
-      {/* Save is one-tap → default "Salvati" list; the small caret is the secondary action,
-          opening the add-to-list dialog (choose a list + note). Grouped so the bookmark stays a
-          compact icon button consistent with hide/share, and nothing dominates the row. */}
+      {/* Save is one-tap → default "Salvati" list; icon-only (the bookmark is universally
+          recognised). The small caret is the secondary action: open the add-to-list dialog. */}
       <div className="inline-flex items-center">
         <ActionButton
           onClick={handleSave}
           label={saved ? t("saved") : t("save")}
           active={saved}
+          iconOnly
         >
           {saved ? (
             <BookmarkCheck className="size-4" aria-hidden="true" />
@@ -368,88 +269,11 @@ export function FeedCardActions({
           <ChevronDown className="size-3.5" aria-hidden="true" />
         </button>
       </div>
+
+      {/* Hide = the single "not interested / hide" action (the undo toast asks what/why). */}
       <ActionButton onClick={handleDiscard} label={t("discard")}>
         <EyeOff className="size-4" aria-hidden="true" />
       </ActionButton>
-
-      {/* "Non mi interessa" → hide the article's topics and/or its source feed-wide. Shown when
-          at least one topic resolves to a mutable interest OR the article has a source id.
-          Distinct from the per-article DISCARD above. */}
-      {mutableTopics.length > 0 || sourceId != null ? (
-        <div className="inline-flex" ref={triggerRef}>
-          <ActionButton
-            onClick={() => {
-              if (menuOpen) {
-                setMenuOpen(false);
-              } else {
-                placeMenu();
-                setMenuOpen(true);
-              }
-            }}
-            label={t("notInterested")}
-            aria-haspopup="menu"
-            aria-expanded={menuOpen}
-          >
-            <Ban className="size-4" aria-hidden="true" />
-          </ActionButton>
-          {menuOpen && menuPos
-            ? createPortal(
-                <div
-                  ref={menuRef}
-                  role="menu"
-                  aria-label={t("notInterested")}
-                  style={{ top: menuPos.top, right: menuPos.right }}
-                  className="fixed z-50 min-w-52 max-w-[calc(100vw-1rem)] overflow-hidden rounded-md border border-border bg-card py-1 shadow-md"
-                >
-                  {mutableTopics.length > 0 ? (
-                <>
-                  <p className="px-3 py-1.5 text-xs font-medium text-muted-foreground">
-                    {t("hideTopicHeading")}
-                  </p>
-                  {mutableTopics.map((tp) => (
-                    <button
-                      key={tp.interestId}
-                      type="button"
-                      role="menuitem"
-                      onClick={() => handleMuteTopic(tp.label, tp.interestId)}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-secondary focus-visible:bg-secondary focus-visible:outline-none"
-                    >
-                      <EyeOff className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
-                      <span className="truncate">{t("hideTopic", { topic: tp.label })}</span>
-                    </button>
-                  ))}
-                </>
-              ) : null}
-
-              {sourceId != null ? (
-                <>
-                  {mutableTopics.length > 0 ? (
-                    <div className="my-1 border-t border-border" role="separator" />
-                  ) : null}
-                  <p className="px-3 py-1.5 text-xs font-medium text-muted-foreground">
-                    {t("hideSourceHeading")}
-                  </p>
-                  <button
-                    type="button"
-                    role="menuitem"
-                    onClick={() =>
-                      handleMuteSource(sourceId, sourceName?.trim() || t("thisSource"))
-                    }
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-secondary focus-visible:bg-secondary focus-visible:outline-none"
-                  >
-                    <Ban className="size-3.5 shrink-0 text-muted-foreground" aria-hidden="true" />
-                    <span className="truncate">
-                      {t("hideSource", { source: sourceName?.trim() || t("thisSource") })}
-                    </span>
-                  </button>
-                </>
-              ) : null}
-                </div>,
-                document.body,
-              )
-            : null}
-        </div>
-      ) : null}
 
       <ActionButton onClick={handleShare} label={t("share")}>
         <Share2 className="size-4" aria-hidden="true" />
