@@ -70,6 +70,17 @@
     "savedDescription": "Sign in to see your reading lists.",
     "signIn": "Sign in"
   },
+  "Notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "unread": "Unread",
+    "fallbackContent": "You have a new notification.",
+    "authDescription": "Sign in to see your notifications.",
+    "emptyTitle": "No notifications",
+    "emptyDescription": "You're all caught up. New notifications will show up here.",
+    "errorTitle": "We couldn't load your notifications",
+    "errorDescription": "Something went wrong. Pull to refresh."
+  },
   "Search": {
     "placeholder": "Search articles",
     "browseByTag": "Browse by topic",

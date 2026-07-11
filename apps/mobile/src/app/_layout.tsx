@@ -8,6 +8,8 @@ import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { usePushListeners } from "@/features/push/use-push-listeners";
+import { usePushRegistration } from "@/features/push/use-push-registration";
 import { LocaleProvider } from "@/i18n/locale-context";
 import { sessionController } from "@/lib/auth/session";
 import { createQueryClient } from "@/lib/query/client";
@@ -51,6 +53,10 @@ function RootNavigator() {
   const { status } = useSession();
   const theme = useTheme();
   const ready = (fontsLoaded || fontError) && status !== "loading";
+
+  // Push: register the device token when authenticated, and route notification taps.
+  usePushRegistration();
+  usePushListeners();
 
   useEffect(() => {
     if (ready) SplashScreen.hideAsync();
