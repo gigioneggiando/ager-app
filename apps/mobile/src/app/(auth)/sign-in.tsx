@@ -1,5 +1,6 @@
 import { AuthError, type AuthErrorKind, useSession } from "@ager/auth";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -164,6 +165,14 @@ export default function SignInScreen() {
             { padding: theme.spacing.xl, gap: theme.spacing.lg },
           ]}
         >
+          <Image
+            source={require("../../../assets/images/logo-symbol.png")}
+            style={styles.logo}
+            contentFit="contain"
+            tintColor={theme.colors.primary}
+            accessibilityLabel="Ager"
+          />
+
           <Text
             style={{
               color: theme.colors.foreground,
@@ -342,6 +351,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   close: { position: "absolute", top: 8, right: 12, zIndex: 1, padding: 8 },
   content: { flex: 1, justifyContent: "center" },
+  logo: { width: 44, height: 44 },
   label: { fontSize: 14 },
   input: {
     borderWidth: 1,
