@@ -15,6 +15,7 @@ export async function POST(request: Request) {
     email?: unknown;
     honeypot?: unknown;
     captchaToken?: unknown;
+    locale?: unknown;
   } | null;
 
   const username = typeof body?.username === "string" ? body.username.trim() : "";
@@ -34,6 +35,7 @@ export async function POST(request: Request) {
         typeof body?.captchaToken === "string" && body.captchaToken
           ? body.captchaToken
           : undefined,
+      locale: typeof body?.locale === "string" ? body.locale : undefined,
     }),
   });
 

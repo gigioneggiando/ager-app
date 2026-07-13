@@ -51,7 +51,7 @@ export function RegisterForm() {
       const res = await fetch("/api/auth/register/request-code", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ username, email, honeypot, captchaToken }),
+        body: JSON.stringify({ username, email, honeypot, captchaToken, locale }),
       });
       if (res.ok) {
         setStep("code");

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
@@ -18,6 +18,7 @@ type Step = "email" | "code" | "done";
  */
 export function RestoreForm() {
   const t = useTranslations("Restore");
+  const locale = useLocale();
   const searchParams = useSearchParams();
 
   const [step, setStep] = useState<Step>("email");
@@ -34,7 +35,7 @@ export function RestoreForm() {
       const res = await fetch("/api/auth/restore/request-code", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, locale }),
       });
       if (res.ok) {
         setStep("code");
