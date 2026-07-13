@@ -41,7 +41,7 @@ export function LoginForm() {
       const res = await fetch("/api/auth/request-code", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, locale }),
       });
       if (res.ok) {
         setStep("code");

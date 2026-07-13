@@ -101,13 +101,14 @@ export class SessionController {
 
   // --- sign-in flow ------------------------------------------------------------------
 
-  async requestOtp(email: string): Promise<void> {
+  async requestOtp(email: string, locale?: string): Promise<void> {
     let response: Response | undefined;
     try {
       const result = await this.deps.authClient.POST(
         "/api/auth/login/request-code",
         {
-          body: { email },
+          // `locale` lets the backend send the OTP email in the user's language (default it).
+          body: { email, locale },
         },
       );
       response = result.response;

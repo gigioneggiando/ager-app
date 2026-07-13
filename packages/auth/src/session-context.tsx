@@ -14,7 +14,7 @@ export interface SessionContextValue {
   status: SessionStatus;
   user: AuthUser | null;
   accessToken: string | null;
-  requestOtp: (email: string) => Promise<void>;
+  requestOtp: (email: string, locale?: string) => Promise<void>;
   verifyOtp: (email: string, code: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -47,7 +47,7 @@ export function SessionProvider({
       status: state.status,
       user: state.user,
       accessToken: state.accessToken,
-      requestOtp: (email) => controller.requestOtp(email),
+      requestOtp: (email, locale) => controller.requestOtp(email, locale),
       verifyOtp: (email, code) => controller.verifyOtp(email, code),
       signOut: () => controller.signOut(),
     }),

@@ -15,7 +15,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { needsOnboarding } from "@/features/interests/interest-sections";
-import { t } from "@/i18n/i18n";
+import { i18n, t } from "@/i18n/i18n";
 import { apiClient } from "@/lib/api/client";
 import { useTheme } from "@/theme";
 
@@ -69,7 +69,7 @@ export default function SignInScreen() {
     setBusy(true);
     setErrorKind(null);
     try {
-      await requestOtp(email.trim());
+      await requestOtp(email.trim(), i18n.locale);
       setStep("otp");
       setResendSeconds(RESEND_COOLDOWN_SECONDS);
     } catch (error) {
@@ -84,7 +84,7 @@ export default function SignInScreen() {
     setBusy(true);
     setErrorKind(null);
     try {
-      await requestOtp(email.trim());
+      await requestOtp(email.trim(), i18n.locale);
       setResendSeconds(RESEND_COOLDOWN_SECONDS);
     } catch (error) {
       setErrorKind(toKind(error));
