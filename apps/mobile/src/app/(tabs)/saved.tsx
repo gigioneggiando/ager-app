@@ -99,6 +99,7 @@ export default function SavedScreen() {
         data={lists}
         keyExtractor={(item) => String(item.id)}
         contentContainerStyle={{
+          flexGrow: 1,
           paddingHorizontal: theme.spacing.md,
           gap: theme.spacing.sm,
         }}
