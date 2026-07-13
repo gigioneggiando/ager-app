@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/brand/logo";
 import { Container } from "@/components/layout/container";
+import { CONTACT_EMAIL } from "@/lib/contact";
 
 export function Footer() {
   const t = useTranslations("Footer");
@@ -16,6 +17,15 @@ export function Footer() {
             <Logo height={28} />
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               {t("mission")}
+            </p>
+            <p className="mt-4 text-sm text-muted-foreground">
+              {t("contact")}:{" "}
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="text-link hover:underline"
+              >
+                {CONTACT_EMAIL}
+              </a>
             </p>
           </div>
 
@@ -41,12 +51,29 @@ export function Footer() {
             >
               {t("botPolicy")}
             </Link>
-            <span className="text-muted-foreground/70">{t("sourcesSoon")}</span>
+            <Link
+              href="/sources"
+              className="text-foreground/80 transition-colors hover:text-link"
+            >
+              {t("sources")}
+            </Link>
             <Link
               href="/chi-siamo"
               className="text-foreground/80 transition-colors hover:text-link"
             >
               {t("about")}
+            </Link>
+            <Link
+              href="/privacy"
+              className="text-foreground/80 transition-colors hover:text-link"
+            >
+              {t("privacy")}
+            </Link>
+            <Link
+              href="/termini"
+              className="text-foreground/80 transition-colors hover:text-link"
+            >
+              {t("terms")}
             </Link>
           </nav>
         </div>

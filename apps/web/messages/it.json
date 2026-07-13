@@ -17,10 +17,13 @@
     "styleguide": "Styleguide",
     "dsaContact": "Contatto DSA",
     "botPolicy": "AgerBot",
-    "sourcesSoon": "Fonti (presto)",
+    "sources": "Fonti",
     "rights": "Tutti i diritti riservati.",
     "claim": "Riduce il rumore, aumenta la comprensione.",
-    "about": "Chi siamo"
+    "about": "Chi siamo",
+    "contact": "Contatti",
+    "privacy": "Privacy",
+    "terms": "Termini"
   },
   "Theme": {
     "label": "Tema",
@@ -728,6 +731,42 @@
     "methodTitle": "Metodo",
     "methodBody": "Aggreghiamo fonti verificate, ne dichiariamo licenze e provenienza, e mostriamo sempre il percorso che porta all'editore originale. Il punteggio di rilevanza è trasparente e gli argomenti sono navigabili: sei tu a decidere cosa approfondire.",
     "closing": "Ager è un progetto editoriale indipendente. Se vuoi proporci una fonte o segnalarci un problema, scrivici."
+  },
+  "Privacy": {
+    "title": "Informativa sulla privacy",
+    "intro": "Come Ager raccoglie, usa e protegge i tuoi dati personali.",
+    "draftNotice": "Bozza in revisione legale: questo documento non è ancora definitivo e sarà aggiornato prima del lancio pubblico.",
+    "lastUpdated": "Ultimo aggiornamento: da definire",
+    "controllerTitle": "Titolare del trattamento",
+    "controllerBody": "Ager è un progetto editoriale indipendente senza scopo di lucro. I riferimenti completi del titolare del trattamento saranno indicati in questa sezione.",
+    "dataTitle": "Dati che raccogliamo",
+    "dataBody": "Per usare Ager raccogliamo il tuo indirizzo email (per l'accesso tramite codice OTP), gli interessi che scegli e le tue interazioni con il feed (articoli aperti, salvati, nascosti) per personalizzare i contenuti. Non vendiamo i tuoi dati.",
+    "purposesTitle": "Finalità del trattamento",
+    "purposesBody": "Usiamo questi dati solo per autenticarti, personalizzare il feed e migliorare il servizio. Non usiamo notifiche o meccanismi progettati per creare dipendenza.",
+    "retentionTitle": "Conservazione",
+    "retentionBody": "Conserviamo i dati per il tempo necessario a fornire il servizio. I codici OTP scadono entro pochi minuti e vengono eliminati automaticamente. Puoi richiedere la cancellazione del tuo account in qualsiasi momento.",
+    "rightsTitle": "I tuoi diritti (GDPR)",
+    "rightsBody": "Hai il diritto di accedere, rettificare, esportare o cancellare i tuoi dati e di opporti al trattamento. Per esercitare questi diritti scrivici all'indirizzo qui sotto.",
+    "contactTitle": "Contatti",
+    "contactBody": "Per qualsiasi domanda sul trattamento dei dati puoi scriverci a:"
+  },
+  "Terms": {
+    "title": "Termini di servizio",
+    "intro": "Le condizioni d'uso del servizio Ager.",
+    "draftNotice": "Bozza in revisione legale: questo documento non è ancora definitivo e sarà aggiornato prima del lancio pubblico.",
+    "lastUpdated": "Ultimo aggiornamento: da definire",
+    "acceptanceTitle": "Accettazione dei termini",
+    "acceptanceBody": "Usando Ager accetti questi termini. Se non li accetti, ti preghiamo di non usare il servizio.",
+    "serviceTitle": "Il servizio",
+    "serviceBody": "Ager è un aggregatore di notizie link-first: selezioniamo e organizziamo gli articoli mostrando sempre la fonte originale e rimandando all'editore. Non ospitiamo il contenuto integrale degli articoli.",
+    "conductTitle": "Uso corretto",
+    "conductBody": "Ti impegni a non usare il servizio per scopi illeciti, a non tentare di comprometterne la sicurezza e a non abusarne in modo automatizzato.",
+    "liabilityTitle": "Limitazione di responsabilità",
+    "liabilityBody": "Ager fornisce il servizio \"così com'è\". I contenuti provengono da fonti terze e la responsabilità editoriale resta dell'editore originale.",
+    "changesTitle": "Modifiche",
+    "changesBody": "Possiamo aggiornare questi termini nel tempo. Le modifiche rilevanti saranno comunicate tramite il servizio.",
+    "contactTitle": "Contatti",
+    "contactBody": "Per domande sui termini puoi scriverci a:"
   },
   "OAuth": {
     "continueWithGoogle": "Continua con Google",

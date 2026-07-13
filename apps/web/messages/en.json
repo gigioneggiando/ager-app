@@ -17,10 +17,13 @@
     "styleguide": "Styleguide",
     "dsaContact": "DSA contact",
     "botPolicy": "AgerBot",
-    "sourcesSoon": "Sources (soon)",
+    "sources": "Sources",
     "rights": "All rights reserved.",
     "claim": "Reduces the noise, increases understanding.",
-    "about": "About"
+    "about": "About",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "terms": "Terms"
   },
   "Theme": {
     "label": "Theme",
@@ -728,6 +731,42 @@
     "methodTitle": "Method",
     "methodBody": "We aggregate verified sources, declare their licences and provenance, and always show the path back to the original publisher. The relevance score is transparent and topics are browsable: you decide what to dig into.",
     "closing": "Ager is an independent editorial project. If you'd like to suggest a source or report an issue, get in touch."
+  },
+  "Privacy": {
+    "title": "Privacy policy",
+    "intro": "How Ager collects, uses and protects your personal data.",
+    "draftNotice": "Draft under legal review: this document is not yet final and will be updated before public launch.",
+    "lastUpdated": "Last updated: to be defined",
+    "controllerTitle": "Data controller",
+    "controllerBody": "Ager is an independent non-profit editorial project. The full details of the data controller will be listed in this section.",
+    "dataTitle": "Data we collect",
+    "dataBody": "To use Ager we collect your email address (for sign-in via OTP code), the interests you choose and your interactions with the feed (articles opened, saved, hidden) to personalise the content. We do not sell your data.",
+    "purposesTitle": "Purposes of processing",
+    "purposesBody": "We use this data only to authenticate you, personalise the feed and improve the service. We do not use notifications or mechanisms engineered to create addiction.",
+    "retentionTitle": "Retention",
+    "retentionBody": "We keep data for as long as needed to provide the service. OTP codes expire within minutes and are deleted automatically. You can request deletion of your account at any time.",
+    "rightsTitle": "Your rights (GDPR)",
+    "rightsBody": "You have the right to access, rectify, export or erase your data and to object to processing. To exercise these rights, write to us at the address below.",
+    "contactTitle": "Contact",
+    "contactBody": "For any question about data processing you can write to us at:"
+  },
+  "Terms": {
+    "title": "Terms of service",
+    "intro": "The conditions for using the Ager service.",
+    "draftNotice": "Draft under legal review: this document is not yet final and will be updated before public launch.",
+    "lastUpdated": "Last updated: to be defined",
+    "acceptanceTitle": "Acceptance of terms",
+    "acceptanceBody": "By using Ager you accept these terms. If you do not accept them, please do not use the service.",
+    "serviceTitle": "The service",
+    "serviceBody": "Ager is a link-first news aggregator: we curate and organise articles, always showing the original source and linking back to the publisher. We do not host the full content of the articles.",
+    "conductTitle": "Acceptable use",
+    "conductBody": "You agree not to use the service for unlawful purposes, not to attempt to compromise its security, and not to abuse it through automated means.",
+    "liabilityTitle": "Limitation of liability",
+    "liabilityBody": "Ager provides the service \"as is\". Content comes from third-party sources and editorial responsibility remains with the original publisher.",
+    "changesTitle": "Changes",
+    "changesBody": "We may update these terms over time. Material changes will be communicated through the service.",
+    "contactTitle": "Contact",
+    "contactBody": "For questions about the terms you can write to us at:"
   },
   "OAuth": {
     "continueWithGoogle": "Continue with Google",

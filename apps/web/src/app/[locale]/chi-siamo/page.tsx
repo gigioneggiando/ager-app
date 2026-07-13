@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Container } from "@/components/layout/container";
 import { Logo } from "@/components/brand/logo";
+import { CONTACT_EMAIL } from "@/lib/contact";
 
 export async function generateMetadata({
   params,
@@ -53,9 +54,15 @@ export default async function AboutPage({
           ))}
         </div>
 
-        <p className="border-t border-border pt-6 text-sm text-muted-foreground">
-          {t("closing")}
-        </p>
+        <div className="flex flex-col gap-2 border-t border-border pt-6">
+          <p className="text-sm text-muted-foreground">{t("closing")}</p>
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="text-sm text-link hover:underline"
+          >
+            {CONTACT_EMAIL}
+          </a>
+        </div>
       </article>
     </Container>
   );

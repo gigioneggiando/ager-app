@@ -8,7 +8,15 @@ describe("sitemap", () => {
 
   it("lists the public routes for both locales", () => {
     for (const locale of ["it", "en"]) {
-      for (const suffix of ["", "/sources", "/chi-siamo", "/dsa-contact", "/bot"]) {
+      for (const suffix of [
+        "",
+        "/sources",
+        "/chi-siamo",
+        "/dsa-contact",
+        "/bot",
+        "/privacy",
+        "/termini",
+      ]) {
         expect(urls.some((u) => u.endsWith(`/${locale}${suffix}`))).toBe(true);
       }
     }
