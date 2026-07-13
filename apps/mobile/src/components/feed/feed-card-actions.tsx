@@ -1,4 +1,8 @@
-import type { FeedPage, Interest } from "@ager/api-client";
+import type {
+  ArticleSearchResultsPage,
+  FeedPage,
+  Interest,
+} from "@ager/api-client";
 import { useSession } from "@ager/auth";
 import { Ionicons } from "@expo/vector-icons";
 import { type InfiniteData, useQueryClient } from "@tanstack/react-query";
@@ -10,6 +14,8 @@ import { ListPickerSheet } from "@/components/reading-lists/list-picker-sheet";
 import { useRequireAuth } from "@/features/auth/use-require-auth";
 import { FEED_QUERY_KEY } from "@/features/feed/use-feed";
 import { removeFromFeed } from "@/features/feed/feed-cache";
+import { removeFromSearch } from "@/features/search/search-result";
+import { SEARCH_QUERY_KEY } from "@/features/search/use-search";
 import {
   buildHideOptions,
   commitForOption,
@@ -126,10 +132,15 @@ export function FeedCardActions({
   }
 
   function commit(action: HideCommit) {
-    // Remove this card from every feed cache immediately (keyed by mode → match by prefix).
+    // Remove this card immediately from every feed cache (keyed by mode) AND every search
+    // cache (keyed by kind+term) — Hide fires on both surfaces, so both must drop the card.
     queryClient.setQueriesData<InfiniteData<FeedPage>>(
       { queryKey: [FEED_QUERY_KEY] },
       (data) => removeFromFeed(data, articleId),
+    );
+    queryClient.setQueriesData<InfiniteData<ArticleSearchResultsPage>>(
+      { queryKey: [SEARCH_QUERY_KEY] },
+      (data) => removeFromSearch(data, articleId),
     );
 
     const markFeedStale = () =>

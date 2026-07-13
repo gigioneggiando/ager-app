@@ -5,6 +5,9 @@ import { apiClient } from "@/lib/api/client";
 
 export const SEARCH_PAGE_SIZE = 20;
 
+/** All search caches share this key prefix; hide/discard handlers match on it to drop a card. */
+export const SEARCH_QUERY_KEY = "article-search";
+
 /** A search request: free-text (`q`) or by tag slug. */
 export type SearchQuery =
   | { kind: "text"; term: string }
@@ -12,7 +15,7 @@ export type SearchQuery =
 
 /** Stable react-query key for a search (kind + term). */
 export function searchQueryKey(query: SearchQuery) {
-  return ["article-search", query.kind, query.term] as const;
+  return [SEARCH_QUERY_KEY, query.kind, query.term] as const;
 }
 
 /** Page-based pagination: is there another page after `loaded` of `total`? */
@@ -66,7 +69,7 @@ export function useTags() {
  */
 export function useArticleSearch(query: SearchQuery | null) {
   return useInfiniteQuery({
-    queryKey: query ? searchQueryKey(query) : ["article-search", "none"],
+    queryKey: query ? searchQueryKey(query) : [SEARCH_QUERY_KEY, "none"],
     enabled: Boolean(query && query.term.length > 0),
     initialPageParam: 1,
     queryFn: ({ pageParam }) => fetchSearchPage(query!, pageParam),

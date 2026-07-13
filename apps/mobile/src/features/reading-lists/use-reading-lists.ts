@@ -39,7 +39,9 @@ export function useReadingListItems(listId: number) {
         {
           params: {
             path: { readingListId: listId },
-            query: { cursor: pageParam },
+            // expand=article returns full previews (title/url/topics…); without it the API
+            // returns bare rows (articleId only) → cards render "untitled" and can't open.
+            query: { cursor: pageParam, expand: "article" },
           },
         },
       );
