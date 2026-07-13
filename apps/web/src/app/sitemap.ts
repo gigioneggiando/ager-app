@@ -8,7 +8,15 @@ import { siteUrl } from "@/lib/site";
  * is out of scope; this is the canonical public set plus the sources index. Auth, admin,
  * and dynamic-id pages are intentionally excluded (they are `noindex` / not crawlable).
  */
-const PUBLIC_PATHS = ["", "/sources", "/chi-siamo", "/dsa-contact", "/bot"];
+const PUBLIC_PATHS = [
+  "",
+  "/sources",
+  "/chi-siamo",
+  "/dsa-contact",
+  "/bot",
+  "/privacy",
+  "/termini",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return routing.locales.flatMap((locale) =>
