@@ -26,6 +26,11 @@ const SWIPE_THRESHOLD_PX = 48;
 /** Deliberately permissive: the authoritative check is server side. */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/** The Figma frame, and how far it may be blown up on a large screen. */
+const STAGE_WIDTH = 402;
+const STAGE_HEIGHT = 874;
+const MAX_SCALE = 1.25;
+
 /** Figma coordinates that differ from screen to screen. */
 const CTA_TOP = [654, 654, 654, 652, 408];
 
@@ -43,7 +48,7 @@ export function BetaOnboarding() {
   const [submitting, setSubmitting] = useState(false);
   // How long the visitor spent on the form: bots submit almost instantly.
   const openedAt = useRef<number | null>(null);
-  const stepAnchorRef = useRef<HTMLDivElement>(null);
+  const stageAnchorRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
 
   const goTo = useCallback((next: number) => {
@@ -100,6 +105,31 @@ export function BetaOnboarding() {
     openedAt.current = Date.now();
   }, []);
 
+  // The frame is a fixed 402x874 block: it is scaled to fit rather than
+  // reflowed. CSS cannot compute the factor (it cannot divide a length by a
+  // length), so it is set here and kept in sync with the viewport.
+  useEffect(() => {
+    const stage = stageAnchorRef.current;
+    if (!stage) return;
+
+    const applyScale = () => {
+      const viewport = window.visualViewport;
+      const width = viewport?.width ?? window.innerWidth;
+      const height = viewport?.height ?? window.innerHeight;
+      const scale = Math.min(MAX_SCALE, width / STAGE_WIDTH, height / STAGE_HEIGHT);
+      stage.style.setProperty("--beta-scale", String(scale));
+    };
+
+    applyScale();
+    window.addEventListener("resize", applyScale);
+    window.visualViewport?.addEventListener("resize", applyScale);
+
+    return () => {
+      window.removeEventListener("resize", applyScale);
+      window.visualViewport?.removeEventListener("resize", applyScale);
+    };
+  }, []);
+
   // Arrow keys on desktop.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -115,7 +145,7 @@ export function BetaOnboarding() {
 
   // Move focus to the new screen so screen readers announce it.
   useEffect(() => {
-    stepAnchorRef.current?.focus();
+    stageAnchorRef.current?.focus();
   }, [step]);
 
   useEffect(() => {
@@ -154,7 +184,7 @@ export function BetaOnboarding() {
       }}
     >
       {/* tabIndex only exists so focus can be moved here between screens */}
-      <div className="beta-stage relative outline-none" ref={stepAnchorRef} tabIndex={-1}>
+      <div className="beta-stage relative outline-none" ref={stageAnchorRef} tabIndex={-1}>
         {/* The mark sits lower and larger on the opening screen */}
         {step === 0 ? (
           <BetaMark size={67} top={213} label={t("markAlt")} />

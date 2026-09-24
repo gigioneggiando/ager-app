@@ -81,7 +81,13 @@
 .beta-stage {
   width: 402px;
   height: 874px;
-  transform: scale(min(1.25, 100vw / 402, 100dvh / 874));
+  /*
+   * The factor is set from JS (--beta-scale): CSS cannot divide a length by a
+   * length, and min() cannot mix a number with lengths — written that way the
+   * whole declaration is dropped and the frame never scales, which puts the
+   * button off-screen on a small phone.
+   */
+  transform: scale(var(--beta-scale, 1));
   transform-origin: center center;
   /*
    * The frame is set in Inter throughout, headings included — unlike the rest
