@@ -74,5 +74,66 @@
     "title": "Qualcosa è andato storto",
     "description": "Si è verificato un errore imprevisto. Riprova tra poco.",
     "retry": "Riprova"
+  },
+  "beta": {
+    "meta": {
+      "title": "Ager | Beta",
+      "description": "Entra nella beta di Ager: notizie di qualità, da fonti scelte una per una."
+    },
+    "markAlt": "Ager",
+    "footnote": "Versione iniziale. Il feed non è ancora personalizzato e non serve creare un account.",
+    "progressLabel": "Avanzamento dell'onboarding",
+    "goToStep": "Vai al passo {step}",
+    "intro": {
+      "title": "Notizie di qualità, da fonti scelte una per una",
+      "body": "Ager è un <b>progetto non-profit che raccoglie le notizie</b> che contano e ti porta a leggerle dall'editore. Senza pubblicità, senza meccanismi per trattenerti",
+      "cta": "Entra nella beta"
+    },
+    "how": {
+      "title": "Come funziona",
+      "cta": "Vai avanti",
+      "item1": {
+        "title": "Fonti scelte a mano",
+        "body": "Testate scelte una per una, valutate non per motivi politici ma per attendibilità di ciò che condividono"
+      },
+      "item2": {
+        "title": "Ti portiamo dall'editore",
+        "body": "L'articolo non lo ospitiamo noi: si apre sul sito di chi l'ha scritto"
+      },
+      "item3": {
+        "title": "Nessuna pubblicità",
+        "body": "Niente inserzioni, niente vendita di dati, niente trucchi per tenerti sullo schermo"
+      }
+    },
+    "notYet": {
+      "title": "Cosa non c'è ancora nella beta",
+      "body": "Non è ancora pubblica la versione con un feed personalizzato sugli interessi degli utenti, nè la versione mobile dell'app",
+      "mockupAlt": "Anteprima del feed personalizzato di Ager su smartphone",
+      "cta": "Vai avanti"
+    },
+    "email": {
+      "title": "Un'ultima cosa",
+      "body": "Per accedere alla beta ti chiediamo di lasciarci la tua email, così da poterti <b>chiedere prossimamente cosa ne pensi</b>",
+      "fieldLabel": "La tua email",
+      "placeholder": "email",
+      "consentContact": "Potete scrivermi per chiedermi com'è andata con la beta",
+      "consentUpdates": "Voglio ricevere ogni tanto aggiornamenti su Ager",
+      "invalid": "Controlla l'indirizzo: non sembra un'email valida",
+      "cta": "Conferma email",
+      "failed": "Non siamo riusciti a registrare l'email. Riprova tra poco",
+      "privacyLink": "Come trattiamo la tua email"
+    },
+    "done": {
+      "title": "Ci sei",
+      "cta": "Apri il feed",
+      "contactIntro": "Puoi contattarci sempre su:",
+      "followIntro": "E seguire il progetto su:",
+      "social": {
+        "x": "Ager su X",
+        "instagram": "Ager su Instagram",
+        "youtube": "Ager su YouTube",
+        "tiktok": "Ager su TikTok"
+      }
+    }
   }
 }

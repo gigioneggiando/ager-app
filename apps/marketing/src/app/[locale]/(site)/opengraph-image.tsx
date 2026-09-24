@@ -12,10 +12,10 @@ export const alt = "Ager — riduce il rumore, aumenta la comprensione";
 async function loadFonts() {
   const [bold, regular] = await Promise.all([
     fetch(
-      new URL("../../assets/fonts/merriweather-700.woff", import.meta.url),
+      new URL("../../../assets/fonts/merriweather-700.woff", import.meta.url),
     ).then((r) => r.arrayBuffer()),
     fetch(
-      new URL("../../assets/fonts/merriweather-400.woff", import.meta.url),
+      new URL("../../../assets/fonts/merriweather-400.woff", import.meta.url),
     ).then((r) => r.arrayBuffer()),
   ]);
   return { bold, regular };

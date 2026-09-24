@@ -7,8 +7,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/site";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SiteFooter } from "@/components/layout/site-footer";
 import "../globals.css";
 
 // Sans — UI + body.
@@ -91,11 +89,8 @@ export default async function LocaleLayout({
       className={`${inter.variable} ${merriweather.variable} h-full`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        <NextIntlClientProvider>
-          <SiteHeader />
-          <main className="flex flex-1 flex-col">{children}</main>
-          <SiteFooter />
-        </NextIntlClientProvider>
+        {/* Header and footer live in the (site) group: the /beta funnel has none. */}
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );
