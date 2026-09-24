@@ -76,9 +76,12 @@ export async function POST(request: Request) {
     const result = await appendRow([
       new Date().toISOString(),
       signup.email,
-      signup.contactConsent ? "si" : "no",
+      // Everyone taking part can be contacted once about the beta, on
+      // legitimate interest — the column records the basis, not a choice.
+      "legittimo-interesse",
       signup.updatesConsent ? "si" : "no",
       signup.locale,
+      signup.source,
       "onboarding-beta",
     ]);
 
@@ -92,6 +95,8 @@ export async function POST(request: Request) {
       status_code: 200,
       duration_ms: Date.now() - startedAt,
       storage: result,
+      // A campaign label, not personal data: safe to log, and useful.
+      source: signup.source,
     });
 
     return NextResponse.json({ ok: true });

@@ -7,16 +7,31 @@
 
 export type BetaSignup = {
   email: string;
-  contactConsent: boolean;
   updatesConsent: boolean;
   locale: "it" | "en";
   elapsedMs: number;
+  /** Which link brought the visitor here, from `?src=` (never free text). */
+  source: string;
 };
 
 /** A human needs at least this long to read the screen and type an address. */
 export const MIN_ELAPSED_MS = 1500;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+/**
+ * `?src=` is a campaign label, not user input: it is clamped to a short slug so
+ * nothing arbitrary can be written into the spreadsheet, and anything that does
+ * not match is recorded as unknown rather than guessed at.
+ */
+const SOURCE_RE = /^[a-z0-9][a-z0-9_-]{0,31}$/;
+export const UNKNOWN_SOURCE = "diretto";
+
+export function normaliseSource(value: unknown): string {
+  if (typeof value !== "string") return UNKNOWN_SOURCE;
+  const slug = value.trim().toLowerCase();
+  return SOURCE_RE.test(slug) ? slug : UNKNOWN_SOURCE;
+}
 const MAX_EMAIL_LENGTH = 254;
 const MAX_ELAPSED_MS = 24 * 60 * 60 * 1000;
 
@@ -36,7 +51,9 @@ export function parseBetaSignup(payload: unknown): BetaSignup | null {
   const email = raw.email.trim().toLowerCase();
   if (email.length < 3 || email.length > MAX_EMAIL_LENGTH || !EMAIL_RE.test(email)) return null;
 
-  if (!isBoolean(raw.contactConsent) || !isBoolean(raw.updatesConsent)) return null;
+  // Only the mailing list is a consent. Being reachable once for feedback is a
+  // condition of the beta, on legitimate interest — there is nothing to tick.
+  if (!isBoolean(raw.updatesConsent)) return null;
 
   if (raw.locale !== "it" && raw.locale !== "en") return null;
 
@@ -52,7 +69,7 @@ export function parseBetaSignup(payload: unknown): BetaSignup | null {
   return {
     // Stored lower-cased so duplicates are easy to spot in the sheet.
     email,
-    contactConsent: raw.contactConsent,
+    source: normaliseSource(raw.source),
     updatesConsent: raw.updatesConsent,
     locale: raw.locale,
     elapsedMs: raw.elapsedMs,

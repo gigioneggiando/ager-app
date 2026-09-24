@@ -96,12 +96,9 @@ export function StepNotYet() {
           height={1561}
           // Sized inline, like every other value in this frame: the element must
           // stay inside its 200x333 box or it covers the button below it.
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            filter: "drop-shadow(8px 11px 16.3px rgba(0, 0, 0, 0.25))",
-          }}
+          // No drop-shadow: the mockup PNG already carries its own shading, and
+          // the CSS one traced the transparent bounding box, not the phone.
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
         />
       </Box>
     </>
@@ -110,7 +107,6 @@ export function StepNotYet() {
 
 export type EmailStepState = {
   email: string;
-  contactConsent: boolean;
   updatesConsent: boolean;
   /** Honeypot: stays empty unless a bot fills the form. */
   company: string;
@@ -183,13 +179,19 @@ export function StepEmail({
         </Box>
       ) : null}
 
-      <Consent
-        id="beta-consent-contact"
-        top={573}
-        checked={state.contactConsent}
-        onChange={(checked) => onChange({ contactConsent: checked })}
-        label={t("consentContact")}
-      />
+      {/*
+        Being reachable for one feedback request is a condition of taking part in
+        the beta, so it is stated rather than ticked: a consent that cannot be
+        refused is not a valid consent (GDPR art. 4(11), recital 43). The legal
+        basis is legitimate interest, declared in the notice, with the right to
+        object. Only the mailing list below is a real, optional consent.
+      */}
+      <Box left={56} top={573} width={290}>
+        <p className="text-center" style={{ fontSize: 10, lineHeight: "12px", color: INK }}>
+          {t("contactNotice")}
+        </p>
+      </Box>
+
       <Consent
         id="beta-consent-updates"
         top={611}

@@ -116,12 +116,12 @@
       "body": "Per accedere alla beta ti chiediamo di lasciarci la tua email, così da poterti <b>chiedere prossimamente cosa ne pensi</b>",
       "fieldLabel": "La tua email",
       "placeholder": "email",
-      "consentContact": "Potete scrivermi per chiedermi com'è andata con la beta",
       "consentUpdates": "Voglio ricevere ogni tanto aggiornamenti su Ager",
       "invalid": "Controlla l'indirizzo: non sembra un'email valida",
       "cta": "Conferma email",
       "failed": "Non siamo riusciti a registrare l'email. Riprova tra poco",
-      "privacyLink": "Come trattiamo la tua email"
+      "privacyLink": "Come trattiamo la tua email",
+      "contactNotice": "Entrando nella beta ci dai modo di scriverti una volta per chiederti com'è andata. Puoi dirci di no quando vuoi, con una riga di risposta."
     },
     "done": {
       "title": "Ci sei",
