@@ -76,7 +76,9 @@ export async function POST(request: Request) {
     const result = await appendRow([
       new Date().toISOString(),
       signup.email,
-      signup.contactConsent ? "si" : "no",
+      // Everyone taking part can be contacted once about the beta, on
+      // legitimate interest — the column records the basis, not a choice.
+      "legittimo-interesse",
       signup.updatesConsent ? "si" : "no",
       signup.locale,
       signup.source,

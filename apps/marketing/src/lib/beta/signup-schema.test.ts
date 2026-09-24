@@ -4,7 +4,6 @@ import { MIN_ELAPSED_MS, UNKNOWN_SOURCE, normaliseSource, parseBetaSignup } from
 
 const VALID = {
   email: "Persona@Example.com",
-  contactConsent: true,
   updatesConsent: false,
   locale: "it",
   elapsedMs: 9000,
@@ -36,7 +35,6 @@ describe("parseBetaSignup", () => {
     const parsed = parseBetaSignup(VALID);
     expect(parsed).toMatchObject({
       email: "persona@example.com",
-      contactConsent: true,
       updatesConsent: false,
       locale: "it",
       source: "instagram",
@@ -67,9 +65,17 @@ describe("parseBetaSignup", () => {
     expect(parseBetaSignup({ ...VALID, elapsedMs: MIN_ELAPSED_MS - 1 })).toBeNull();
   });
 
-  it("refuses an unknown locale and non-boolean consents", () => {
+  it("refuses an unknown locale and a non-boolean consent", () => {
     expect(parseBetaSignup({ ...VALID, locale: "fr" })).toBeNull();
-    expect(parseBetaSignup({ ...VALID, contactConsent: "si" })).toBeNull();
+    expect(parseBetaSignup({ ...VALID, updatesConsent: "si" })).toBeNull();
+  });
+
+  // Being reachable for feedback is a condition, not a consent: there is no
+  // field for it, and sending one must not change anything.
+  it("ignores a contactConsent field if a client sends one", () => {
+    const parsed = parseBetaSignup({ ...VALID, contactConsent: false });
+    expect(parsed).not.toBeNull();
+    expect(parsed).not.toHaveProperty("contactConsent");
   });
 
   it("refuses anything that is not an object", () => {

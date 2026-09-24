@@ -116,12 +116,12 @@
       "body": "To get into the beta we ask for your email, so that we can <b>ask you later what you think</b>",
       "fieldLabel": "Your email",
       "placeholder": "email",
-      "consentContact": "You can write to me to ask how the beta went",
       "consentUpdates": "I want to get occasional updates about Ager",
       "invalid": "Check the address: that does not look like a valid email",
       "cta": "Confirm email",
       "failed": "We could not save your email. Please try again shortly",
-      "privacyLink": "How we handle your email"
+      "privacyLink": "How we handle your email",
+      "contactNotice": "By joining the beta you let us write to you once to ask how it went. You can tell us to stop whenever you like, with a one-line reply."
     },
     "done": {
       "title": "You're in",

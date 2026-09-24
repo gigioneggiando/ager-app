@@ -58,7 +58,7 @@ export const betaPrivacyIt: PrivacyContent = {
       paragraphs: ["Quando invii il modulo di accesso alla beta registriamo soltanto:"],
       bullets: [
         "il tuo indirizzo email;",
-        "se hai spuntato o no le due caselle di consenso;",
+        "se hai scelto di ricevere gli aggiornamenti sul progetto;",
         "la lingua in cui stavi usando il sito (italiano o inglese);",
         "l'etichetta del link da cui sei arrivato, quando c'è: una parola come «instagram» o «tiktok», che ci dice da quale canale proviene l'iscrizione e non dice niente su di te;",
         "la data e l'ora dell'iscrizione.",
@@ -75,11 +75,11 @@ export const betaPrivacyIt: PrivacyContent = {
       heading: "Perché li trattiamo, e con quale base giuridica",
       bullets: [
         "Per darti accesso alla beta e tenere traccia di chi partecipa: la base giuridica è il nostro legittimo interesse a gestire una sperimentazione a inviti (art. 6.1.f GDPR).",
-        "Per scriverti una volta e chiederti com'è andata, se hai spuntato la prima casella: la base giuridica è il tuo consenso (art. 6.1.a GDPR).",
-        "Per mandarti ogni tanto aggiornamenti sul progetto, se hai spuntato la seconda casella: anche qui la base giuridica è il tuo consenso (art. 6.1.a GDPR).",
+        "Per scriverti una volta e chiederti com'è andata con la beta: è una condizione della partecipazione, non una casella da spuntare, e la base giuridica è il nostro legittimo interesse a raccogliere un parere su una sperimentazione a inviti (art. 6.1.f GDPR). Puoi opporti in qualsiasi momento, anche solo rispondendo a quella email (art. 21 GDPR).",
+        "Per mandarti ogni tanto aggiornamenti sul progetto, se hai spuntato la casella: qui la base giuridica è il tuo consenso (art. 6.1.a GDPR).",
       ],
       paragraphs: [
-        "Le due caselle sono indipendenti e facoltative: puoi entrare nella beta senza spuntarne nessuna. Se hai dato un consenso puoi ritirarlo quando vuoi, e il ritiro non tocca la liceità di quello che abbiamo fatto prima.",
+        "La casella degli aggiornamenti è facoltativa: puoi entrare nella beta senza spuntarla, e se la spunti puoi ritirare il consenso quando vuoi, senza che questo tocchi la liceità di quello che abbiamo fatto prima. La richiesta di parere sulla beta, invece, è parte del patto: se non vuoi riceverla scrivicelo e non ti contatteremo.",
       ],
     },
     {
@@ -133,7 +133,7 @@ export const betaPrivacyEn: PrivacyContent = {
       paragraphs: ["When you submit the beta form we record only:"],
       bullets: [
         "your email address;",
-        "whether you ticked each of the two consent boxes;",
+        "whether you chose to receive updates about the project;",
         "the language you were using the site in (Italian or English);",
         "the label of the link you arrived from, when there is one: a word such as \"instagram\" or \"tiktok\", which tells us which channel the signup came from and nothing about you;",
         "the date and time of the signup.",
@@ -150,11 +150,11 @@ export const betaPrivacyEn: PrivacyContent = {
       heading: "Why we process it, and on what legal basis",
       bullets: [
         "To give you access to the beta and keep track of who is taking part: our legitimate interest in running an invite-only trial (Art. 6(1)(f) GDPR).",
-        "To write to you once and ask how it went, if you ticked the first box: your consent (Art. 6(1)(a) GDPR).",
-        "To send you occasional updates about the project, if you ticked the second box: again your consent (Art. 6(1)(a) GDPR).",
+        "To write to you once and ask how the beta went: this is a condition of taking part, not a box to tick, and the legal basis is our legitimate interest in collecting feedback on an invite-only trial (Art. 6(1)(f) GDPR). You can object at any time, including by simply replying to that email (Art. 21 GDPR).",
+        "To send you occasional updates about the project, if you ticked the box: here the legal basis is your consent (Art. 6(1)(a) GDPR).",
       ],
       paragraphs: [
-        "Both boxes are independent and optional: you can join the beta without ticking either. You can withdraw a consent at any time, and withdrawal does not affect the lawfulness of processing before it.",
+        "The updates box is optional: you can join the beta without ticking it, and if you do tick it you can withdraw your consent at any time, without affecting the lawfulness of processing before it. The feedback request, on the other hand, is part of the deal: if you would rather not get it, tell us and we will not write.",
       ],
     },
     {

@@ -7,7 +7,6 @@
 
 export type BetaSignup = {
   email: string;
-  contactConsent: boolean;
   updatesConsent: boolean;
   locale: "it" | "en";
   elapsedMs: number;
@@ -52,7 +51,9 @@ export function parseBetaSignup(payload: unknown): BetaSignup | null {
   const email = raw.email.trim().toLowerCase();
   if (email.length < 3 || email.length > MAX_EMAIL_LENGTH || !EMAIL_RE.test(email)) return null;
 
-  if (!isBoolean(raw.contactConsent) || !isBoolean(raw.updatesConsent)) return null;
+  // Only the mailing list is a consent. Being reachable once for feedback is a
+  // condition of the beta, on legitimate interest — there is nothing to tick.
+  if (!isBoolean(raw.updatesConsent)) return null;
 
   if (raw.locale !== "it" && raw.locale !== "en") return null;
 
@@ -69,7 +70,6 @@ export function parseBetaSignup(payload: unknown): BetaSignup | null {
     // Stored lower-cased so duplicates are easy to spot in the sheet.
     email,
     source: normaliseSource(raw.source),
-    contactConsent: raw.contactConsent,
     updatesConsent: raw.updatesConsent,
     locale: raw.locale,
     elapsedMs: raw.elapsedMs,

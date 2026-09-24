@@ -40,7 +40,6 @@ export function BetaOnboarding() {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<EmailStepState>({
     email: "",
-    contactConsent: false,
     updatesConsent: false,
     company: "",
   });
@@ -72,7 +71,6 @@ export function BetaOnboarding() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: form.email.trim(),
-          contactConsent: form.contactConsent,
           updatesConsent: form.updatesConsent,
           company: form.company,
           locale,
