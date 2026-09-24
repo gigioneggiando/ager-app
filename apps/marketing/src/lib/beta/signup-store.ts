@@ -13,6 +13,16 @@
 
 export type SignupStoreResult = "appended" | "not-configured";
 
+/**
+ * A spreadsheet reads a cell starting with = + - @ as a formula, so an address
+ * like `=cmd()@example.com` would execute instead of being stored. Prefixing
+ * with an apostrophe forces Sheets to treat the value as text; the apostrophe
+ * itself is not part of the stored string.
+ */
+function asPlainText(value: string): string {
+  return /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
+}
+
 export async function appendRow(values: string[]): Promise<SignupStoreResult> {
   const url = process.env.BETA_SIGNUP_WEBHOOK_URL?.trim();
   const secret = process.env.BETA_SIGNUP_WEBHOOK_SECRET?.trim();
@@ -22,7 +32,7 @@ export async function appendRow(values: string[]): Promise<SignupStoreResult> {
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ secret, values }),
+    body: JSON.stringify({ secret, values: values.map(asPlainText) }),
     // Apps Script answers /exec with a redirect to its content host.
     redirect: "follow",
     cache: "no-store",

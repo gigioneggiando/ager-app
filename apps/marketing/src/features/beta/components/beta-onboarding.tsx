@@ -48,6 +48,8 @@ export function BetaOnboarding() {
   const [submitting, setSubmitting] = useState(false);
   // How long the visitor spent on the form: bots submit almost instantly.
   const openedAt = useRef<number | null>(null);
+  // Which link brought them here — read once, from ?src=.
+  const source = useRef<string>("");
   const stageAnchorRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
 
@@ -74,6 +76,7 @@ export function BetaOnboarding() {
           updatesConsent: form.updatesConsent,
           company: form.company,
           locale,
+          source: source.current,
           elapsedMs: Date.now() - (openedAt.current ?? Date.now()),
         }),
       });
@@ -103,6 +106,9 @@ export function BetaOnboarding() {
 
   useEffect(() => {
     openedAt.current = Date.now();
+    // Read straight off the URL rather than through useSearchParams: this page
+    // is statically rendered and that hook would force it dynamic.
+    source.current = new URLSearchParams(window.location.search).get("src") ?? "";
   }, []);
 
   // The frame is a fixed 402x874 block: it is scaled to fit rather than
