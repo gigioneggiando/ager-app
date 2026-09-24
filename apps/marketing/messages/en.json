@@ -74,5 +74,66 @@
     "title": "Something went wrong",
     "description": "An unexpected error occurred. Please try again shortly.",
     "retry": "Try again"
+  },
+  "beta": {
+    "meta": {
+      "title": "Ager | Beta",
+      "description": "Join the Ager beta: quality news, from sources picked one by one."
+    },
+    "markAlt": "Ager",
+    "footnote": "Early version. The feed is not personalised yet and no account is needed.",
+    "progressLabel": "Onboarding progress",
+    "goToStep": "Go to step {step}",
+    "intro": {
+      "title": "Quality news, from sources picked one by one",
+      "body": "Ager is a <b>non-profit project that gathers the news</b> that matters and takes you to read it at the publisher. No ads, no tricks to keep you here",
+      "cta": "Join the beta"
+    },
+    "how": {
+      "title": "How it works",
+      "cta": "Continue",
+      "item1": {
+        "title": "Sources picked by hand",
+        "body": "Outlets chosen one by one, judged not on politics but on how reliable what they publish is"
+      },
+      "item2": {
+        "title": "We take you to the publisher",
+        "body": "We do not host the article: it opens on the site of whoever wrote it"
+      },
+      "item3": {
+        "title": "No advertising",
+        "body": "No ads, no data selling, no tricks to keep you on the screen"
+      }
+    },
+    "notYet": {
+      "title": "What the beta does not have yet",
+      "body": "The version with a feed personalised on your interests is not public yet, and neither is the mobile app",
+      "mockupAlt": "Preview of the personalised Ager feed on a smartphone",
+      "cta": "Continue"
+    },
+    "email": {
+      "title": "One last thing",
+      "body": "To get into the beta we ask for your email, so that we can <b>ask you later what you think</b>",
+      "fieldLabel": "Your email",
+      "placeholder": "email",
+      "consentContact": "You can write to me to ask how the beta went",
+      "consentUpdates": "I want to get occasional updates about Ager",
+      "invalid": "Check the address: that does not look like a valid email",
+      "cta": "Confirm email",
+      "failed": "We could not save your email. Please try again shortly",
+      "privacyLink": "How we handle your email"
+    },
+    "done": {
+      "title": "You're in",
+      "cta": "Open the feed",
+      "contactIntro": "You can always reach us at:",
+      "followIntro": "And follow the project on:",
+      "social": {
+        "x": "Ager on X",
+        "instagram": "Ager on Instagram",
+        "youtube": "Ager on YouTube",
+        "tiktok": "Ager on TikTok"
+      }
+    }
   }
 }
