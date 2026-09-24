@@ -96,12 +96,9 @@ export function StepNotYet() {
           height={1561}
           // Sized inline, like every other value in this frame: the element must
           // stay inside its 200x333 box or it covers the button below it.
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            filter: "drop-shadow(8px 11px 16.3px rgba(0, 0, 0, 0.25))",
-          }}
+          // No drop-shadow: the mockup PNG already carries its own shading, and
+          // the CSS one traced the transparent bounding box, not the phone.
+          style={{ width: "100%", height: "100%", objectFit: "contain" }}
         />
       </Box>
     </>

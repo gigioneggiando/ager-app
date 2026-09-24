@@ -49,6 +49,7 @@ export function BetaOnboarding() {
   const openedAt = useRef<number | null>(null);
   // Which link brought them here — read once, from ?src=.
   const source = useRef<string>("");
+  const frameRef = useRef<HTMLDivElement>(null);
   const stageAnchorRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
 
@@ -113,15 +114,15 @@ export function BetaOnboarding() {
   // reflowed. CSS cannot compute the factor (it cannot divide a length by a
   // length), so it is set here and kept in sync with the viewport.
   useEffect(() => {
-    const stage = stageAnchorRef.current;
-    if (!stage) return;
+    const frame = frameRef.current;
+    if (!frame) return;
 
     const applyScale = () => {
       const viewport = window.visualViewport;
       const width = viewport?.width ?? window.innerWidth;
       const height = viewport?.height ?? window.innerHeight;
       const scale = Math.min(MAX_SCALE, width / STAGE_WIDTH, height / STAGE_HEIGHT);
-      stage.style.setProperty("--beta-scale", String(scale));
+      frame.style.setProperty("--beta-scale", String(scale));
     };
 
     applyScale();
@@ -187,8 +188,11 @@ export function BetaOnboarding() {
         if (delta >= SWIPE_THRESHOLD_PX) handleBack();
       }}
     >
-      {/* tabIndex only exists so focus can be moved here between screens */}
-      <div className="beta-stage relative outline-none" ref={stageAnchorRef} tabIndex={-1}>
+      {/* The frame reserves exactly the scaled size; the stage inside it is
+          always the full 402x874 of the design. */}
+      <div className="beta-frame" ref={frameRef}>
+        {/* tabIndex only exists so focus can be moved here between screens */}
+        <div className="beta-stage outline-none" ref={stageAnchorRef} tabIndex={-1}>
         {/* The mark sits lower and larger on the opening screen */}
         {step === 0 ? (
           <BetaMark size={67} top={213} label={t("markAlt")} />
@@ -261,6 +265,7 @@ export function BetaOnboarding() {
             </Box>
           </div>
         ) : null}
+        </div>
       </div>
     </div>
   );

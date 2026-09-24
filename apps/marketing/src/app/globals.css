@@ -78,17 +78,30 @@
  * than the viewport. Every colour below is an existing brand token — the frame
  * was drawn in the brand palette.
  */
+/*
+ * The frame takes up exactly the space the scaled stage occupies. A transform
+ * does not change layout size, so without this wrapper the page would still be
+ * 402px wide on a narrower phone and the browser would zoom out or let the page
+ * drift sideways.
+ *
+ * The factor is set from JS (--beta-scale): CSS cannot divide a length by a
+ * length, and min() cannot mix a number with lengths — written that way the
+ * whole declaration is dropped and the frame never scales at all.
+ */
+.beta-frame {
+  position: relative;
+  width: calc(402px * var(--beta-scale, 1));
+  height: calc(874px * var(--beta-scale, 1));
+}
+
 .beta-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 402px;
   height: 874px;
-  /*
-   * The factor is set from JS (--beta-scale): CSS cannot divide a length by a
-   * length, and min() cannot mix a number with lengths — written that way the
-   * whole declaration is dropped and the frame never scales, which puts the
-   * button off-screen on a small phone.
-   */
   transform: scale(var(--beta-scale, 1));
-  transform-origin: center center;
+  transform-origin: top left;
   /*
    * The frame is set in Inter throughout, headings included — unlike the rest
    * of the site, whose base layer puts headings in Merriweather. Flagged to
