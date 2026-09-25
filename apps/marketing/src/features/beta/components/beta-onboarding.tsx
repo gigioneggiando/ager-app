@@ -21,7 +21,6 @@ const TOTAL_STEPS = 5;
 /** Dots and the footnote only run while the onboarding does. */
 const STEPS_WITH_PROGRESS = 4;
 const COMPLETED_KEY = "ager.beta.onboarding.completed";
-const SWIPE_THRESHOLD_PX = 48;
 
 /** Deliberately permissive: the authoritative check is server side. */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -51,7 +50,6 @@ export function BetaOnboarding() {
   const source = useRef<string>("");
   const frameRef = useRef<HTMLDivElement>(null);
   const stageAnchorRef = useRef<HTMLDivElement>(null);
-  const touchStartX = useRef<number | null>(null);
 
   const goTo = useCallback((next: number) => {
     setStep(Math.min(Math.max(next, 0), TOTAL_STEPS - 1));
@@ -178,20 +176,12 @@ export function BetaOnboarding() {
   ][step];
 
   return (
+    // No swipe: on a phone the screens advance with the button, not with a
+    // sideways drag. A funnel that moves under the thumb makes it too easy to
+    // skip past the one screen that sets up the consent.
     <div
       className="grid min-h-dvh place-items-center overflow-hidden"
       style={{ backgroundColor: "var(--neutral-beige)" }}
-      onTouchStart={(event) => {
-        touchStartX.current = event.changedTouches[0]?.clientX ?? null;
-      }}
-      onTouchEnd={(event) => {
-        const start = touchStartX.current;
-        touchStartX.current = null;
-        if (start === null) return;
-        const delta = (event.changedTouches[0]?.clientX ?? start) - start;
-        if (delta <= -SWIPE_THRESHOLD_PX) handleNext();
-        if (delta >= SWIPE_THRESHOLD_PX) handleBack();
-      }}
     >
       {/* The frame reserves exactly the scaled size; the stage inside it is
           always the full 402x874 of the design. */}
