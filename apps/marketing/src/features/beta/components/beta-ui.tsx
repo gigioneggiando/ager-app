@@ -50,16 +50,22 @@ export function Box({
 /** 20/24 bold — the screen title. */
 export function Title({
   children,
-  color = "var(--ink-gray)",
+  color = "var(--ager-blue)",
   top,
+  size = 20,
 }: {
   children: React.ReactNode;
   color?: string;
   top: number;
+  /** The closing screen sets its own, larger size. */
+  size?: number;
 }) {
   return (
     <Box left={30} top={top} width={342}>
-      <h1 className="text-center font-bold" style={{ fontSize: 20, lineHeight: "24px", color }}>
+      <h1
+        className="text-center font-bold"
+        style={{ fontSize: size, lineHeight: `${Math.round(size * 1.2)}px`, color }}
+      >
         {children}
       </h1>
     </Box>
@@ -72,11 +78,9 @@ const ctaClasses = cn(
   "disabled:cursor-not-allowed disabled:opacity-40"
 );
 
-// #0f172a is the one value in the frame that is not a brand token: the design
-// uses it for the pill, while headings use --ager-blue (#0f2a44).
 const ctaStyle = {
   padding: "17px 52px",
-  backgroundColor: "#0f172a",
+  backgroundColor: "var(--ager-blue)",
   color: "var(--editorial-white)",
   fontSize: 20,
   lineHeight: "24px",

@@ -21,11 +21,9 @@ export function StepIntro() {
 
   return (
     <>
-      <Title top={381} color="var(--ager-blue)">
-        {t("title")}
-      </Title>
+      <Title top={381}>{t("title")}</Title>
       <Box left={30} top={437} width={342}>
-        <p className="text-center" style={body12}>
+        <p className="text-center" style={body16}>
           {t.rich("body", { b: bold })}
         </p>
       </Box>
@@ -156,7 +154,7 @@ export function StepEmail({
             {
               padding: "17px 24px",
               backgroundColor: "var(--neutral-beige)",
-              borderColor: error ? "var(--destructive)" : "#0f172a",
+              borderColor: error ? "var(--destructive)" : "var(--ager-blue)",
               color: INK,
               fontSize: 20,
               lineHeight: "24px",
@@ -256,8 +254,8 @@ function Consent({
           {
             width: 15,
             height: 15,
-            borderColor: "#6ea8d8",
-            backgroundColor: checked ? "#6ea8d8" : "transparent",
+            borderColor: "var(--ethical-green)",
+            backgroundColor: checked ? "var(--ethical-green)" : "transparent",
             "--tw-ring-color": "var(--ager-blue)",
             "--tw-ring-offset-color": "var(--neutral-beige)",
           } as React.CSSProperties
@@ -297,7 +295,9 @@ export function StepDone() {
 
   return (
     <>
-      <Title top={342}>{t("title")}</Title>
+      <Title top={342} size={30}>
+        {t("title")}
+      </Title>
       <BetaSocials />
     </>
   );
