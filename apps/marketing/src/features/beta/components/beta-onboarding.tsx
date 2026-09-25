@@ -107,7 +107,8 @@ export function BetaOnboarding() {
     openedAt.current = Date.now();
     // Read straight off the URL rather than through useSearchParams: this page
     // is statically rendered and that hook would force it dynamic.
-    source.current = new URLSearchParams(window.location.search).get("src") ?? "";
+    source.current =
+      new URLSearchParams(window.location.search).get("src") ?? "";
   }, []);
 
   // The frame is a fixed 402x874 block: it is scaled to fit rather than
@@ -121,7 +122,11 @@ export function BetaOnboarding() {
       const viewport = window.visualViewport;
       const width = viewport?.width ?? window.innerWidth;
       const height = viewport?.height ?? window.innerHeight;
-      const scale = Math.min(MAX_SCALE, width / STAGE_WIDTH, height / STAGE_HEIGHT);
+      const scale = Math.min(
+        MAX_SCALE,
+        width / STAGE_WIDTH,
+        height / STAGE_HEIGHT,
+      );
       frame.style.setProperty("--beta-scale", String(scale));
     };
 
@@ -192,79 +197,97 @@ export function BetaOnboarding() {
           always the full 402x874 of the design. */}
       <div className="beta-frame" ref={frameRef}>
         {/* tabIndex only exists so focus can be moved here between screens */}
-        <div className="beta-stage outline-none" ref={stageAnchorRef} tabIndex={-1}>
-        {/* The mark sits lower and larger on the opening screen */}
-        {step === 0 ? (
-          <BetaMark size={67} top={213} label={t("markAlt")} />
-        ) : (
-          <BetaMark size={44} top={69} label={t("markAlt")} />
-        )}
-
-        {/* Keyed by step: remounting replays the staggered entrance */}
-        <div key={step} className="beta-enter absolute inset-0">
-          {step === 0 ? <StepIntro /> : null}
-          {step === 1 ? <StepHow /> : null}
-          {step === 2 ? <StepNotYet /> : null}
-          {step === 3 ? (
-            <StepEmail
-              state={form}
-              onChange={(next) => {
-                setForm((current) => ({ ...current, ...next }));
-                if (next.email !== undefined) setEmailError(null);
-              }}
-              error={emailError}
-            />
-          ) : null}
-          {step === 4 ? <StepDone /> : null}
-
-          {isLastStep ? (
-            <CtaLink top={CTA_TOP[step]} href={`${FEED_BASE_URL}/${locale}`}>
-              {ctaLabel}
-            </CtaLink>
+        <div
+          className="beta-stage outline-none"
+          ref={stageAnchorRef}
+          tabIndex={-1}
+        >
+          {/* The mark sits lower and larger on the opening screen */}
+          {step === 0 ? (
+            <BetaMark size={67} top={213} label={t("markAlt")} />
           ) : (
-            <Cta top={CTA_TOP[step]} onClick={handleNext} disabled={submitting}>
-              {ctaLabel}
-            </Cta>
+            <BetaMark size={44} top={69} label={t("markAlt")} />
           )}
-        </div>
 
-        {showProgress ? (
-          <div className="space-y-4">
-            <Box left={176} top={720} width={50} height={6}>
-              <nav aria-label={t("progressLabel")} className="flex items-center" style={{ gap: 5 }}>
-                {Array.from({ length: TOTAL_STEPS }, (_, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => goTo(index)}
-                    aria-label={t("goToStep", { step: index + 1 })}
-                    aria-current={index === step ? "step" : undefined}
-                    className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
-                    style={
-                      {
-                        width: 6,
-                        height: 6,
-                        backgroundColor:
-                          index === step ? "var(--ager-blue)" : "rgba(107, 114, 128, 0.8)",
-                        "--tw-ring-color": "var(--ager-blue)",
-                        "--tw-ring-offset-color": "var(--neutral-beige)",
-                      } as React.CSSProperties
-                    }
-                  />
-                ))}
-              </nav>
-            </Box>
+          {/* Keyed by step: remounting replays the staggered entrance */}
+          <div key={step} className="beta-enter absolute inset-0">
+            {step === 0 ? <StepIntro /> : null}
+            {step === 1 ? <StepHow /> : null}
+            {step === 2 ? <StepNotYet /> : null}
+            {step === 3 ? (
+              <StepEmail
+                state={form}
+                onChange={(next) => {
+                  setForm((current) => ({ ...current, ...next }));
+                  if (next.email !== undefined) setEmailError(null);
+                }}
+                error={emailError}
+              />
+            ) : null}
+            {step === 4 ? <StepDone /> : null}
 
-            <Box left={65} top={734} width={272} height={22}>
-              <p
-                className="text-center"
-                style={{ fontSize: 9, lineHeight: "11px", color: "var(--ink-gray)" }}
+            {isLastStep ? (
+              <CtaLink top={CTA_TOP[step]} href={`${FEED_BASE_URL}/${locale}`}>
+                {ctaLabel}
+              </CtaLink>
+            ) : (
+              <Cta
+                top={CTA_TOP[step]}
+                onClick={handleNext}
+                disabled={submitting}
               >
-                {t("footnote")}
-              </p>
-            </Box>
+                {ctaLabel}
+              </Cta>
+            )}
           </div>
-        ) : null}
+
+          {showProgress ? (
+            <div className="space-y-4">
+              <Box left={176} top={720} width={50} height={6}>
+                <nav
+                  aria-label={t("progressLabel")}
+                  className="flex items-center"
+                  style={{ gap: 5 }}
+                >
+                  {Array.from({ length: TOTAL_STEPS }, (_, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => goTo(index)}
+                      aria-label={t("goToStep", { step: index + 1 })}
+                      aria-current={index === step ? "step" : undefined}
+                      className="rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
+                      style={
+                        {
+                          width: 6,
+                          height: 6,
+                          backgroundColor:
+                            index === step
+                              ? "var(--ager-blue)"
+                              : "rgba(28, 28, 28, 0.35)",
+                          "--tw-ring-color": "var(--ager-blue)",
+                          "--tw-ring-offset-color": "var(--neutral-beige)",
+                        } as React.CSSProperties
+                      }
+                    />
+                  ))}
+                </nav>
+              </Box>
+
+              <Box left={65} top={734} width={272} height={22}>
+                <p
+                  className="text-center"
+                  style={{
+                    fontSize: 9,
+                    lineHeight: "11px",
+                    color: "var(--ink-gray)",
+                  }}
+                >
+                  {t("footnote")}
+                </p>
+              </Box>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
